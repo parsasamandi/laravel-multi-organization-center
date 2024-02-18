@@ -62,52 +62,32 @@
                     <nav class="mt-2">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                             {{-- Admin --}}
-                            <x-admin.urlAddress text="ادمین" fontAwesome="fa fa-users" route="{{ url('admin/list') }}" />
+                            <x-admin.urlAddress text="اطلاعات مرکز" fontAwesome="fa fa-user" route="{{ url('admin/list') }}" />
 
                             {{-- Products --}}
-                            <x-admin.urlAddressParent text="محصولات" fontAwesome="fa fa-shopping-cart">
+                            <x-admin.urlAddressParent text="گزارش هزینه های ماهانه" fontAwesome="fa fa-info">
                                 <x-slot name="content">
                                     {{-- List --}}
-                                    <x-admin.urlAddress text="لیست" fontAwesome="null" route="{{ url('product/list') }}" />
-                                    {{-- New Course --}}
-                                    <x-admin.urlAddress text="شماره همراه" fontAwesome="fas fa-phone" route="{{ url('phoneNumber/list') }}"  />
+                                    <x-admin.urlAddress text="اطلاعات کلی" fontAwesome="null" route="{{ url('product/list') }}" />
+                                    {{--  --}}
+                                    <x-admin.urlAddress text="گزارش هزینه حقوق کارمندان" fontAwesome="null" route="{{ url('phoneNumber/list') }}"  />
+                                    {{--  --}}
+                                    <x-admin.urlAddress text="گزارش هزینه آموزش" fontAwesome="null" route="{{ url('phoneNumber/list') }}"  />
+                                    {{--  --}}
+                                    <x-admin.urlAddress text="گزارش هزینه سلامت" fontAwesome="null" route="{{ url('phoneNumber/list') }}"  />
                                     {{-- Media --}}
-                                    <x-admin.urlAddressParent text="رسانه" fontAwesome="fas fa-image">
+                                    <!-- <x-admin.urlAddressParent text="رسانه" fontAwesome="fas fa-image">
                                         <x-slot name="content">
                                             {{-- Aparat --}}
                                             <x-admin.urlAddress text="ویدئو آپارات" fontAwesome="null" route="{{ url('aparat/list') }}" />
                                             {{-- Images --}}
                                             <x-admin.urlAddress text="عکس" fontAwesome="null" route="{{ url('image/list') }}" />
                                         </x-slot>
-                                    </x-admin.urlAddressParent>
+                                    </x-admin.urlAddressParent> -->
                                 </x-slot>
                             </x-admin.urlAddressParent>
 
-                            {{-- Team --}}
-                            <x-admin.urlAddress text="تیم" fontAwesome="fas fa-user-friends" route="{{ url('team/list') }}" />
-
-                            {{-- Categories --}}
-                            <x-admin.urlAddressParent text="دسته بندی ها" fontAwesome="fa fa-list">
-                                <x-slot name="content">
-                                    {{-- Categories --}}
-                                    <x-admin.urlAddress text="دسته بندی اول" fontAwesome="null" route="{{ url('category/list') }}" />
-                                    {{-- Sub Categories --}}
-                                    <x-admin.urlAddress text="دسته بندی دوم" fontAwesome="null" route="{{ url('subCategory/list') }}" />
-                                </x-slot>
-                            </x-admin.urlAddressParent>
-
-                            {{-- Service --}}
-                            <x-admin.urlAddress text="خدمات" fontAwesome="fa fa-id-badge" route="{{ url('service/list') }}" />
-
-                            {{-- Settings--}}
-                            <x-admin.urlAddressParent text="تنظیمات" fontAwesome="fa fa-cogs">
-                                <x-slot name="content">
-                                    {{-- Home --}}
-                                    <x-admin.urlAddress text="تنظیمات صفحه اصلی" fontAwesome="null" route="{{ url('setting/homeSetting') }}" />
-                                    {{-- Product --}}
-                                    <x-admin.urlAddress text="تنظیمات صفحه محصولات" fontAwesome="null" route="{{ url('setting/productSetting') }}" />
-                                </x-slot>
-                            </x-admin.urlAddressParent>
+                
                         </ul>
                     </nav>
                 </div>

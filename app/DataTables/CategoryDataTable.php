@@ -2,7 +2,6 @@
 
 namespace App\DataTables;
 
-use App\Models\Category;
 use App\Models\Status;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;

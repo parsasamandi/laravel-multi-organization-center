@@ -49,7 +49,7 @@
     "superfish": "^1.7.10",
     "venobox": "^1.9.2"
   },
-  "name": "mofidSanat",
+  "name": "Golestan Finance Panel",
   "description": "<p align=\"center\"><img src=\"https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg\" width=\"400\"></p>",
   "version": "1.0.0",
   "main": "webpack.mix.js",
