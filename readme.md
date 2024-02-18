@@ -1,7 +1,7 @@
 ## About this
 
-This project was coded on January for Pouya Samandi. I have worked hard to be the best version of myself and optimized every single line of code to look simpler and more comfortable. This was my first experience of freelancary work and helped me have a better aspect of commercial work.
-I have been trying to improve it any time I find a new optmized way.    
+<!-- This project was coded on January for Pouya Samandi. I have worked hard to be the best version of myself and optimized every single line of code to look simpler and more comfortable. This was my first experience of freelancary work and helped me have a better aspect of commercial work.
+I have been trying to improve it any time I find a new optmized way.     -->
 
 - Simple
 - Fast
