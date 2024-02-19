@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $bank_statement_receipt
+ * @property float $bank_balance
+ * @property string $date
+ * @property Center $center
+ * @property Report $report
+ */
+class GeneralInfo extends Model
+{
+    /**
+     * The table associated with the model.
+     * 
+     * @var string
+     */
+    protected $table = 'general_infos';
+
+    /**
+     * @var array
+     */
+    protected $fillable = ['center_id1', 'bank_statement_receipt', 'bank_balance', 'date'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function center()
+    {
+        return $this->belongsTo('App\Models\Center', 'center_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function report()
+    {
+        return $this->hasOne('App\Models\Report', 'general_info_id');
+    }
+}

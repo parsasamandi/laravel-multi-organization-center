@@ -1,17 +1,17 @@
 @extends('layouts.admin')
-@section('title', 'لیست اطلاعات کلی')
+@section('title', 'لیست مرکز')
 
 @section('content')
 
   {{-- Header --}}
-  <x-header pageName="اطلاعات کلی" buttonValue="اطلاعات کلی">
+  <x-header pageName="لیست مرکز" buttonValue="لیست مرکز">
     <x-slot name="table">
-      <x-table :table="$generalInfoTable1" />
+      <x-table :table="$centerTable" />
     </x-slot>
   </x-header>
 
   {{-- Insertion --}}
-  <x-admin.insert size="modal-l" formId="generalInfoForm">
+  <x-admin.insert size="modal-l" formId="centerForm">
     <x-slot name="content">
       {{-- Form --}}
       <div class="row">
@@ -22,7 +22,7 @@
   </x-admin.insert>
 
   {{-- Delete --}}
-  <x-admin.delete title="اطلاعات" />
+  <x-admin.delete title="مرکز" />
   
 @endsection
 
@@ -30,13 +30,13 @@
 @parent
 
 <!-- DataTable data -->
-{!! $generalInfoTable1->scripts() !!}
+{!! $centerTable->scripts() !!}
 
 <script>
   $(document).ready(function () {
-    // phoneNumber Table
-    let dt = window.LaravelDataTables['generalInfoTable'];
-    let action = new RequestHandler(dt,'generalInfoForm', 'generalInfo');
+    // Center Table
+    let dt = window.LaravelDataTables['centerTable'];
+    let action = new RequestHandler(dt,'centerForm', 'center');
 
     // Record modal
     $('#create_record').click(function () {

@@ -1,8 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
 
 /**
  * @property int $id
@@ -10,8 +12,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property GeneralInfo $generalInfo
  * @property Report $report
  */
-class Center extends Model
+class Center extends Model implements Authenticatable
 {
+    use AuthenticatableTrait;
+
     /**
      * The table associated with the model.
      * 

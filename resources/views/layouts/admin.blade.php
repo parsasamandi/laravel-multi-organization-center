@@ -62,13 +62,13 @@
                     <nav class="mt-2">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                             {{-- Admin --}}
-                            <x-admin.urlAddress text="اطلاعات مرکز" fontAwesome="fa fa-user" route="{{ url('admin/list') }}" />
+                            <x-admin.urlAddress text="اطلاعات مرکز" fontAwesome="fa fa-user" route="{{ url('center/list') }}" />
 
                             {{-- Products --}}
                             <x-admin.urlAddressParent text="گزارش هزینه های ماهانه" fontAwesome="fa fa-info">
                                 <x-slot name="content">
                                     {{-- List --}}
-                                    <x-admin.urlAddress text="اطلاعات کلی" fontAwesome="null" route="{{ url('product/list') }}" />
+                                    <x-admin.urlAddress text="اطلاعات کلی" fontAwesome="null" route="{{ url('generalInfo/list') }}" />
                                     {{--  --}}
                                     <x-admin.urlAddress text="گزارش هزینه حقوق کارمندان" fontAwesome="null" route="{{ url('phoneNumber/list') }}"  />
                                     {{--  --}}

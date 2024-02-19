@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-use App\DataTables\AdminDataTable;
-use App\Http\Requests\StoreAdminRequest;
+use App\DataTables\CenterDataTable;
+// use App\Http\Requests\StoreAdminRequest;
 use App\Providers\Action;
-use App\Models\Category;
-use App\Models\User;
+use App\Models\Center;
 
 
 class CenterController extends Controller
@@ -19,29 +18,25 @@ class CenterController extends Controller
         $this->action = new Action();
     }
 
-    // Admin home
-    public function admin() {
-        return view('admin.home');
-    }
 
     // DataTable to blade
     public function list() {
         // dataTable
-        $dataTable = new AdminDataTable();
+        $dataTable = new CenterDataTable();
 
-        // Admin table
-        $vars['adminTable'] = $dataTable->html();
+        // Center table
+        $vars['centerTable'] = $dataTable->html();
 
-        return view('admin.list', $vars);
+        return view('centerList', $vars);
     }
 
     // Get 
-    public function adminTable(AdminDataTable $dataTable) {
-        return $dataTable->render('admin.list');
+    public function centerTable(CenterDataTable $dataTable) {
+        return $dataTable->render('centerList');
     }
 
     // Store
-    public function store(StoreAdminRequest $request) {
+    public function store(Request $request) {
 
         // Insert or update
         $password = Hash::make($request->get('password'));

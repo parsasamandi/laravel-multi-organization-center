@@ -10,6 +10,8 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    protected $table = 'centers';
+
     /**
      * The attributes that are mass assignable.
      *

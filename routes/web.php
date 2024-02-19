@@ -1,5 +1,5 @@
 <?php
-use App\Http\Controllers\CategoryController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -16,14 +16,22 @@ use App\Http\Controllers\CategoryController;
 Route::group(['middleware' => 'auth'], function () {
     // Logout
     Route::post('/logout', 'Auth\LoginController@logout');
-    // Admin
-    Route::get('/','AdminController@admin');
-    Route::group(['prefix' => 'admin','as' => 'admin.'], function() {
-        Route::get('list', 'AdminController@list');
-        Route::get('table/list', 'AdminController@adminTable')->name('list.table');
-        Route::post('store', 'AdminController@store');
-        Route::get('edit', 'AdminController@edit');
-        Route::get('delete/{id}','AdminController@delete');
+    // Center
+    Route::get('/','CenterController@center');
+    Route::group(['prefix' => 'center','as' => 'center.'], function() {
+        Route::get('list', 'CenterController@list');
+        Route::get('table/list', 'CenterController@centerTable')->name('list.table');
+        Route::post('store', 'CenterController@store');
+        Route::get('edit', 'CenterController@edit');
+        Route::get('delete/{id}','CenterController@delete');
+    });
+
+    Route::group(['prefix' => 'generalInfo','as' => 'generalInfo.'], function() {
+        Route::get('list', 'GeneralInfoController@list');
+        Route::get('table/list', 'GeneralInfoController@generalInfoTable')->name('list.table');
+        Route::post('store', 'GeneralInfoController@store');
+        Route::get('edit', 'GeneralInfoController@edit');
+        Route::get('delete/{id}','GeneralInfoController@delete');
     });
 });
 
@@ -33,5 +41,3 @@ Route::post('login', 'Auth\LoginController@store');
 // Home
 // Each product description
 Route::get('/product/details/{id}', 'ProductController@details');
-// Products with categories
-Route::get('/products', 'ProductController@show')->name('products');

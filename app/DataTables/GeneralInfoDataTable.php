@@ -2,12 +2,14 @@
 
 namespace App\DataTables;
 
-use App\Models\Status;
+use App\Models\GeneralInfo;
+use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use App\Datatables\GeneralDataTable;
 
-class CategoryDataTable extends DataTable
+
+class GeneralInfoDataTable extends DataTable
 {
     public $dataTable;
 
@@ -26,28 +28,23 @@ class CategoryDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->rawColumns(['action'])
-            ->addColumn('status', function (Category $category) {
-                return $this->dataTable->setStatusCol($category->statuses->status);
-            })
-            ->filterColumn('status', function ($query, $keyword) {
-                return $this->dataTable->filterStatusCol($query, $keyword);
-            })
-            ->addColumn('action', function (Category $category){
-                return $this->dataTable->setAction($category->id); 
+            ->rawColumns(['action']) 
+            ->addColumn('action', function(GeneralInfo $generalInfo) {
+                return $this->dataTable->setAction($generalInfo->id); 
             });
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Category $model
+     * @param \App\Models\GeneralInfoDataTable $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Category $model)
+    public function query(GeneralInfo $model)
     {
         return $model->newQuery();
     }
+
 
     /**
      * Optional method if you want to use html builder.
@@ -57,8 +54,8 @@ class CategoryDataTable extends DataTable
     public function html()
     {
         return $this->dataTable->html($this->builder(), 
-                $this->getColumns(), 'category');
-    }    
+                $this->getColumns(), 'generalInfo');
+    }
 
     /**
      * Get columns.
@@ -69,11 +66,13 @@ class CategoryDataTable extends DataTable
     {
         return [
             $this->dataTable->getIndexCol(),
-            Column::make('name')
-            ->title('نام'),
-            Column::make('status')
-            ->title('وضعیت')
+            Column::make('bank_statement_receipt')
+            ->title('پرینت حساب بانکی'),
+            Column::make('bank_balance')
+            ->title('موجودی بانکی')
                 ->orderable(false),
+            Column::make('date')
+            ->title('تاریخ'),
             $this->dataTable->setActionCol()
         ];
     }

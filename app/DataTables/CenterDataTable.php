@@ -2,14 +2,12 @@
 
 namespace App\DataTables;
 
-use App\Models\Media;
-use Yajra\DataTables\Html\Button;
+use App\Models\Center;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use App\Datatables\GeneralDataTable;
 
-
-class ImageDataTable extends DataTable
+class CenterDataTable extends DataTable
 {
     public $dataTable;
 
@@ -28,33 +26,22 @@ class ImageDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->rawColumns(['action', 'media_url']) 
-            ->editColumn('media_url', function(Media $media) {
-                return "<img src=/images/" . $media->media_url . " class='dataTableImage' />";
-            })
-            ->editColumn('media_id', function (Media $media) {
-                return $media->media->name;
-            })
-            ->filterColumn('media_id', function($query,$keyword) {
-                return $this->dataTable->filterColumn($squery, 
-                            'media_id in (select id from media where name like ?)', $keyword);
-            })
-            ->addColumn('action', function(Media $media){
-                return $this->dataTable->setAction($media->id); 
+            ->rawColumns(['action'])
+            ->addColumn('action', function (Center $center){
+                return $this->dataTable->setAction($center->id); 
             });
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\ImageDataTable $model
+     * @param \App\Models\Center $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Media $model)
+    public function query(Center $model)
     {
-        return $model->where('type', $model::IMAGE);
+        return $model->newQuery();
     }
-
 
     /**
      * Optional method if you want to use html builder.
@@ -64,8 +51,8 @@ class ImageDataTable extends DataTable
     public function html()
     {
         return $this->dataTable->html($this->builder(), 
-                $this->getColumns(), 'image');
-    }
+                $this->getColumns(), 'center');
+    }    
 
     /**
      * Get columns.
@@ -76,10 +63,10 @@ class ImageDataTable extends DataTable
     {
         return [
             $this->dataTable->getIndexCol(),
-            Column::make('media_url')
-            ->title('رسانه'),
-            Column::make('media_id')
-            ->title('محصول مرتبط')
+            Column::make('name')
+            ->title('نام'),
+            Column::make('email')
+            ->title('ایمیل')
                 ->orderable(false),
             $this->dataTable->setActionCol()
         ];
