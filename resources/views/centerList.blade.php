@@ -15,9 +15,26 @@
     <x-slot name="content">
       {{-- Form --}}
       <div class="row">
-        <input type="file" id="file" name="file" 
-          accept="application/pdf,image/*,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+        <x-input key="name" placeholder="نام" 
+          class="col-md-12 mb-3" />
+
+        <x-input key="email" placeholder="ایمیل"
+          class="col-md-12 mb-3" />
+
+          {{-- Passwords --}}
+        <div class="col-md-12 mb-3">
+          <label for="password">رمز جدید:</label>
+          <input type="password" name="password" id="password" class="form-control" 
+            placeholder="رمز جدید" autocomplete="new-password">
+        </div>
+        <div class="col-md-12">
+          <label for="password-confirm">تکرار رمز جدید:</label>
+          <input type="password" name="password-confirm" id="password-confirm" class="form-control"  
+            placeholder="تکرار رمز جدید" autocomplete="new-password">
+        </div>
       </div>
+
+          
     </x-slot>
   </x-admin.insert>
 
@@ -36,11 +53,11 @@
   $(document).ready(function () {
     // Center Table
     let dt = window.LaravelDataTables['centerTable'];
-    let action = new RequestHandler(dt,'centerForm', 'center');
+    let action = new RequestHandler(dt,'#centerForm', 'center');
 
     // Record modal
     $('#create_record').click(function () {
-      action.modal();
+      action.openInsertionModal();
     });
 
     // Insert
@@ -57,17 +74,18 @@
     }
     function edit($url) {
       // Edit
-      action.edit();
+      action.reloadModal();
 
       $.ajax({
-        url: "{{ url('generalInfo/edit') }}",
+        url: "{{ url('center/edit') }}",
         method: 'get',
         data: { id: $url },
         success: function (data) {  
           action.editData($url);
-          $('#number').val(data.number);
-          $('#products').val(data.product_id)
-          $('#status').val(data.status).trigger('change');
+          $('#name').val(data.name);
+          $('#email').val(data.email);
+          $('#password').val('new_password');
+          $('#password-confirm').val('new_password');
         }
       })
     }

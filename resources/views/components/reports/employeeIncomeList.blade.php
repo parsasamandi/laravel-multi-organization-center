@@ -22,7 +22,7 @@
           class="col-md-6 mb-3" />
 
         <x-input key="bank_balance" placeholder="موجودی در پایان ماه"
-          class="col-md-12" />
+          class="col-md-12 mb-3" />
 
       </div>
       <!-- File -->

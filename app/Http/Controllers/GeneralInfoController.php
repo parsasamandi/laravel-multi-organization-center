@@ -20,7 +20,7 @@ class GeneralInfoController extends Controller
 
         $dataTable = new GeneralInfoDataTable;
 
-        $vars['generalInfoTable1'] = $dataTable->html();
+        $vars['generalInfoTable'] = $dataTable->html();
 
         return view('generalInfoList', $vars);
     }
