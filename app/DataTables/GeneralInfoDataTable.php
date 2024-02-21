@@ -29,6 +29,9 @@ class GeneralInfoDataTable extends DataTable
             ->eloquent($query)
             ->addIndexColumn()
             ->rawColumns(['action']) 
+            ->editColumn('year', function(GeneralInfo $generalInfo) {
+                return $generalInfo->jalaliMonth . ' ' . $generalInfo->jalaliYear;
+            })
             ->addColumn('action', function(GeneralInfo $generalInfo) {
                 return $this->dataTable->setAction($generalInfo->id); 
             });
@@ -71,7 +74,7 @@ class GeneralInfoDataTable extends DataTable
             Column::make('bank_balance')
             ->title('موجودی بانکی')
                 ->orderable(false),
-            Column::make('date')
+            Column::make('year')
             ->title('تاریخ'),
             $this->dataTable->setActionCol()
         ];

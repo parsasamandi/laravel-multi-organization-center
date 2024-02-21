@@ -63,31 +63,8 @@
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                             {{-- Admin --}}
                             <x-admin.urlAddress text="اطلاعات مرکز" fontAwesome="fa fa-user" route="{{ url('center/list') }}" />
-
-                            {{-- Products --}}
-                            <x-admin.urlAddressParent text="گزارش هزینه های ماهانه" fontAwesome="fa fa-info">
-                                <x-slot name="content">
-                                    {{-- List --}}
-                                    <x-admin.urlAddress text="اطلاعات کلی" fontAwesome="null" route="{{ url('generalInfo/list') }}" />
-                                    {{--  --}}
-                                    <x-admin.urlAddress text="گزارش هزینه حقوق کارمندان" fontAwesome="null" route="{{ url('phoneNumber/list') }}"  />
-                                    {{--  --}}
-                                    <x-admin.urlAddress text="گزارش هزینه آموزش" fontAwesome="null" route="{{ url('phoneNumber/list') }}"  />
-                                    {{--  --}}
-                                    <x-admin.urlAddress text="گزارش هزینه سلامت" fontAwesome="null" route="{{ url('phoneNumber/list') }}"  />
-                                    {{-- Media --}}
-                                    <!-- <x-admin.urlAddressParent text="رسانه" fontAwesome="fas fa-image">
-                                        <x-slot name="content">
-                                            {{-- Aparat --}}
-                                            <x-admin.urlAddress text="ویدئو آپارات" fontAwesome="null" route="{{ url('aparat/list') }}" />
-                                            {{-- Images --}}
-                                            <x-admin.urlAddress text="عکس" fontAwesome="null" route="{{ url('image/list') }}" />
-                                        </x-slot>
-                                    </x-admin.urlAddressParent> -->
-                                </x-slot>
-                            </x-admin.urlAddressParent>
-
-                
+                            {{-- Monthly Expense Report --}}
+                            <x-admin.urlAddress text="گزارش هزینه های ماهانه" fontAwesome="fa fa-info" route="{{ url('monthlyExpenseReport/list') }}" />    
                         </ul>
                     </nav>
                 </div>

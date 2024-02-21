@@ -28,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/adminHome';
+    protected $redirectTo = '/centerList';
 
 
     // Show Login login

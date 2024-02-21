@@ -18,6 +18,11 @@ class CenterController extends Controller
         $this->action = new Action();
     }
 
+    // DataTable to blade
+    public function center() {
+        return view('admin.home');
+    }
+
 
     // DataTable to blade
     public function list() {

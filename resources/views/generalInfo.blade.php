@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'لیست اطلاعات کلی')
+@section('title', 'لیست ')
 
 @section('content')
 
@@ -22,26 +22,44 @@
           class="col-md-6 mb-3" />
 
         <x-input key="bank_balance" placeholder="موجودی در پایان ماه"
-          class="col-md-12 mb-3" />
+          class="col-md-12" />
 
       </div>
       <!-- File -->
-      <h6 class="images">ارسال پرینت صورت حساب بانکی</h6>
-      <input class="mb-3" type="file" id="file" name="bank_statement_receipt" 
+      <h6>ارسال پرینت صورت حساب بانکی</h6>
+      <input ctype="file" id="file" name="bank_statement_receipt" 
         accept="application/pdf,image/*,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+
     </x-slot>
   </x-admin.insert>
 
-  {{-- Delete --}}
-  <x-admin.delete title="اطلاعات" />
+  <div class="container-fluid mt-5 right-text">
+    {{-- List --}}
+    <h2 class="mt-4">گزارش هزینه ها</h2>
+
+    {{-- Button --}}
+    <button type="button" id="create_report"
+        class="btn btn-primary btn-sm">افزودن گزارش</button>
+    <hr>
+    
+    {{-- Responsive Table --}}
+    <div class="table-responsive mb-3">
+      {!! $reportTable->table(['class' => 'table table-bordered']) !!}
+    </div>
+</div>
+
   
 @endsection
 
 @section('scripts')
 @parent
 
-<!-- DataTable data -->
+<!-- General Info Data Table -->
 {!! $generalInfoTable->scripts() !!}
+
+<!-- Report Data Table -->
+{!! $reportTable->scripts() !!}
+
 
 <script>
   $(document).ready(function () {
@@ -51,6 +69,11 @@
 
     // Record modal
     $('#create_record').click(function () {
+      action.openInsertionModal();
+    });
+
+    // Record modal
+    $('#create_report').click(function () {
       action.openInsertionModal();
     });
 

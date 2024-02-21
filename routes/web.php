@@ -26,13 +26,27 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('delete/{id}','CenterController@delete');
     });
 
-    Route::group(['prefix' => 'generalInfo','as' => 'generalInfo.'], function() {
-        Route::get('list', 'GeneralInfoController@list');
-        Route::get('table/list', 'GeneralInfoController@generalInfoTable')->name('list.table');
+    // General Info
+    Route::group(['prefix' => 'generalInfoReport','as' => 'generalInfoReport.'], function() {
+        Route::get('list', 'GeneralInfoReportController@list');
+        Route::get('/table/list', 'GeneralInfoController@generalInfoTable')->name('generalInfo.table');
+        Route::get('/table/list', 'GeneralInfoController@reportTable')->name('report.table');
         Route::post('store', 'GeneralInfoController@store');
         Route::get('edit', 'GeneralInfoController@edit');
         Route::get('delete/{id}','GeneralInfoController@delete');
     });
+
+    // Report
+    Route::group(['prefix' => 'report','as' => 'report.'], function() {
+        Route::get('list', 'ReportController@list');
+        Route::get('/table/list', 'Report@generalInfoTable')->name('generalInfo.table');
+        Route::get('/table/list', 'ReportController@reportTable')->name('report.table');
+        Route::post('store', 'ReportController@store');
+        Route::get('edit', 'ReportController@edit');
+        Route::get('delete/{id}','ReportController@delete');
+    });
+
+
 });
 
 // Login page

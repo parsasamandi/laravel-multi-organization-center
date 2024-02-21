@@ -18,6 +18,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Report extends Model
 {
+
+    const EMPLOYEE = 0;
+    const EDUCATION = 1;
+    const HEALTHCARE = 2;
+
     /**
      * The "type" of the auto-incrementing ID.
      * 

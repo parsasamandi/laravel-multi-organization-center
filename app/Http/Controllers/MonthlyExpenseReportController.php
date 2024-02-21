@@ -9,7 +9,7 @@ use App\Http\Requests\StoreAparatRequest;
 use App\Datatables\GeneralInfoDataTable;
 use App\Datatables\ReportDataTable;
 
-class ReportController extends Controller
+class MonthlyExpenseReportController extends Controller
 {
     // DataTable to blade
     public function list() {
@@ -22,7 +22,7 @@ class ReportController extends Controller
 
         $vars['reportTable'] = $ReportTable->html();
 
-        return view('Report', $vars);
+        return view('monthlyExpenseReport', $vars);
     }
 
     // Rendering General Info Table
@@ -38,14 +38,6 @@ class ReportController extends Controller
 
     // Insert
     public function store(Request $request) {
-
-        $ = Product::updateOrCreate(
-            ['id' => $id],
-            ['name' => $request->get('name'), 'model' => $request->get('model'), 'price' => $request->get('price'), 
-            'size' => $request->get('size'), 'description' => $request->get('description'), 'category_id' => $request->get('categories'), 
-            'subcategory_id' => $this->subSet($request->get('subcategories'))
-        ]);
-
         return $this->getAction($request->get('button_action'));
     }
 

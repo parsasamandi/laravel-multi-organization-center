@@ -21,12 +21,14 @@ class Center extends Model implements Authenticatable
      * 
      * @var string
      */
-    protected $table = 'center';
+    protected $table = 'centers';
 
     /**
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name', 'email', 'password',
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

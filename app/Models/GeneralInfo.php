@@ -25,7 +25,7 @@ class GeneralInfo extends Model
     /**
      * @var array
      */
-    protected $fillable = ['center_id1', 'bank_statement_receipt', 'bank_balance', 'date'];
+    protected $fillable = ['center_id', 'bank_statement_receipt', 'bank_balance', 'jalaliMonth', 'jalaliYear'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -40,6 +40,6 @@ class GeneralInfo extends Model
      */
     public function report()
     {
-        return $this->hasOne('App\Models\Report', 'general_info_id');
+        return $this->hasMany('App\Models\Report', 'general_info_id');
     }
 }
