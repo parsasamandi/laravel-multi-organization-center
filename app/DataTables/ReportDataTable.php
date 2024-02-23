@@ -32,8 +32,10 @@ class ReportDataTable extends DataTable
                 return $this->dataTable->setAction($report->id); 
             })
             ->editColumn('receipt', function(Report $report) {
-                return "<img src=/receipts/" . $report->receipt . " class='dataTableImage' />";
-
+                
+                return "<object data='/receipts/{$report->receipt}' type='application/pdf' class='dataTablePDF' width='100%' height='auto'>
+                            <p>Your browser does not support PDFs. <a href='/receipts/{$report->receipt}'>Download the PDF</a> instead.</p>
+                        </object>";
             })
             ->editColumn('type', function (Report $report){
                 switch ($report->type) {

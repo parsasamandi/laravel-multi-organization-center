@@ -28,7 +28,7 @@ class GeneralInfoDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->rawColumns(['action']) 
+            ->rawColumns(['action', 'bank_statement_receipt']) 
             ->editColumn('jalaliMonth', function(GeneralInfo $generalInfo) {
                 switch ($generalInfo->jalaliMonth) {
                     case 1:
@@ -74,7 +74,9 @@ class GeneralInfoDataTable extends DataTable
                 return $generalInfo->jalaliYear;
             })
             ->editColumn('bank_statement_receipt', function(GeneralInfo $generalInfo) {
-                return "<img src=/images/" . $generalInfo->bank_statement_receipt . " class='dataTableImage' />";
+                return "<object data='/receipts/{$generalInfo->bank_statement_receipt}' type='application/pdf' class='dataTablePDF' width='100%' height='auto'>
+                            <p>Your browser does not support PDFs. <a href='/receipts/{$generalInfo->bank_stateemnt_receipt}'>Download the PDF</a> instead.</p>
+                        </object>";
             })
             ->addColumn('action', function(GeneralInfo $generalInfo) {
                 return $this->dataTable->setAction($generalInfo->id); 

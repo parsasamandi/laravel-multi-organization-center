@@ -8,6 +8,9 @@
     {{-- Button --}}
     <button type="button" id="create_record"
         class="btn btn-primary btn-sm">افزودن {{ $buttonValue }}</button>
+        
+    <button type="button" id="create_record"
+        class="btn btn-primary btn-sm">پرینت {{ $buttonValue }}</button>
     <hr>
     
     {{-- Responsive Table --}}
