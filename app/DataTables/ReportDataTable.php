@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Report;
 use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Services\DataTable;
 use App\Datatables\GeneralDataTable;
 
@@ -26,9 +27,13 @@ class ReportDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->rawColumns(['action'])
+            ->rawColumns(['action' , 'receipt'])
             ->addColumn('action', function (Report $report){
                 return $this->dataTable->setAction($report->id); 
+            })
+            ->editColumn('receipt', function(Report $report) {
+                return "<img src=/receipts/" . $report->receipt . " class='dataTableImage' />";
+
             })
             ->editColumn('type', function (Report $report){
                 switch ($report->type) {

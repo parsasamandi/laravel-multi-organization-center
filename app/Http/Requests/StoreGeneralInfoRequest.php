@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreAparatRequest extends FormRequest
+class StoreGeneralInfoRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,8 +14,8 @@ class StoreAparatRequest extends FormRequest
     public function rules()
     {
         return [
-            'aparat_url' => 'required|regex:/^https?:\/\/www\.aparat\.com\/video\/video\/embed/',
-            'products' => 'required'
+            'bank_balance' => 'required',
+            'bank_statement_receipt' => 'required'
         ];
     }
 
@@ -27,7 +27,8 @@ class StoreAparatRequest extends FormRequest
     public function attributes()
     {
         return [
-            'aparat_url' => '"لینک ویدئو امبد آپارات"'
+            'bank_balance' => '"موجودی در بانک"',
+            'bank_statement_receipt' => '"پرینت صورتحساب بانکی"',
         ];
     }
 }

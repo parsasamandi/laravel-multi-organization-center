@@ -23,6 +23,7 @@ class Report extends Model
     const EDUCATION = 1;
     const HEALTHCARE = 2;
 
+    public $timestamps = false;
     /**
      * The "type" of the auto-incrementing ID.
      * 

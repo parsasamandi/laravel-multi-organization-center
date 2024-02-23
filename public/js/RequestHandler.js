@@ -22,7 +22,15 @@ class RequestHandler {
             event.preventDefault();
             // Form Data
             var form_data = new FormData(this);
-            form_data.append('file', form_data);
+            // Get the file input element
+            var fileInput = document.getElementById('file');
+            // Get the file from the file input
+            var file = fileInput.files[0];
+            // Check if a file exists
+            if (file) {
+                // Append the file to the FormData object
+                form_data.append('file', file);
+            }
 
             $.ajax({
                 url: "/" + window.url + "/store",
@@ -44,7 +52,7 @@ class RequestHandler {
     // Delete
     delete(id) {
         $('#confirmationModal').modal('show'); // Confirm
-        $('#deleteSubmission').click(function () {
+        $('#ok_button').click(function () {
             $.ajax({
                 url: "/" + window.url + "/delete/" + id,
                 method: "get",
@@ -81,12 +89,25 @@ function success(data) {
 
 // Error
 function error(data) {
-    // Parse To Json
-    var data = JSON.parse(data.responseText);
-    // Error
-    error_html = '';
-    for(var all in data.errors) {
-        error_html += '<div class="alert alert-danger">' + data.errors[all] + '</div>';
+    // Check if responseText is empty or undefined
+    if (!data.responseText || data.responseText.trim() === '') {
+        $('#form_output').html('<div class="alert alert-danger">متاسفانه اطلاعاتی فرستاده نشد.</div>');
+        return;
+    }
+    
+    // Parse responseText to JSON
+    var jsonData;
+    try {
+        jsonData = JSON.parse(data.responseText);
+    } catch (e) {
+        $('#form_output').html('<div class="alert alert-danger">خطایی رخ داده است، لطفا دوباره امتحان کنید.</div>');
+        return;
+    }
+    
+    // Handle JSON data
+    var error_html = '';
+    for (var all in jsonData.errors) {
+        error_html += '<div class="alert alert-danger">' + jsonData.errors[all] + '</div>';
     }
     $('#form_output').html(error_html);
 }

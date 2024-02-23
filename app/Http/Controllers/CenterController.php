@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\DataTables\CenterDataTable;
-// use App\Http\Requests\StoreAdminRequest;
+use App\Http\Requests\StoreCenterRequest;
 use App\Providers\Action;
 use App\Models\Center;
 
@@ -36,19 +36,20 @@ class CenterController extends Controller
     }
 
     // Get 
-    public function centerTable(CenterDataTable $dataTable) {
-        return $dataTable->render('centerList');
+    public function centerTable(CenterDataTable $centerTable) {
+        return $centerTable->render('centerList');
     }
 
     // Store
-    public function store(Request $request) {
+    public function store(StoreCenterRequest $request) {
 
         // Insert or update
         $password = Hash::make($request->get('password'));
 
-        User::updateOrCreate(
+        Center::updateOrCreate(
             ['id' => $request->get('id')],
-            ['name' => $request->get('name'), 'email' => $request->get('email'), 'password' => $password]
+            ['name' => $request->get('name'), 'phone_number' => $request->get('phone_number'), 
+            'email' => $request->get('email'), 'password' => $password]
         );
 
         return $this->getAction($request->get('button_action'));
@@ -56,11 +57,11 @@ class CenterController extends Controller
     
     // Edit 
     public function edit(Request $request) {
-        return $this->action->edit(User::class, $request->get('id'));
+        return $this->action->edit(Center::class, $request->get('id'));
     }
 
     // Delete
     public function delete($id) {
-        return $this->action->delete(User::class, $id);
+        return $this->action->delete(Center::class, $id);
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Providers\EnglishConvertion;
 use Illuminate\Http\Request;
 
-class StoreAdminRequest extends FormRequest
+class StoreCenterRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

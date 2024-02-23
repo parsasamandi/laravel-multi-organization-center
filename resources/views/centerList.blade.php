@@ -15,10 +15,13 @@
     <x-slot name="content">
       {{-- Form --}}
       <div class="row">
-        <x-input key="name" placeholder="نام" 
+        <x-input key="name" placeholder="نام مرکز" 
           class="col-md-12 mb-3" />
 
-        <x-input key="email" placeholder="ایمیل"
+        <x-input key="email" placeholder="ایمیل مرکز"
+          class="col-md-12 mb-3" />
+
+        <x-input key="phone_number" placeholder="شماره تلفن"
           class="col-md-12 mb-3" />
 
           {{-- Passwords --}}
@@ -81,8 +84,9 @@
         method: 'get',
         data: { id: $url },
         success: function (data) {  
-          action.editData($url);
+          action.editOnSuccess($url);
           $('#name').val(data.name);
+          $('#phone_number').val(data.phone_number);
           $('#email').val(data.email);
           $('#password').val('new_password');
           $('#password-confirm').val('new_password');

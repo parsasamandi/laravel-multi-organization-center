@@ -16,6 +16,8 @@ class Center extends Model implements Authenticatable
 {
     use AuthenticatableTrait;
 
+    public $timestamps = false;
+
     /**
      * The table associated with the model.
      * 
@@ -27,7 +29,7 @@ class Center extends Model implements Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'phone_number', 'email', 'password',
     ];
 
     /**
@@ -35,7 +37,7 @@ class Center extends Model implements Authenticatable
      */
     public function generalInfo()
     {
-        return $this->hasOne('App\GeneralInfo', 'user_id');
+        return $this->hasOne('App\Models\GeneralInfo', 'center_id');
     }
 
     /**

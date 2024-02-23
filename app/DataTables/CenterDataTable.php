@@ -64,10 +64,11 @@ class CenterDataTable extends DataTable
         return [
             $this->dataTable->getIndexCol(),
             Column::make('name')
-            ->title('نام'),
+                ->title('نام'),
             Column::make('email')
-            ->title('ایمیل')
-                ->orderable(false),
+                ->title('ایمیل'),
+            Column::make('phone_number')
+                ->title('شماره تلفن'),
             $this->dataTable->setActionCol()
         ];
     }

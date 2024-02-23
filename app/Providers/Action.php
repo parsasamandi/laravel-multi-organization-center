@@ -44,19 +44,18 @@ class Action {
      * 
      * @return json
      */
-    public function deleteWithImage($model, $id) {
+    public function deleteWithFile($model, $id, $column) {
 
-        $modelImage = $model::find($id);
-        if($modelImage) {
+        $modelFile = $model::find($id);
+        if($modelFile) {
             // Media
-            $media = Media::where('media_id', $id)->first();
+            $fileDelete = public_path("receipts/" . $generalInfo->$column);
 
-            $imageDelete = public_path("images/" . $media->media_url);
-            if($imageDelete) {
-                File::delete($imageDelete); 
+            if($fileDelete) {
+                File::delete($fileDelete); 
             }
 
-            return $modelImage->delete();
+            return $modelFile->delete();
 
         } else {
             return $this->failedResponse();

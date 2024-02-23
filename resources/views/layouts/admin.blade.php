@@ -64,7 +64,14 @@
                             {{-- Admin --}}
                             <x-admin.urlAddress text="اطلاعات مرکز" fontAwesome="fa fa-user" route="{{ url('center/list') }}" />
                             {{-- Monthly Expense Report --}}
-                            <x-admin.urlAddress text="گزارش هزینه های ماهانه" fontAwesome="fa fa-info" route="{{ url('monthlyExpenseReport/list') }}" />    
+                            <x-admin.urlAddressParent text="گزارش هزینه های ماهانه" fontAwesome="fa fa-info">
+                                <x-slot name="content">
+                                    {{-- General Info --}}
+                                    <x-admin.urlAddress text="اطلاعات کلی" fontAwesome="null" route="{{ url('generalInfo/list') }}" />
+                                    {{-- Reports --}}
+                                    <x-admin.urlAddress text="انواع گزارشات" fontAwesome="null" route="{{ url('report/list') }}"  />
+                                </x-slot>
+                            </x-admin.urlAddressParent>
                         </ul>
                     </nav>
                 </div>
