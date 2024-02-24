@@ -3,56 +3,39 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use App\Http\Requests\StoreLoginRequest;
+use App\Http\Requests\StoreCenterRequest;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Center;
 use Redirect;
-use Auth;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/centerList';
-
-
-    // Show Login login
+    // Show Login Form
     public function index() {
         return view('login');
     }
 
+
+    // Override the username method to use 'phone_number' as the identifier
+    public function username()
+    {
+        return 'phone_number';
+    }
+
     // Store Login
-    public function store(StoreLoginRequest $request) {
-        // Remember Token
-        $remember = $request->get('remember_me');
-
-        $remember_me = false;
-        if(isset($remember)) {
-            $remember_me = true;
-        }
-
-        // Auth
-        $credentials = $request->only('email', 'password');
-        if (Auth::attempt(($credentials), $remember_me)) {
+    public function store(Request $request)
+    {
+        $credentials = $request->only('phone_number', 'password');
+        $remember_me = $request->has('remember_me');
+        
+        if (Auth::attempt($credentials, $remember_me, 'centers')) {
             // Authentication passed...
-            return redirect()->intended('/adminHome');
+            return redirect()->intended('/');
         }
-        return Redirect::back()->withErrors('رمز عبور یا ایمیل شما نادرست است');
+            
+        return Redirect::back()->withErrors('رمز عبور یا شماره تلفن شما نادرست است');
     }
     
     //logout
@@ -60,5 +43,4 @@ class LoginController extends Controller
         Auth::logout();
         return redirect('login');
     }
-
 }

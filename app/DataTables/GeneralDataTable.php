@@ -27,8 +27,8 @@ class GeneralDataTable
             ->info(false)
             ->ordering(true)
             ->responsive(true)
-            ->pageLength(8)
-            ->dom('PBCfrtip')
+            ->pageLength(10)
+            ->dom('Bfrtip')
             ->orderBy(1)
             ->language(asset('js/persian.json'));
     }

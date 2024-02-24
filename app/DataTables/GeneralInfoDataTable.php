@@ -103,7 +103,10 @@ class GeneralInfoDataTable extends DataTable
     public function html()
     {
         return $this->dataTable->html($this->builder(), 
-                $this->getColumns(), 'generalInfo');
+                $this->getColumns(), 'generalInfo')->buttons(
+                    Button::make('excel'),
+                    Button::make('csv')
+                );
     }
 
     /**

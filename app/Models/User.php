@@ -12,6 +12,11 @@ class User extends Authenticatable
 
     protected $table = 'centers';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     public $timestamps = false;
 
     /**
@@ -20,7 +25,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'phone_number', 'email', 'password',
     ];
 
 

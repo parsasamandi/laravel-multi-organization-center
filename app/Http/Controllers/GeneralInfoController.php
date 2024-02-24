@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\StoreGeneralInfoRequest;
 use App\Providers\SuccessMessages;
 use App\Datatables\GeneralInfoDataTable;
@@ -40,18 +41,28 @@ class GeneralInfoController extends Controller
 
         if($request->hasFile('bank_statement_receipt')) {
 
-            $receipt = $request->file('bank_statement_receipt');
-            $file = $receipt->getClientOriginalName();
-            $receipt->move(public_path('receipts'), $file);
+            $generalInfo = GeneralInfo::where('jalaliMonth', $request->get('jalaliMonth'))
+                                ->where('jalaliYear', $request->get('jalaliYear'))->first();
+            if(!$generalInfo) {
 
-            GeneralInfo::updateOrCreate(
-                ['id' => $request->get('id')],
-                ['jalaliMonth' => $request->get('jalaliMonth'),
-                 'jalaliYear' => $request->get('jalaliYear'), 
-                 'bank_balance' => $request->get('bank_balance'),
-                 'center_id' => Auth::id(),
-                 'bank_statement_receipt' => $file
-            ]);
+                $receipt = $request->file('bank_statement_receipt');
+                $file = $receipt->getClientOriginalName();
+                $receipt->move(public_path('receipts'), $file);
+
+                GeneralInfo::updateOrCreate(
+                    ['id' => $request->get('id')],
+                    ['jalaliMonth' => $request->get('jalaliMonth'),
+                    'jalaliYear' => $request->get('jalaliYear'), 
+                    'bank_balance' => $request->get('bank_balance'),
+                    'center_id' => Auth::id(),
+                    'bank_statement_receipt' => $file
+                ]);
+
+            } else {
+                return response()->json(['success' => true, 'message' => '<div class="alert alert-danger">برای این تاریخ قبلا اطلاعات وارد شده است.</div>']); 
+            }
+
+
 
             return $this->getAction($request->get('button_action'));
 

@@ -11,6 +11,8 @@
     <title>@yield('title')</title>
     {{-- App --}}
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    <!-- DataTables Buttons CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
 @show
 
 <body class="hold-transition sidebar-mini">
@@ -103,8 +105,14 @@
         <script src="{{ mix('js/manifest.js') }}"></script>
         <script src="{{ mix('js/vendor.js') }}"></script>
         <script src="{{ mix('js/app.js') }}"></script>
-        {{-- Ajax Requests --}}
         <script src="{{ asset('js/RequestHandler.js') }}"></script>
+
+        <!-- DataTables JavaScript -->
+        <script src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script>
+
+        <!-- DataTables Buttons JavaScript -->
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.bootstrap.min.js"></script>
 
         <script>
             // Ajax Setup
@@ -113,4 +121,5 @@
             $('select').select2({ width:'100%' });
         </script>
     @show
+
 </body>

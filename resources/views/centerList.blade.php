@@ -52,6 +52,12 @@
 <!-- DataTable data -->
 {!! $centerTable->scripts() !!}
 
+<!-- DataTables Buttons JavaScript -->
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+
 <script>
   $(document).ready(function () {
     // Center Table

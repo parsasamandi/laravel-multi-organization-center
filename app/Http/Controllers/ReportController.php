@@ -10,6 +10,7 @@ use App\Providers\SuccessMessages;
 use App\Providers\Action;
 use App\Models\Report;
 use App\Models\GeneralInfo;
+use Yajra\DataTables\Html\Builder;
 use Symfony\Component\HttpFoundation\Response;
 use Auth;
 
@@ -59,7 +60,7 @@ class ReportController extends Controller
                 ]);
 
             } else {
-                return response()->json(['success' => true, 'message' => '<div class="alert alert-danger">برای تاریخ انتخاب شده اطلاعات کلی وارد نشده است</div>'], Response::HTTP_CREATED); 
+                return response()->json(['success' => false, 'message' => '<div class="alert alert-danger">برای تاریخ انتخاب شده اطلاعات کلی وارد نشده است</div>']); 
             }
 
         }
@@ -77,8 +78,10 @@ class ReportController extends Controller
         $report = Report::find($request->get('id'));
 
         if ($report) {
+
             $generalInfo = GeneralInfo::find($report->general_info_id);
             $values = $report->toArray();
+            
             if ($generalInfo) {
                 $values['jalaliMonth'] = $generalInfo->jalaliMonth;
                 $values['jalaliYear'] = $generalInfo->jalaliYear;
@@ -88,5 +91,14 @@ class ReportController extends Controller
         } else {
             return $this->failedResponse();
         }
-    }    
+    }   
+    
+     // Print
+     public function printReport() {
+        // Retrieve all reports from the database
+        $reports = Report::all();
+        
+        // Pass the reports data to the printable view
+        return view('vendor.datatables.print', compact('reports'));
+    }
 }

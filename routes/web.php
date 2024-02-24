@@ -49,6 +49,7 @@ Route::group(['middleware' => 'auth'], function () {
 // Login page
 Route::get('login','Auth\loginController@index')->name('login');
 Route::post('login', 'Auth\LoginController@store');
+Route::get('/print', 'ReportController@printReport')->name('print.report');
 // Home
 // Each product description
 Route::get('/product/details/{id}', 'ProductController@details');

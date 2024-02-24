@@ -16,7 +16,7 @@
                 <p class="title">ورود</p>
                 <!-- Form -->
                 <div class="form-group">
-                    <input class="text-right" type="email" name="email" placeholder="آدرس ایمیل">
+                    <input class="text-right" type="number" name="phone_number" placeholder="شماره تلفن">
                     <i class="fa fa-user"></i>
                 </div>
                 <div class="form-group">

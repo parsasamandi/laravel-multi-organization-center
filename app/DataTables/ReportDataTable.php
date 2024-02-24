@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Report;
+use App\Models\GeneralInfo;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Services\DataTable;
@@ -31,8 +32,16 @@ class ReportDataTable extends DataTable
             ->addColumn('action', function (Report $report){
                 return $this->dataTable->setAction($report->id); 
             })
+            ->addColumn('jalaliMonth', function (Report $report){
+                $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
+                return $generalInfo->jalaliMonth;
+            })
+            ->addColumn('jalaliYear', function (Report $report){
+                $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
+                return $generalInfo->jalaliYear;
+            })
             ->editColumn('receipt', function(Report $report) {
-                
+
                 return "<object data='/receipts/{$report->receipt}' type='application/pdf' class='dataTablePDF' width='100%' height='auto'>
                             <p>Your browser does not support PDFs. <a href='/receipts/{$report->receipt}'>Download the PDF</a> instead.</p>
                         </object>";
@@ -94,6 +103,10 @@ class ReportDataTable extends DataTable
                 ->title('توضیحات'),
             Column::make('type')
                 ->title('نوع'),
+            Column::computed('jalaliMonth')
+                ->title('ماه'),
+            Column::computed('jalaliYear')
+                ->title('سال'),
             $this->dataTable->setActionCol()
         ];
     }

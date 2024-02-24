@@ -64,15 +64,22 @@
 <!-- Report Data Table -->
 {!! $reportTable->scripts() !!}
 
+
 <script>
   $(document).ready(function () {
-    // phoneNumber Table
+
+    // Report Table
     let dt = window.LaravelDataTables['reportTable'];
     let action = new RequestHandler(dt,'#reportForm', 'report');
 
     // Record modal
     $('#create_record').click(function () {
       action.openInsertionModal();
+    });
+
+    // Record modal
+    $('#printButton').click(function () {
+      window.location.href = "/print";
     });
 
     // Insert
@@ -82,6 +89,7 @@
     window.showConfirmationModal = function showConfirmationModal(url) {
       action.delete(url);
     }
+
 
     // Edit
     window.showEditModal = function showEditModal(url) {
