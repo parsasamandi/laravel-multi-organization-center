@@ -4,10 +4,11 @@ namespace App\DataTables;
 
 use App\Models\Report;
 use App\Models\GeneralInfo;
+use App\Datatables\GeneralDataTable;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Services\DataTable;
-use App\Datatables\GeneralDataTable;
+use Illuminate\Support\Facades\Auth;
 
 class ReportDataTable extends DataTable
 {
@@ -28,17 +29,44 @@ class ReportDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->rawColumns(['action' , 'receipt'])
-            ->addColumn('action', function (Report $report){
-                return $this->dataTable->setAction($report->id); 
-            })
+            ->rawColumns(['action' , 'receipt', 'jalaliMonth'])
             ->addColumn('jalaliMonth', function (Report $report){
                 $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
-                return $generalInfo->jalaliMonth;
+
+                return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth);
+            })->filterColumn('jalaliMonth', function ($query, $keyword) {
+                // Define a mapping of Persian month names to their corresponding numbers
+                $monthMap = [
+                    'فروردین' => 1,
+                    'اردیبهشت' => 2,
+                    'خرداد' => 3,
+                    'تیر' => 4,
+                    'مرداد' => 5,
+                    'شهریور' => 6,
+                    'مهر' => 7,
+                    'آبان' => 8,
+                    'آذر' => 9,
+                    'دی' => 10,
+                    'بهمن' => 11,
+                    'اسفند' => 12,
+                ];
+                if (isset($monthMap[$keyword])) {
+                    // If it exists, convert the Persian month name to its corresponding number
+                    $monthNumber = $monthMap[$keyword];
+            
+                    // Apply the filter based on the month number
+                    return $query->whereHas('generalInfo', function ($query) use ($monthNumber) {
+                        $query->where('jalaliMonth', $monthNumber);
+                    });
+                }
             })
             ->addColumn('jalaliYear', function (Report $report){
                 $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
                 return $generalInfo->jalaliYear;
+            })
+            ->filterColumn('jalaliYear', function ($query, $keyword) {
+                return $this->dataTable->filterColumn($query, 'general_info_id in 
+                    (select id from general_infos where jalaliYear like ?)', $keyword);
             })
             ->editColumn('receipt', function(Report $report) {
 
@@ -58,7 +86,8 @@ class ReportDataTable extends DataTable
                         return 'گزارش هزینه های سلامت';
                         break;
                 }
-                
+            })->addColumn('action', function (Report $report){
+                return $this->dataTable->setAction($report->id); 
             });
     }
 
@@ -70,7 +99,7 @@ class ReportDataTable extends DataTable
      */
     public function query(Report $model)
     {
-        return $model->newQuery();
+        return $model->where('center_id', Auth::id());
     }
 
     /**
@@ -104,9 +133,11 @@ class ReportDataTable extends DataTable
             Column::make('type')
                 ->title('نوع'),
             Column::computed('jalaliMonth')
-                ->title('ماه'),
+                ->title('ماه')
+                ->searchable('true'),
             Column::computed('jalaliYear')
-                ->title('سال'),
+                ->title('سال')
+                ->searchable('true'),
             $this->dataTable->setActionCol()
         ];
     }

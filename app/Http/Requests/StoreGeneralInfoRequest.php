@@ -13,10 +13,18 @@ class StoreGeneralInfoRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        // Define the base validation rules
+        $rules = [
             'bank_balance' => 'required',
-            'bank_statement_receipt' => 'required'
         ];
+
+        // Check if the hidden_receipt field is not 'Not null'
+        if ($this->input('hidden_receipt') != 'Not null') {
+            // If true, add the validation rule for the receipt field
+            $rules['receipt'] = 'required';
+        }
+
+        return $rules;
     }
 
     /**
@@ -27,8 +35,7 @@ class StoreGeneralInfoRequest extends FormRequest
     public function attributes()
     {
         return [
-            'bank_balance' => '"موجودی در بانک"',
-            'bank_statement_receipt' => '"پرینت صورتحساب بانکی"',
+            'bank_balance' => '"موجودی در بانک"'
         ];
     }
 }

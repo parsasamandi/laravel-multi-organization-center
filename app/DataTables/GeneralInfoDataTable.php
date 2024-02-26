@@ -3,11 +3,11 @@
 namespace App\DataTables;
 
 use App\Models\GeneralInfo;
+use App\Datatables\GeneralDataTable;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
-use App\Datatables\GeneralDataTable;
-
+use Illuminate\Support\Facades\Auth;
 
 class GeneralInfoDataTable extends DataTable
 {
@@ -30,45 +30,7 @@ class GeneralInfoDataTable extends DataTable
             ->addIndexColumn()
             ->rawColumns(['action', 'bank_statement_receipt']) 
             ->editColumn('jalaliMonth', function(GeneralInfo $generalInfo) {
-                switch ($generalInfo->jalaliMonth) {
-                    case 1:
-                        return 'فروردین';
-                        break;
-                    case 2:
-                        return 'اردیبهشت';
-                        break;
-                    case 3:
-                        return 'خرداد';
-                        break;
-                    case 4:
-                        return 'تیر';
-                        break;
-                    case 5:
-                        return 'مرداد';
-                        break;
-                    case 6:
-                        return 'شهریور';
-                        break;
-                    case 7:
-                        return 'مهر';
-                        break;
-                    case 8:
-                        return 'آبان';
-                        break;
-                    case 9:
-                        return 'آذر';
-                        break;
-                    case 10:
-                        return 'دی';
-                        break;
-                    case 11:
-                        return 'بهمن';
-                        break;
-                    case 12:
-                        return 'اسفند';
-                        break;
-                }
-                return $generalInfo->jalaliMonth . ' ' . $generalInfo->jalaliYear;
+                return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth);
             })
             ->editColumn('jalaliYear', function(GeneralInfo $generalInfo) {
                 return $generalInfo->jalaliYear;
@@ -91,7 +53,7 @@ class GeneralInfoDataTable extends DataTable
      */
     public function query(GeneralInfo $model)
     {
-        return $model->newQuery();
+        return $model->where('center_id', Auth::id());
     }
 
 
@@ -103,10 +65,7 @@ class GeneralInfoDataTable extends DataTable
     public function html()
     {
         return $this->dataTable->html($this->builder(), 
-                $this->getColumns(), 'generalInfo')->buttons(
-                    Button::make('excel'),
-                    Button::make('csv')
-                );
+                $this->getColumns(), 'generalInfo');
     }
 
     /**

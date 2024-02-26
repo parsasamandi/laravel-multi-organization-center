@@ -20,7 +20,7 @@ class CenterController extends Controller
 
     // DataTable to blade
     public function center() {
-        return view('admin.home');
+        return view('home');
     }
 
 

@@ -17,10 +17,10 @@ class GeneralDataTable
             ->setTableId("{$table}Table")
             ->minifiedAjax(route("{$table}.list.table"))
             ->columns($columns)
-            ->columnDefs(
-                [
-                    ["className" => 'dt-center text-center', "target" => '_all'],
-                ]
+            ->buttons(
+                Button::make('excel'),
+                Button::make('csv'),
+                Button::make('copy'),
             )
             ->searching(true)
             ->lengthMenu([10,25,40])
@@ -109,5 +109,47 @@ class GeneralDataTable
     // Filter column
     public function filterColumn($query, $sql, $keyword) {
         return $query->whereRaw($sql, ["%{$keyword}%"]);
+    }
+
+    // Returning Jalali months
+    public function jalaliMonth($column) {
+        switch ($column) {
+            case 1:
+                return 'فروردین';
+                break;
+            case 2:
+                return 'اردیبهشت';
+                break;
+            case 3:
+                return 'خرداد';
+                break;
+            case 4:
+                return 'تیر';
+                break;
+            case 5:
+                return 'مرداد';
+                break;
+            case 6:
+                return 'شهریور';
+                break;
+            case 7:
+                return 'مهر';
+                break;
+            case 8:
+                return 'آبان';
+                break;
+            case 9:
+                return 'آذر';
+                break;
+            case 10:
+                return 'دی';
+                break;
+            case 11:
+                return 'بهمن';
+                break;
+            case 12:
+                return 'اسفند';
+                break;
+        }
     }
 }

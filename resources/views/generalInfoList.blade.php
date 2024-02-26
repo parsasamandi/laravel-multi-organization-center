@@ -30,8 +30,10 @@
       </div>
       <!-- File -->
       <h6>ارسال پرینت صورت حساب بانکی</h6>
-      <input type="file" id="file" name="bank_statement_receipt" class="mb-3" 
-        accept="application/pdf,image/*,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+      <input type="file" id="file" name="receipt" class="mb-3" 
+        accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,application/csv"/>
+
+      <input type="hidden" id="hidden_receipt" name="hidden_receipt"/>
 
     </x-slot>
   </x-admin.insert>
@@ -82,6 +84,7 @@
         data: { id: $url },
         success: function (data) {  
           action.editOnSuccess($url);
+          $('#hidden_receipt').val('Not null');
           $('#bank_balance').val(data.bank_balance);
           $('#jalaliMonth').val(data.jalaliMonth).trigger('change');
           $('#jalaliYear').val(data.jalaliYear).trigger('change');

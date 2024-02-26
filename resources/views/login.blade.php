@@ -16,11 +16,11 @@
                 <p class="title">ورود</p>
                 <!-- Form -->
                 <div class="form-group">
-                    <input class="text-right" type="number" name="phone_number" placeholder="شماره تلفن">
+                    <input class="text-right" type="number" name="phone_number" placeholder="شماره تلفن" required>
                     <i class="fa fa-user"></i>
                 </div>
                 <div class="form-group">
-                    <input class="text-right" type="password" name="password" placeholder="رمز عبور" />
+                    <input class="text-right" type="password" name="password" placeholder="رمز عبور" required/>
                     <i class="fa fa-key"></i>
                 </div>
                 <!-- remember token  -->

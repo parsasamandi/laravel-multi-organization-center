@@ -3,9 +3,10 @@
 namespace App\DataTables;
 
 use App\Models\Center;
+use App\Datatables\GeneralDataTable;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
-use App\Datatables\GeneralDataTable;
+use Auth;
 
 class CenterDataTable extends DataTable
 {
@@ -40,7 +41,7 @@ class CenterDataTable extends DataTable
      */
     public function query(Center $model)
     {
-        return $model->newQuery();
+        return $model->where('id', Auth::id());
     }
 
     /**

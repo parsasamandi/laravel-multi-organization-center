@@ -26142,6 +26142,15 @@ div.dataTables_wrapper div.dataTables_paginate {
   float: right;
 }
 
+.dataTablePDF {
+  display: block;
+  width: 250px;
+  height: 200px;
+  /* Adjust the height as needed */
+  margin: 0 auto;
+  border: 1px solid #ccc;
+}
+
 /* Search input align in dataTable */
 
 @media screen and (max-width: 767px) {

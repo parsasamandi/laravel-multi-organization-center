@@ -71,7 +71,7 @@
                                     {{-- General Info --}}
                                     <x-admin.urlAddress text="اطلاعات کلی" fontAwesome="null" route="{{ url('generalInfo/list') }}" />
                                     {{-- Reports --}}
-                                    <x-admin.urlAddress text="انواع گزارشات" fontAwesome="null" route="{{ url('report/list') }}"  />
+                                    <x-admin.urlAddress text="گزارش جزئی" fontAwesome="null" route="{{ url('report/list') }}"  />
                                 </x-slot>
                             </x-admin.urlAddressParent>
                         </ul>

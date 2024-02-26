@@ -50,7 +50,7 @@
       <!-- File -->
       <h6>ارسال رسید</h6>
       <input type="file" id="file" name="receipt" class="mb-3" 
-        accept="application/pdf,image/*,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+        accept="application/vnd.ms-excel"/>
 
     </x-slot>
   </x-admin.insert>

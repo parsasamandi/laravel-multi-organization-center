@@ -2,9 +2,7 @@
 body {
     font-family: 'BYekan';
     height: 100vh;
-    background: url("/images/GolestanFoundation.png") fixed;
-    /* Fixed background so it doesn't scroll with content */
-    background-attachment: fixed;
+    background: url("/images/GolestanFoundation.png") 50% fixed;
     background-size: cover;
     direction: rtl;
 }

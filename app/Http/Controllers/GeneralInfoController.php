@@ -39,34 +39,51 @@ class GeneralInfoController extends Controller
     // Insert
     public function store(StoreGeneralInfoRequest $request) {
 
-        if($request->hasFile('bank_statement_receipt')) {
 
-            $generalInfo = GeneralInfo::where('jalaliMonth', $request->get('jalaliMonth'))
-                                ->where('jalaliYear', $request->get('jalaliYear'))->first();
-            if(!$generalInfo) {
+        $generalInfo = GeneralInfo::where('jalaliMonth', $request->get('jalaliMonth'))
+                            ->where('jalaliYear', $request->get('jalaliYear'))
+                            ->first();
 
-                $receipt = $request->file('bank_statement_receipt');
-                $file = $receipt->getClientOriginalName();
-                $receipt->move(public_path('receipts'), $file);
+        // Finding the record in the table
+        $generalInfoUpdate = GeneralInfo::find($request->get('id'));
 
-                GeneralInfo::updateOrCreate(
-                    ['id' => $request->get('id')],
-                    ['jalaliMonth' => $request->get('jalaliMonth'),
-                    'jalaliYear' => $request->get('jalaliYear'), 
-                    'bank_balance' => $request->get('bank_balance'),
-                    'center_id' => Auth::id(),
-                    'bank_statement_receipt' => $file
-                ]);
+        $generalInfoData = [
+            'jalaliMonth' => $request->get('jalaliMonth'),
+            'jalaliYear' => $request->get('jalaliYear'),
+            'bank_balance' => $request->get('bank_balance'),
+            'center_id' => Auth::id(),
+        ]; 
 
+        if($request->hasFile('receipt')) {
+            $receipt = $request->file('receipt');
+            $file = $receipt->getClientOriginalName();
+            $receipt->move(public_path('receipts'), $file);
+            $generalInfoData['bank_statement_receipt'] = $file;
+        }
+
+
+        if (!$generalInfo && !$generalInfoUpdate) { 
+
+            if (!$file) {
+                return response()->json(['success' => false, 
+                    'message' => '<div class="alert alert-danger">برای این تاریخ قبلا اطلاعات وارد شده است.</div>']);
             } else {
-                return response()->json(['success' => true, 'message' => '<div class="alert alert-danger">برای این تاریخ قبلا اطلاعات وارد شده است.</div>']); 
+                $generalInfoUpdate->create($generalInfoData);
             }
 
+        } else if ($generalInfoUpdate && $generalInfo) {
+            $generalInfoUpdate->update($generalInfoData);
 
+        } else if ($generalInfo) {
 
-            return $this->getAction($request->get('button_action'));
+            return response()->json(['success' => false, 
+                'message' => '<div class="alert alert-danger">برای این تاریخ قبلا اطلاعات وارد شده است.</div>']); 
 
         }
+
+        return $this->getAction($request->get('button_action'));
+
+
 
     }
 

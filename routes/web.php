@@ -26,7 +26,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('delete/{id}','CenterController@delete');
     });
 
-    // General Info
+    // General info
     Route::group(['prefix' => 'generalInfo','as' => 'generalInfo.'], function() {
         Route::get('list', 'GeneralInfoController@list');
         Route::get('/table/list', 'GeneralInfoController@generalInfoTable')->name('list.table');
@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'report','as' => 'report.'], function() {
         Route::get('list', 'ReportController@list');
         Route::get('/table/list', 'ReportController@reportTable')->name('list.table');
+        // Route::get('/print', 'ReportController@printReport')->name('print.report');
         Route::post('store', 'ReportController@store');
         Route::get('edit', 'ReportController@edit');
         Route::get('delete/{id}','ReportController@delete');
@@ -49,7 +50,3 @@ Route::group(['middleware' => 'auth'], function () {
 // Login page
 Route::get('login','Auth\loginController@index')->name('login');
 Route::post('login', 'Auth\LoginController@store');
-Route::get('/print', 'ReportController@printReport')->name('print.report');
-// Home
-// Each product description
-Route::get('/product/details/{id}', 'ProductController@details');

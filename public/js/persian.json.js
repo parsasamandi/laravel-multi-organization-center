@@ -6,7 +6,7 @@
  * or disable the default devtool with "devtool: false".
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
-(self["webpackChunkmofidSanat"] = self["webpackChunkmofidSanat"] || []).push([["/js/persian.json"],{
+(self["webpackChunkGolestan_Finance_Panel"] = self["webpackChunkGolestan_Finance_Panel"] || []).push([["/js/persian.json"],{
 
 /***/ "./resources/assets/js/persian.json":
 /*!******************************************!*\

@@ -156,7 +156,7 @@
 /******/ 			return __webpack_require__.O(result);
 /******/ 		}
 /******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunkmofidSanat"] = self["webpackChunkmofidSanat"] || [];
+/******/ 		var chunkLoadingGlobal = self["webpackChunkGolestan_Finance_Panel"] = self["webpackChunkGolestan_Finance_Panel"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();
