@@ -23879,6 +23879,20 @@ body,
   margin: 0;
 }
 
+.breadcrumb-item + .breadcrumb-item::before {
+  padding-left: 0.5rem;
+}
+
+.details-form {
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.breadcrumb {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
 .content-header .breadcrumb {
   margin-bottom: 0;
   padding: 0;
@@ -25831,6 +25845,10 @@ ul {
 .dropdown-footer,
 .dropdown-header {
   text-align: center;
+}
+
+.breadcrumb {
+  background-color: rgba(0, 0, 0, 0.05) !important;
 }
 
 .breadcrumb-item + .breadcrumb-item::before {

@@ -36,12 +36,13 @@ class GeneralInfoDataTable extends DataTable
                 return $generalInfo->jalaliYear;
             })
             ->editColumn('bank_statement_receipt', function(GeneralInfo $generalInfo) {
-                return "<object data='/receipts/{$generalInfo->bank_statement_receipt}' type='application/pdf' class='dataTablePDF' width='100%' height='auto'>
-                            <p>Your browser does not support PDFs. <a href='/receipts/{$generalInfo->bank_stateemnt_receipt}'>Download the PDF</a> instead.</p>
-                        </object>";
+
+                $fileUrl = asset("receipts/{$generalInfo->bank_statement_receipt}");
+
+                return "<a href=\"$fileUrl\" download>دانلود رسید بانک</a>";
             })
             ->addColumn('action', function(GeneralInfo $generalInfo) {
-                return $this->dataTable->setAction($generalInfo->id); 
+                return $this->dataTable->setAction($generalInfo->id, 'generalInfo'); 
             });
     }
 
@@ -78,7 +79,7 @@ class GeneralInfoDataTable extends DataTable
         return [
             $this->dataTable->getIndexCol(),
             Column::make('bank_statement_receipt')
-                ->title('پرینت حساب بانکی'),
+                ->title('چاپ حساب بانکی'),
             Column::make('bank_balance')
                 ->title('موجودی بانکی')
                 ->orderable(false),

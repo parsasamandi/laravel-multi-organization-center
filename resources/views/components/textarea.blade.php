@@ -1,7 +1,9 @@
 <div class="{{ $class ?? null }}">
     {{-- Label --}}
-    <label for="{{ $key }}">{{ $placeholder }}:</label>
+    <label for="{{ $key }}">{{ $placeholder ? (string) $placeholder : '' }}:</label>
     {{-- Textarea --}}
-    <textarea name="{{ $key }}" id="{{ $key }}" rows="{{ $rows ?? 3 }}" class="form-control" 
-        placeholder="{{ $placeholder }}">{{ optional($value) }}</textarea>
+    <textarea name="{{ $key }}" id="{{ $key }}" rows="{{ $rows ?? 2 }}" class="form-control" 
+        placeholder="{{ $placeholder ? (string) $placeholder : '' }}" @if(isset($readonly) && $readonly) readonly @endif>
+        {{ $value instanceof \Illuminate\Support\Optional ? $value->value() : $value }}
+    </textarea>
 </div>

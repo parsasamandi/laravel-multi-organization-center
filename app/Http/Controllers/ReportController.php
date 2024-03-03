@@ -29,39 +29,37 @@ class ReportController extends Controller
 
         $vars['reportTable'] = $ReportTable->html();
 
-        return view('reportList', $vars);
+        return view('report.list', $vars);
     }
 
     // Rendering Report Table
     public function reportTable(ReportDataTable $reportTable) {
-        return $reportTable->render('report'); 
+        return $reportTable->render('report.list'); 
     }
 
 
     // Insert
     public function store(StoreReportRequest $request) {
 
-        if($request->hasFile('receipt')) {
+        $generalInfo = GeneralInfo::where('jalaliMonth', $request->get('jalaliMonth'))
+                            ->where('jalaliYear', $request->get('jalaliYear'))->where('center_id', Auth::id())->first();
+        if($generalInfo) {
 
-            $generalInfo = GeneralInfo::where('jalaliMonth', $request->get('jalaliMonth'))
-                                ->where('jalaliYear', $request->get('jalaliYear'))->first();
-            if($generalInfo) {
+            $receipt = $request->file('receipt');
+            $file = $receipt->getClientOriginalName();
+            $receipt->move(public_path('receipts'), $file);
 
-                $receipt = $request->file('receipt');
-                $file = $receipt->getClientOriginalName();
-                $receipt->move(public_path('receipts'), $file);
+            Report::updateOrCreate(
+                ['id' => $request->get('id')],
+                ['expenses' => $request->get('expenses'), 'range' => $request->get('range'), 
+                'receipt' => $file, 'description' => $request->get('description'), 
+                'type' => $request->get('type'), 'center_id' => Auth::id(), 
+                'general_info_id' => $generalInfo->id
+            ]);
 
-                Report::updateOrCreate(
-                    ['id' => $request->get('id')],
-                    ['expenses' => $request->get('expenses'), 'range' => $request->get('range'), 
-                    'receipt' => $file, 'description' => $request->get('description'), 
-                    'type' => $request->get('type'), 'center_id' => Auth::id(), 
-                    'general_info_id' => $generalInfo->id
-                ]);
-
-            } else {
-                return response()->json(['success' => false, 'message' => '<div class="alert alert-danger">برای تاریخ انتخاب شده اطلاعات کلی وارد نشده است</div>']); 
-            }
+        } else {
+            return response()->json(['success' => false, 
+                'message' => '<div class="alert alert-danger">برای تاریخ انتخاب شده "مقدمات گزارش" وارد نشده است</div>']); 
 
         }
         return $this->getAction($request->get('button_action'));
@@ -70,7 +68,10 @@ class ReportController extends Controller
 
     // Delete
     public function delete($id) {
-        return $this->action->deleteWithFile(Report::class, $request->get('id'), 'receipt');
+
+        $report = Report::findOrFail($id);
+
+        return $this->action->deleteWithFile(Report::class, $id, $report->receipt);
     }
 
     // Edit
@@ -91,7 +92,24 @@ class ReportController extends Controller
         } else {
             return $this->failedResponse();
         }
-    }   
+    }  
+    
+    // Details
+    public function details($id) {
+
+        $report = Report::with('generalInfo')->where('id', $id)->first();
+
+        if (!$report) {
+            // Handle report not found scenario (e.g., return 404)
+            return abort(404);
+        }
+        
+        $vars = [
+            'report' => $report,
+        ];
+        
+        return view('report.details', $vars);
+    }
     
      // Print
      public function printReport() {

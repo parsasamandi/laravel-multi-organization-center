@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('title', 'لیست ')
+@section('title', 'فهرست مقدمات گزارش')
 
 @section('content')
 
   {{-- Header --}}
-  <x-header pageName="اطلاعات کلی" buttonValue="اطلاعات کلی">
+  <x-header pageName="مقدمات گزارش" buttonValue="مقدمات گزارش">
     <x-slot name="table">
       <x-table :table="$generalInfoTable" />
     </x-slot>
@@ -29,18 +29,16 @@
 
       </div>
       <!-- File -->
-      <h6>ارسال پرینت صورت حساب بانکی</h6>
+      <h6>ارسال چاپ صورت حساب بانکی</h6>
       <input type="file" id="file" name="receipt" class="mb-3" 
         accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,application/csv"/>
-
-      <input type="hidden" id="hidden_receipt" name="hidden_receipt"/>
 
     </x-slot>
   </x-admin.insert>
 
 
   {{-- Delete --}}
-  <x-admin.delete title="اطلاعات کلی" />
+  <x-admin.delete title="'گزارش'" />
 
   
 @endsection
@@ -72,24 +70,7 @@
 
     // Edit
     window.showEditModal = function showEditModal(url) {
-      edit(url);
-    }
-    function edit($url) {
-      // Edit
-      action.reloadModal();
-
-      $.ajax({
-        url: "{{ url('generalInfo/edit') }}",
-        method: 'get',
-        data: { id: $url },
-        success: function (data) {  
-          action.editOnSuccess($url);
-          $('#hidden_receipt').val('Not null');
-          $('#bank_balance').val(data.bank_balance);
-          $('#jalaliMonth').val(data.jalaliMonth).trigger('change');
-          $('#jalaliYear').val(data.jalaliYear).trigger('change');
-        }
-      })
+      action.redirectPage('/generalInfo/edit/' + url);
     }
   });
 </script>

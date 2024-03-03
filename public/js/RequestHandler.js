@@ -44,11 +44,14 @@ class RequestHandler {
     // Delete
     delete(id) {
         $('#confirmationModal').modal('show'); // Confirm
-        $('#deleteSubmission').click(function () {
+
+        $('#ok_button').click(function () {
+
             $.ajax({
                 url: "/" + window.url + "/delete/" + id,
                 method: "get",
                 success: function(data) {
+
                     $('#confirmationModal').modal('hide');
                     window.dt.draw(false);
                 }
@@ -67,7 +70,11 @@ class RequestHandler {
         $('#id').val(id);
         $('#button_action').val('update');
         $('#action').val('ویرایش');
-        $('#hidden_receipt').val('Not null'); 
+    }
+
+    // Redirect page
+    redirectPage (url) {
+        window.location.href = url;
     }
 }
 

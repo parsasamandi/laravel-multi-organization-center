@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreGeneralInfoRequest extends FormRequest
+class UpdateGeneralInfoRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,9 +14,10 @@ class StoreGeneralInfoRequest extends FormRequest
     public function rules()
     {
         // Define the base validation rules
-        return $rules = [
+        return [
             'bank_balance' => 'required',
-            'receipt' => 'required',
+            'jalaliMonth' => 'required',
+            'jalaliYear' => 'required',
         ];
 
     }
@@ -30,7 +31,6 @@ class StoreGeneralInfoRequest extends FormRequest
     {
         return [
             'bank_balance' => '"موجودی در بانک"',
-            'receipt' => '"رسید صورتحساب بانک"',
         ];
     }
 }

@@ -31,9 +31,11 @@ class ReportDataTable extends DataTable
             ->addIndexColumn()
             ->rawColumns(['action' , 'receipt', 'jalaliMonth'])
             ->addColumn('jalaliMonth', function (Report $report){
+
                 $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
 
                 return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth);
+
             })->filterColumn('jalaliMonth', function ($query, $keyword) {
                 // Define a mapping of Persian month names to their corresponding numbers
                 $monthMap = [
@@ -61,7 +63,9 @@ class ReportDataTable extends DataTable
                 }
             })
             ->addColumn('jalaliYear', function (Report $report){
+
                 $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
+
                 return $generalInfo->jalaliYear;
             })
             ->filterColumn('jalaliYear', function ($query, $keyword) {
@@ -70,9 +74,9 @@ class ReportDataTable extends DataTable
             })
             ->editColumn('receipt', function(Report $report) {
 
-                return "<object data='/receipts/{$report->receipt}' type='application/pdf' class='dataTablePDF' width='100%' height='auto'>
-                            <p>Your browser does not support PDFs. <a href='/receipts/{$report->receipt}'>Download the PDF</a> instead.</p>
-                        </object>";
+                $fileUrl = asset("receipts/{$report->receipt}");
+
+                return "<a href=\"$fileUrl\" download>دانلود رسید بانک</a>";;
             })
             ->editColumn('type', function (Report $report){
                 switch ($report->type) {
@@ -87,7 +91,7 @@ class ReportDataTable extends DataTable
                         break;
                 }
             })->addColumn('action', function (Report $report){
-                return $this->dataTable->setAction($report->id); 
+                return $this->dataTable->setAction($report->id, 'report'); 
             });
     }
 

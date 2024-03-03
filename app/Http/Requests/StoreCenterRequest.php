@@ -19,8 +19,8 @@ class StoreCenterRequest extends FormRequest
             'name' => 'required',
             'password' => 'required|min:6|',
             'password-confirm' => 'same:password',
-            'phone_number' => 'nullable|numeric|digits:11',
-            'email' => 'email|required|max:255|unique:users,email,' . $request->get('id')
+            'phone_number' => 'required|numeric|digits:11|unique:centers,phone_number,' . $request->get('id'),
+            'email' => 'email|max:255|unique:centers,email,' . $request->get('id')
         ];
     }
 

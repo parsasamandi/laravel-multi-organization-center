@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'لیست گزارش جزئی')
+@section('title', 'فهرست گزارش جزئی')
 
 @section('content')
 

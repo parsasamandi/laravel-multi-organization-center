@@ -34,17 +34,27 @@ class GeneralDataTable
     }
 
     // Computed column in datatables for delete,update,insertion
-    public function setAction($id) {
-        return <<<ATAG
-                    <a onclick="showConfirmationModal('{$id}')">
-                        <i class="fa fa-trash text-danger" aria-hidden="true"></i>
-                    </a>
-                    &nbsp;
-                    <a onclick="showEditModal('{$id}')">
-                        <i class="fa fa-edit text-danger" aria-hidden="true"></i>
-                    </a>
-                ATAG;
+    public function setAction($id, $model = null)
+    {
+        $baseHtml = <<<HTML
+            <a onclick="showConfirmationModal('{$id}')">
+                <i class="fa fa-trash text-primary" aria-hidden="true"></i>
+            </a>
+            &nbsp;
+            <a onclick="showEditModal('{$id}')">
+                <i class="fa fa-edit text-primary" aria-hidden="true"></i>
+            </a>
+        HTML;
+
+        if ($model) {
+            $detailsUrl = url($model . '/details/' . $id);
+            return $baseHtml . "&nbsp;" . "<a href='$detailsUrl'><i class='fa fa-info-circle text-primary' aria-hidden='true'></i></a>";
+        }
+
+        return $baseHtml;
     }
+    
+    
 
     /**
      * Get index column(0 | 1 | 2 .....).
@@ -67,7 +77,7 @@ class GeneralDataTable
                 ->searchable(false)
                 ->printable(false)
                 ->orderable(false)
-                ->title("حذف | ویرایش");
+                ->title("حذف | ویرایش | جزئیات");
     }  
 
 

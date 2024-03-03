@@ -31,7 +31,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('list', 'GeneralInfoController@list');
         Route::get('/table/list', 'GeneralInfoController@generalInfoTable')->name('list.table');
         Route::post('store', 'GeneralInfoController@store');
-        Route::get('edit', 'GeneralInfoController@edit');
+        Route::get('/edit/{id}', 'GeneralInfoController@edit');
+        Route::get('/details/{id}', 'GeneralInfoController@details');
+        Route::post('/update', 'GeneralInfoController@update');
         Route::get('delete/{id}','GeneralInfoController@delete');
     });
 
@@ -39,9 +41,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'report','as' => 'report.'], function() {
         Route::get('list', 'ReportController@list');
         Route::get('/table/list', 'ReportController@reportTable')->name('list.table');
-        // Route::get('/print', 'ReportController@printReport')->name('print.report');
         Route::post('store', 'ReportController@store');
-        Route::get('edit', 'ReportController@edit');
+        Route::get('/edit', 'ReportController@edit')->name('edit');
+        Route::get('/details/{id}', 'ReportController@details');
         Route::get('delete/{id}','ReportController@delete');
     });
 

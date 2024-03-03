@@ -44,12 +44,14 @@ class Action {
      * 
      * @return json
      */
-    public function deleteWithFile($model, $id, $column) {
+    public function deleteWithFile($model, $id, $file) {
 
+        // Model file
         $modelFile = $model::find($id);
+
         if($modelFile) {
             // Media
-            $fileDelete = public_path("receipts/" . $generalInfo->$column);
+            $fileDelete = public_path("receipts/" . $file);
 
             if($fileDelete) {
                 File::delete($fileDelete); 
@@ -60,6 +62,7 @@ class Action {
         } else {
             return $this->failedResponse();
         }
+ 
     }
 
     // Image

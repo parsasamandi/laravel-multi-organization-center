@@ -9,8 +9,8 @@
                 <h5 class="mb-0">آیا مایل به حذف {{ $title }} هستید؟</h5>
             </div>
             <div class="modal-footer text-center">
-                <button type="button" name="ok_button" id="ok_button" class="btn btn-danger">تایید</button>
-                <button type="button" class="btn btn-opaque" data-dismiss="modal">انصراف</button>
+                <button type="button" name="ok_button" id="ok_button" class="btn btn-primary">تایید</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
             </div>
         </div>
     </div>

@@ -41,6 +41,10 @@ ul {
     text-align: center;
 }
 
+.breadcrumb {
+    background-color: rgba(0,0,0,.05) !important;
+}
+
 .breadcrumb-item+.breadcrumb-item::before {
     padding-left: .5rem;
 }

@@ -11,6 +11,7 @@ class textarea extends Component
     public $value; // Value | default: null
     public $rows; // Rows | default: 3
     public $class; // Class
+    public $readonly; // Readonly
     
     /**
      * Create a new component instance.
@@ -18,13 +19,14 @@ class textarea extends Component
      * @return void
      */
     public function __construct($key, $placeholder, 
-                                $rows = 3, $value = null, $class = null)
+                                $rows = 3, $value = null, $class = null, $readonly = null)
     {
         $this->key = $key;
         $this->placeholder = $placeholder;
         $this->value = $value;
         $this->rows = $rows;
         $this->class = $class;
+        $this->readonly = $readonly;
     }
 
     /**
@@ -34,13 +36,6 @@ class textarea extends Component
      */
     public function render()
     {
-        return <<<'blade'
-            <div class="{{ $class ?? null }}">
-                <label for="{{ $key }}">{{ $placeholder }}:</label>
-
-                <textarea name="{{ $key }}" id="{{ $key }}" rows="{{ $rows ?? 3 }}" class="form-control" 
-                    placeholder="{{ $placeholder }}">{{ $value ?? null }}</textarea>
-            </div>
-        blade;
+        return view('components.textarea');
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\StoreGeneralInfoRequest;
+use App\Http\Requests\UpdateGeneralInfoRequest;
 use App\Providers\SuccessMessages;
 use App\Datatables\GeneralInfoDataTable;
 use App\Models\GeneralInfo;
@@ -28,72 +29,85 @@ class GeneralInfoController extends Controller
 
         $vars['generalInfoTable'] = $GeneralInfoTable->html();
 
-        return view('generalInfoList', $vars);
+        return view('generalInfo.list', $vars);
     }
 
     // Rendering General Info Table
     public function generalInfoTable(GeneralInfoDataTable $generalInfoTable) {
-        return $generalInfoTable->render('generalInfoList'); 
+        return $generalInfoTable->render('generalInfo.list'); 
     }
 
     // Insert
     public function store(StoreGeneralInfoRequest $request) {
 
+        $receipt = $request->file('receipt');
+        $file = $receipt->getClientOriginalName();
+        $receipt->move(public_path('receipts'), $file);
 
-        $generalInfo = GeneralInfo::where('jalaliMonth', $request->get('jalaliMonth'))
-                            ->where('jalaliYear', $request->get('jalaliYear'))
-                            ->first();
+        GeneralInfo::create([
+            'jalaliMonth' => $request->get('jalaliMonth'),
+            'jalaliYear' => $request->get('jalaliYear'),
+            'bank_balance' => $request->get('bank_balance'),
+            'bank_statement_receipt' => $file,
+            'center_id' => Auth::id()
+        ]);
 
-        // Finding the record in the table
-        $generalInfoUpdate = GeneralInfo::find($request->get('id'));
+        return $this->getAction($request->get('button_action'));
+    }
 
-        $generalInfoData = [
+    // Update
+    public function update(UpdateGeneralInfoRequest $request) {
+
+        $generalInfo = GeneralInfo::findOrFail($request->get('id'));
+
+        // Initialize $updateData array
+        $updateData = [
             'jalaliMonth' => $request->get('jalaliMonth'),
             'jalaliYear' => $request->get('jalaliYear'),
             'bank_balance' => $request->get('bank_balance'),
             'center_id' => Auth::id(),
-        ]; 
+        ];
 
-        if($request->hasFile('receipt')) {
+        // Check if a receipt file is uploaded
+        if ($request->hasFile('receipt')) {
             $receipt = $request->file('receipt');
             $file = $receipt->getClientOriginalName();
             $receipt->move(public_path('receipts'), $file);
-            $generalInfoData['bank_statement_receipt'] = $file;
+            $updateData['bank_statement_receipt'] = $file; // Include file in update data
         }
 
+        // Update the GeneralInfo record
+        $generalInfo->update($updateData);
 
-        if (!$generalInfo && !$generalInfoUpdate) { 
-
-            if (!$file) {
-                return response()->json(['success' => false, 
-                    'message' => '<div class="alert alert-danger">برای این تاریخ قبلا اطلاعات وارد شده است.</div>']);
-            } else {
-                $generalInfoUpdate->create($generalInfoData);
-            }
-
-        } else if ($generalInfoUpdate && $generalInfo) {
-            $generalInfoUpdate->update($generalInfoData);
-
-        } else if ($generalInfo) {
-
-            return response()->json(['success' => false, 
-                'message' => '<div class="alert alert-danger">برای این تاریخ قبلا اطلاعات وارد شده است.</div>']); 
-
-        }
 
         return $this->getAction($request->get('button_action'));
-
-
-
     }
 
     // Delete
     public function delete($id) {
-        return $this->action->deleteWithFile(GeneralInfo::class, $request->get('id'), 'bank_statement_receipt');
+
+        $generalInfo = GeneralInfo::findOrFail($id);
+
+        return $this->action->deleteWithFile(GeneralInfo::class, 
+          $id, $generalInfo->bank_statement_receipt);
     }
 
     // Edit
-    public function edit(Request $request) {
-        return $this->action->edit(GeneralInfo::class, $request->get('id'));
+    public function edit($id) {
+        // Fetch the data for the specified ID from the database
+        $generalInfo = GeneralInfo::findOrFail($id); // Replace with your actual model name
+
+        // Return the view with the data
+        return view('generalInfo.edit')->with('generalInfo', $generalInfo); 
     }
+
+    // Details
+    public function details($id) {
+        // Fetch the data for the specified ID from the database
+        $generalInfo = GeneralInfo::where('id', $id)->first(); 
+
+        // Return the view with the data
+        return view('generalInfo.details')->with('generalInfo', $generalInfo); 
+    }
+
 }
