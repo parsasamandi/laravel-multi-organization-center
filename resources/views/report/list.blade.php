@@ -37,9 +37,9 @@
           <!-- Type -->
           <label for="type">نوع گزارش:</label>
           <select name="type" id="type">
-              <option value="1">هزینه حقوق کارمندان</option>
-              <option value="2">هزینه آموزش</option>
-              <option value="3">هزینه های سلامت</option>
+              <option value="0">هزینه حقوق کارمندان</option>
+              <option value="1">هزینه آموزش</option>
+              <option value="2">هزینه های سلامت</option>
           </select>
         </div>
 
@@ -90,27 +90,9 @@
 
     // Edit
     window.showEditModal = function showEditModal(url) {
-      edit(url);
+      action.redirectPage('/report/edit/' + url);
     }
-    function edit($url) {
-      // Edit
-      action.reloadModal();
-
-      $.ajax({
-        url: "{{ url('report/edit') }}",
-        method: 'get',
-        data: { id: $url },
-        success: function (data) {  
-          action.editOnSuccess($url);
-          $('#jalaliMonth').val(data.jalaliMonth).trigger('change');
-          $('#jalaliYear').val(data.jalaliYear).trigger('change');
-          $('#type').val(data.type).trigger('change');
-          $('#expenses').val(data.expenses);
-          $('#range').val(data.range);
-          $('#description').val(data.description);
-        }
-      })
-    }
+    
   });
 </script>
 @endsection

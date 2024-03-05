@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('title', 'لیست مرکز')
+@section('title', 'فهرست مرکز')
 
 @section('content')
 
   {{-- Header --}}
-  <x-header pageName="لیست مرکز" buttonValue="لیست مرکز">
+  <x-header pageName="مرکز" buttonValue="فهرست مرکز">
     <x-slot name="table">
       <x-table :table="$centerTable" />
     </x-slot>

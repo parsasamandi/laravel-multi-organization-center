@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Http\Requests\StoreGeneralInfoRequest;
 use App\Http\Requests\UpdateGeneralInfoRequest;
 use App\Providers\SuccessMessages;
@@ -40,6 +42,7 @@ class GeneralInfoController extends Controller
     // Insert
     public function store(StoreGeneralInfoRequest $request) {
 
+
         $receipt = $request->file('receipt');
         $file = $receipt->getClientOriginalName();
         $receipt->move(public_path('receipts'), $file);
@@ -57,6 +60,19 @@ class GeneralInfoController extends Controller
 
     // Update
     public function update(UpdateGeneralInfoRequest $request) {
+
+        // Inside your method where you have access to the validator instance
+        $validator = Validator::make([], []); // Create an empty validator instance
+        $validator->errors()->add('general_info', 'مقدمات گزارش برای تاریخ مورد نظر وجود ندارد.');
+
+        // After adding errors, you can check if there are any errors
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()->toJson(),
+                'message' => 'Validation failed' // Add your message here if needed
+            ], 422); // Use appropriate status code for validation errors
+        }
 
         $generalInfo = GeneralInfo::findOrFail($request->get('id'));
 
@@ -78,7 +94,6 @@ class GeneralInfoController extends Controller
 
         // Update the GeneralInfo record
         $generalInfo->update($updateData);
-
 
         return $this->getAction($request->get('button_action'));
     }

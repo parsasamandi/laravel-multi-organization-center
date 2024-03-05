@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'لیست ')
+@section('title', 'صفحه ویرایش مقدمات گزارش')
 
 @section('content')
 
@@ -54,6 +54,12 @@
 
 <script>
     $(document).ready(function () {
+
+        // Jalali month
+        $('#jalaliMonth').val({{ json_encode($generalInfo->jalaliMonth) }}).trigger('change');
+        // Jalali year
+        $('#jalaliYear').val({{ json_encode($generalInfo->jalaliYear) }}).trigger('change');
+
         // Form submission for updating
         $('#generalInfoEditForm').on('submit', function (event) {
           event.preventDefault();

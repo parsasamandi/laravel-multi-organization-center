@@ -49,6 +49,6 @@ class Report extends Model
      */
     public function generalInfo()
     {
-        return $this->belongsTo('App\Models\GeneralInfo');
+        return $this->belongsTo('App\Models\GeneralInfo', 'general_info_id');
     }
 }

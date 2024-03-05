@@ -49,8 +49,7 @@ class ReportController extends Controller
             $file = $receipt->getClientOriginalName();
             $receipt->move(public_path('receipts'), $file);
 
-            Report::updateOrCreate(
-                ['id' => $request->get('id')],
+            Report::create(
                 ['expenses' => $request->get('expenses'), 'range' => $request->get('range'), 
                 'receipt' => $file, 'description' => $request->get('description'), 
                 'type' => $request->get('type'), 'center_id' => Auth::id(), 
@@ -62,6 +61,7 @@ class ReportController extends Controller
                 'message' => '<div class="alert alert-danger">برای تاریخ انتخاب شده "مقدمات گزارش" وارد نشده است</div>']); 
 
         }
+
         return $this->getAction($request->get('button_action'));
 
     }
@@ -75,24 +75,65 @@ class ReportController extends Controller
     }
 
     // Edit
-    public function edit(Request $request) {
-        $report = Report::find($request->get('id'));
+    public function edit($id) {
+
+        $report = Report::find($id);
 
         if ($report) {
-
             $generalInfo = GeneralInfo::find($report->general_info_id);
+
+            // Create an array with report properties
             $values = $report->toArray();
             
+            // Add jalaliMonth and jalaliYear from the associated GeneralInfo model
             if ($generalInfo) {
+
                 $values['jalaliMonth'] = $generalInfo->jalaliMonth;
                 $values['jalaliYear'] = $generalInfo->jalaliYear;
             }
 
-            return response()->json($values);
+            return view('report.edit')->with('report', $values); 
         } else {
             return $this->failedResponse();
         }
+
     }  
+
+    // Update
+    public function update(Request $request) {
+
+        $generalInfo = GeneralInfo::where('jalaliMonth', $request->get('jalaliMonth'))
+                            ->where('jalaliYear', $request->get('jalaliYear'))->where('center_id', Auth::id())->first();
+        if($generalInfo) {
+
+            // Report table
+            $report = Report::findOrFail($request->get('id'));
+
+            $updateData = [
+                'expenses' => $request->get('expenses'),
+                'range' => $request->get('range'),
+                'description' => $request->get('description'), 
+                'type' => $request->get('type'), 
+                'center_id' => Auth::id(),
+                'general_info_id' => $generalInfo->id
+            ];
+
+            // Check if a receipt file is uploaded
+            if ($request->hasFile('receipt')) {
+                $receipt = $request->file('receipt');
+                $file = $receipt->getClientOriginalName();
+                $receipt->move(public_path('receipts'), $file);
+                $updateData['receipt'] = $file; // Include file in update data
+            }
+
+            // Updating the report table
+            $report->update($updateData);
+
+        } else {
+            return response()->json(['success' => false, 
+                'message' => '<div class="alert alert-danger">در گذشته برای تاریخ انتخاب شده "مقدمات گزارش"وارد نشده است</div>']); 
+        }
+    }
     
     // Details
     public function details($id) {

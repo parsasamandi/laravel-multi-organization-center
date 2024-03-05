@@ -3,7 +3,8 @@
 
 @section('content')
 
-<div class="container-fluid mt-3 right-text">
+<!-- <div class="container-fluid mt-3 right-text"> -->
+<div id="content-to-print">
     {{-- List --}}
     <x-details tableId="reportDetailsTable" header="گزارش جزئی">
 
@@ -34,32 +35,32 @@
                 @case(2)
                     <td>گزارش هزینه های سلامت</td>
                     @break
-                @default
-                    <td>Unknown Report Type</td>
             @endswitch
 
+            <!-- Jalali months -->
             @php
-            $months = [
-                1 => 'فروردین',
-                2 => 'اردیبهشت',
-                3 => 'خرداد',
-                4 => 'تیر',
-                5 => 'مرداد',
-                6 => 'شهریور',
-                7 => 'مهر',
-                8 => 'آبان',
-                9 => 'آذر',
-                10 => 'دی',
-                11 => 'بهمن',
-                12 => 'اسفند',
-            ];
+                $months = [
+                    1 => 'فروردین',
+                    2 => 'اردیبهشت',
+                    3 => 'خرداد',
+                    4 => 'تیر',
+                    5 => 'مرداد',
+                    6 => 'شهریور',
+                    7 => 'مهر',
+                    8 => 'آبان',
+                    9 => 'آذر',
+                    10 => 'دی',
+                    11 => 'بهمن',
+                    12 => 'اسفند',
+                ];
             @endphp
 
             <td>{{ $months[$report->generalInfo->jalaliMonth] }}</td>
 
             <!-- Jalali Year -->
             <td>{{ $report->generalInfo->jalaliYear }}</td>
-            <td><a href="{{ url('receipts/' . $report->receipt) }}" download>دانلود  
+            <!-- Receipt -->
+            <td><a href="{{ url('/receipts/' . $report->receipt) }}" download>دانلود  
                     {{ $report->receipt }} </a></td>
         </x-slot>
 
@@ -84,14 +85,16 @@
 @parent
     <script>
         $('#print_button').click(function() {
-            window.print();
+            var $tableToPrint = $('#reportDetailsTable').clone(); // Clone the table
+            $tableToPrint.find('button').remove(); // Remove any buttons in the cloned table
+            
+            var $printWindow = window.open('', '_blank'); // Open a new window
+            $printWindow.document.body.innerHTML = '<table class="table table-bordered">' + $tableToPrint.html() + '</table>'; // Append the table to the new window
+            
+            $printWindow.print(); // Print the window
+            $printWindow.close(); // Close the window after printing
         });
     </script>
-
-
-
-
-
 
 @endsection
 
