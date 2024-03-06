@@ -79,9 +79,9 @@ class GeneralInfoDataTable extends DataTable
         return [
             $this->dataTable->getIndexCol(),
             Column::make('bank_statement_receipt')
-                ->title('چاپ حساب بانکی'),
+                ->title('صورتحساب بانکی'),
             Column::make('bank_balance')
-                ->title('موجودی بانکی')
+                ->title('موجودی حساب')
                 ->orderable(false),
             Column::make('jalaliMonth')
                 ->title('ماه'),

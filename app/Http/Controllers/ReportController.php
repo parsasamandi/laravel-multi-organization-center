@@ -58,7 +58,7 @@ class ReportController extends Controller
 
         } else {
             return response()->json(['success' => false, 
-                'message' => '<div class="alert alert-danger">برای تاریخ انتخاب شده "مقدمات گزارش" وارد نشده است</div>']); 
+                'message' => '<div class="alert alert-danger">برای تاریخ انتخاب شده "گزارش کلی" وارد نشده است</div>']); 
 
         }
 

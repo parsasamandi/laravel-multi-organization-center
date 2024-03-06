@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreGeneralInfoRequest extends FormRequest
 {
@@ -13,12 +14,25 @@ class StoreGeneralInfoRequest extends FormRequest
      */
     public function rules()
     {
-        // Define the base validation rules
-        return $rules = [
+        return [
             'bank_balance' => 'required',
             'receipt' => 'required',
+            'jalaliMonth' => [
+                'required',
+                Rule::unique('general_infos')->where(function ($query) {
+                    return $query->where('jalaliYear', $this->input('jalaliYear'));
+                })
+            ],
+            'jalaliYear' => 'required',
         ];
-
+    }
+    
+    // Messages
+    public function messages()
+    {
+        return [
+            'jalaliMonth.unique' => 'برای تاریخ انتخاب شده "گزارش کلی" موجود است',
+        ];
     }
 
     /**

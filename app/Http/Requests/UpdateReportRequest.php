@@ -60,7 +60,7 @@ class StoreReportRequest extends FormRequest
                                       ->first();
 
             if (!$generalInfo) {
-                $validator->errors()->add('general_info', 'مقدمات گزارش برای تاریخ مورد نظر وجود ندارد.');
+                $validator->errors()->add('general_info', 'گزارش کلی برای تاریخ مورد نظر وجود ندارد.');
 
             }
         });

@@ -4,7 +4,7 @@
 @section('content')
 
   {{-- Header --}}
-  <x-header pageName="گزارش جزئی" buttonValue="گزارش جزئی">
+  <x-header pageName="گزارشات جزئیات هزینه کرد" pageDescription="گزارشات جزئیات هزینه‌کرد" buttonValue="گزارش جزئی هزینه کرد">
     <x-slot name="table">
       <x-table :table="$reportTable" />
     </x-slot>
@@ -30,7 +30,7 @@
         <x-input type="number" key="expenses" placeholder="مبلغ هزینه"
           class="col-md-6 mb-3" />
         <!-- Range -->
-        <x-input type="number" key="range" placeholder="ردیف های مرتبط"
+        <x-input type="number" key="range" placeholder="ردیف هزینه"
           class="col-md-6 mb-3" />
 
         <div class="col-md-12 mb-3">

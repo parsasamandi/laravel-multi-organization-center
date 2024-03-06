@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('title', 'فهرست مقدمات گزارش')
+@section('title', 'فهرست گزارش های کالی')
 
 @section('content')
 
   {{-- Header --}}
-  <x-header pageName="مقدمات گزارش" buttonValue="مقدمات گزارش">
+  <x-header pageName="گزارشات کلی" pageDescription="گزارشات موجودی و فرستادن صورت حساب" buttonValue="گزارش کلی جدید">
     <x-slot name="table">
       <x-table :table="$generalInfoTable" />
     </x-slot>

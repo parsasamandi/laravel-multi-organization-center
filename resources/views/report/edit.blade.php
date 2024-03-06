@@ -1,12 +1,12 @@
 @extends('layouts.admin')
-@section('title', 'ویرایش گزارش جزئی')
+@section('title', 'ویرایش گزارش جزئیات هزینه‌کرد')
 
 @section('content')
 
 <div class="container-fluid mt-3 right-text">
     {{-- List --}}
     <ol class="breadcrumb mb-4 right-text">
-      <li class="breadcrumb-item">ویرایش گزارش جزئی</li>
+      <h5>ویرایش گزارش یک ردیف هزینه‌کرد</h5>
     </ol>
 
     <form id="reportEditForm" class="form-horizontal details-form" enctype="multipart/form-data">
@@ -31,7 +31,7 @@
                 class="col-md-4 mb-3" value="{{ $report['id'] }}" />
 
             <!-- Range -->
-            <x-input type="number" key="range" placeholder="ردیف های مرتبط"
+            <x-input type="number" key="range" placeholder="ردیف هزینه"
                 class="col-md-6 mb-3" value="{{ $report['range'] }}" />
 
             <div class="col-md-6 mb-3">
