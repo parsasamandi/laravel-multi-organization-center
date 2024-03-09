@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReportTable extends Migration {
+class CreateReportsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -13,16 +13,18 @@ class CreateReportTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('report', function(Blueprint $table)
+		Schema::create('reports', function(Blueprint $table)
 		{
-			$table->bigInteger('id', true)->unsigned();
+			$table->integer('id', true);
 			$table->float('expenses', 10, 0);
 			$table->float('range', 10, 0);
-			$table->float('receipt', 10, 0);
+			$table->text('receipt');
 			$table->text('description')->nullable();
-			$table->integer('type');
-			$table->integer('center_id')->unique('center_id_UNIQUE');
-			$table->integer('general_info_id')->unique('general_info_id_UNIQUE');
+			$table->integer('type')->comment('0 = Employee Income Expenses;
+1 = Education Expenses;
+2 = Healthcare Expenses;');
+			$table->integer('center_id')->index('center_id_idx');
+			$table->integer('general_info_id')->index('general_info_idx');
 		});
 	}
 
@@ -34,7 +36,7 @@ class CreateReportTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('report');
+		Schema::drop('reports');
 	}
 
 }

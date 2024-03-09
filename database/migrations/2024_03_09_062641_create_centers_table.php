@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCenterNameTable extends Migration {
+class CreateCentersTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -13,10 +13,14 @@ class CreateCenterNameTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('center_name', function(Blueprint $table)
+		Schema::create('centers', function(Blueprint $table)
 		{
 			$table->integer('id', true);
 			$table->string('name')->unique('name_unique');
+			$table->string('phone_number', 20)->unique('phone_number_UNIQUE');
+			$table->string('email')->nullable();
+			$table->string('password');
+			$table->integer('type')->default(0)->comment('0 = Center; 1 = Super Admin');
 		});
 	}
 
@@ -28,7 +32,7 @@ class CreateCenterNameTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('center_name');
+		Schema::drop('centers');
 	}
 
 }

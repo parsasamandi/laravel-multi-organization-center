@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGeneralInfoTable extends Migration {
+class CreateStatusesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -13,13 +13,12 @@ class CreateGeneralInfoTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('general_info', function(Blueprint $table)
+		Schema::create('statuses', function(Blueprint $table)
 		{
 			$table->integer('id', true);
-			$table->text('bank_statement')->nullable();
-			$table->float('bank_balance', 10, 0);
-			$table->char('date', 120);
-			$table->integer('user_id')->unique('user_id_UNIQUE');
+			$table->integer('status')->comment('0 = NOT CONFIRMED | 1 = CONFIRMED ');
+			$table->integer('status_id')->index('status_general_info_fk');
+			$table->string('status_type', 100);
 		});
 	}
 
@@ -31,7 +30,7 @@ class CreateGeneralInfoTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('general_info');
+		Schema::drop('statuses');
 	}
 
 }
