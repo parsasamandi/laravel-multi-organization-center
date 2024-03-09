@@ -28,28 +28,40 @@ class GeneralInfoDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->rawColumns(['action', 'bank_statement_receipt']) 
-            ->editColumn('jalaliMonth', function(GeneralInfo $generalInfo) {
-                return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth);
+            ->rawColumns(['action', 'bank_statement_receipt', 'data']) 
+            ->addColumn('date', function(GeneralInfo $generalInfo) {
+                return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) . ' ' . $generalInfo->jalaliYear;
             })
-            ->addColumn('status', function(GeneralInfo $generalInfo) {
-                switch($generalInfo->statuses->status) {
-                    case 0:
-                        return 'تایید نشده';
-                        break;
-                    case 1:
-                        return 'تایید شده';
-                        break;
-                }
+            ->filterColumn('date', function ($query, $keyword) {
+
+                $monthMap = [
+                    'فروردین' => 1,
+                    'اردیبهشت' => 2,
+                    'خرداد' => 3,
+                    'تیر' => 4,
+                    'مرداد' => 5,
+                    'شهریور' => 6,
+                    'مهر' => 7,
+                    'آبان' => 8,
+                    'آذر' => 9,
+                    'دی' => 10,
+                    'بهمن' => 11,
+                    'اسفند' => 12,
+                ];
+    
+                return $query->where('jalaliYear', 'LIKE', "%{$keyword}%")
+                    ->orWhere(function ($query) use ($keyword, $monthMap) {
+                        $monthNumeric = $monthMap[$keyword] ?? null;
+                        if ($monthNumeric !== null) {
+                            $query->where('jalaliMonth', $monthNumeric);
+                        }
+                });
             })
             ->editColumn('bank_statement_receipt', function(GeneralInfo $generalInfo) {
 
                 $fileUrl = asset("receipts/{$generalInfo->bank_statement_receipt}");
 
                 return "<a href=\"$fileUrl\" download>دانلود رسید بانک</a>";
-            })
-            ->editColumn('jalaliYear', function(GeneralInfo $generalInfo) {
-                return $generalInfo->jalaliYear;
             })
             ->addColumn('action', function(GeneralInfo $generalInfo) {
                 return $this->dataTable->setAction($generalInfo->id, 'generalInfo'); 
@@ -64,12 +76,6 @@ class GeneralInfoDataTable extends DataTable
      */
     public function query(GeneralInfo $model)
     {
-        $user = Auth::user();
-
-        if ($user && $user->type === 1) {
-            return $model->newQuery();
-        }
-
         return $model->where('center_id', Auth::id());
     }
 
@@ -95,16 +101,13 @@ class GeneralInfoDataTable extends DataTable
         return [
             $this->dataTable->getIndexCol(),
             Column::make('bank_statement_receipt')
-                ->title('صورتحساب بانکی'),
+                ->title('چاپ حساب بانکی'),
             Column::make('bank_balance')
-                ->title('موجودی حساب')
+                ->title('موجودی بانکی')
                 ->orderable(false),
-            Column::make('jalaliMonth')
-                ->title('ماه'),
-            Column::make('jalaliYear')
-                ->title('سال'),
-            Column::computed('status') 
-                ->title('وضعیت'),
+            Column::computed('date')
+                ->title('تاریخ')
+                ->searchable(true),
             $this->dataTable->setActionCol()
         ];
     }

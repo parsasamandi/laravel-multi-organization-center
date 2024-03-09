@@ -21,13 +21,6 @@ class UpdateReportRequest extends FormRequest
             'range' => 'required',
             'description' => 'required',
             'type' => 'required',
-            'jalaliMonth' => [
-                'required',
-                Rule::unique('general_infos')->where(function ($query) {
-                    return $query->where('jalaliYear', $this->input('jalaliYear'));
-                })
-            ],
-            'jalaliYear' => 'required', // Assuming this is also a required field
         ];
     }
 
@@ -46,7 +39,7 @@ class UpdateReportRequest extends FormRequest
         ];
     }
 
-    /**
+     /**
      * Configure the validator instance.
      *
      * @param  \Illuminate\Validation\Validator  $validator
@@ -61,17 +54,17 @@ class UpdateReportRequest extends FormRequest
 
             $generalInfo = GeneralInfo::where('jalaliMonth', $jalaliMonth)
                                       ->where('jalaliYear', $jalaliYear)
-                                      ->where('center_id', Auth::id())
-                                      ->first();
+                                      ->where('center_id', auth()->id())
+                                      ->exists();
 
             if (!$generalInfo) {
-                $validator->errors()->add('general_info', 'گزارش کلی برای تاریخ مورد نظر وجود ندارد.');
-
+                $validator->errors()->add('general_info', 'مقدمات گزارش برای تاریخ مورد نظر وجود ندارد.');
             }
         });
     }
 
-       /**
+
+    /**
      * Handle a failed validation attempt.
      *
      * @param  \Illuminate\Contracts\Validation\Validator  $validator
@@ -79,10 +72,14 @@ class UpdateReportRequest extends FormRequest
      */
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json([
+        $response = new JsonResponse([
             'success' => false,
-            'errors' => $validator->errors(),
-            'message' => '<div class="alert alert-danger">در گذشته برای تاریخ انتخاب شده "مقدمات گزارش"وارد نشده است</div>' 
-        ], 422));
+            'message' => '<div class="alert alert-danger">در گذشته برای تاریخ انتخاب شده "مقدمات گزارش"وارد نشده است</div>'
+        ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+
+        throw new HttpResponseException($response);
     }
+
+
+
 }
