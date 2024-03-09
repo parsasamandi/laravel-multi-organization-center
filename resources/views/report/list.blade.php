@@ -4,7 +4,8 @@
 @section('content')
 
   {{-- Header --}}
-  <x-header pageName="گزارشات جزئیات هزینه کرد" pageDescription="گزارشات جزئیات هزینه‌کرد" buttonValue="گزارش جزئی هزینه کرد">
+  <x-header pageName="گزارشات جزئیات هزینه کرد" pageDescription="گزارشات جزئیات هزینه‌کرد" 
+    buttonValue="گزارش جزئی هزینه کرد">
     <x-slot name="table">
       <x-table :table="$reportTable" />
     </x-slot>
@@ -27,16 +28,16 @@
         </div>
 
         <!-- Expenses -->
-        <x-input type="number" key="expenses" placeholder="مبلغ هزینه"
+        <x-input type="number" key="expenses" placeholder="مبلغ هزینه (ریال)"
           class="col-md-6 mb-3" />
         <!-- Range -->
-        <x-input type="number" key="range" placeholder="ردیف هزینه"
+        <x-input type="number" key="range" placeholder="ردیف هزینه (ریال)"
           class="col-md-6 mb-3" />
 
         <div class="col-md-12 mb-3">
           <!-- Type -->
           <label for="type">نوع گزارش:</label>
-          <select name="type" id="type">
+          <select name="type">
               <option value="0">هزینه حقوق کارمندان</option>
               <option value="1">هزینه آموزش</option>
               <option value="2">هزینه های سلامت</option>

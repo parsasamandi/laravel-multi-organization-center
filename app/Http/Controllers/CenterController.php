@@ -35,7 +35,7 @@ class CenterController extends Controller
         return view('centerList', $vars);
     }
 
-    // Get 
+    // Get Table
     public function centerTable(CenterDataTable $centerTable) {
         return $centerTable->render('centerList');
     }

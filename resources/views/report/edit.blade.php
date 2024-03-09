@@ -34,35 +34,39 @@
             <x-input type="number" key="range" placeholder="ردیف هزینه"
                 class="col-md-6 mb-3" value="{{ $report['range'] }}" />
 
-            <div class="col-md-6 mb-3">
-                <!-- Type -->
-                <label for="type">نوع گزارش:</label>
-                <select name="type" id="type">
-                    <option value="1">هزینه حقوق کارمندان</option>
-                    <option value="2">هزینه آموزش</option>
-                    <option value="3">هزینه های سلامت</option>
-                </select>
-            </div>
-
             <!-- Description -->
             <x-textarea key="description" placeholder="توضیحات" class="col-md-12 mb-3" value="{{ $report['description'] }}" />
 
+            <!-- Confirmed or Not confirmed status -->
+            @if(Auth::user()->type == 1)
+                {{-- Confirmation --}}
+                <div class="col-md-12 mb-3">
+                    <label for="status">وضعیت تایید:</label>
+                    <select name="status" id="status">
+                        <option value="0" selected>تایید نشده</option>
+                        <option value="1">تایید شده</option>
+                    </select>
+                </div>
+            @endif
+
         </div>
-        
+
         <!-- File -->
         <h6>ارسال چاپ صورت حساب بانکی</h6>  
         <input type="file" id="file" name="receipt" class="mb-3"
-            accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,application/csv"/>
+            accept="application/vnd.ms-excel,
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+            text/csv,application/csv"/>
 
         <br/>
 
-            <!-- Buttons -->
-            <div class="form-group" align="center">
-                <input type="submit" id="action" value="ویرایش" class="btn btn-primary" />
-                <button type="button" id="return_button" class="btn btn-secondary" data-dismiss="modal">بازگشت</button>
-                <input type="hidden" name="id" id="id" value="{{ $report['id'] }}"  />
-                <input type="hidden" name="button_action" id="button_action" value="update" />
-            </div>
+        <!-- Buttons -->
+        <div class="form-group" align="center">
+            <input type="submit" id="action" value="ویرایش" class="btn btn-primary" />
+            <button type="button" id="return_button" class="btn btn-secondary" data-dismiss="modal">بازگشت</button>
+            <input type="hidden" name="id" id="id" value="{{ $report['id'] }}"  />
+            <input type="hidden" name="button_action" id="button_action" value="update" />
+        </div>
 
     </form>
 

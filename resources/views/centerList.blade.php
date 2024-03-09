@@ -4,11 +4,28 @@
 @section('content')
 
   {{-- Header --}}
-  <x-header pageName="مرکز" buttonValue="فهرست مرکز">
-    <x-slot name="table">
-      <x-table :table="$centerTable" />
-    </x-slot>
-  </x-header>
+  <div class="container-fluid mt-3 right-text">
+    {{-- List --}}
+    <h2 class="mt-4">فهرست مرکز</h2>
+    <ol class="breadcrumb mb-4 right-text">
+        <li class="breadcrumb-item">صفحه مرکز</li>
+    </ol>
+
+    {{-- Conditional rendering based on user type --}}
+    @if(Auth::user()->type == 1)
+        {{-- Button for super admin --}}
+        <button type="button" id="create_record" class="btn btn-primary btn-sm">افزودن مرکز</button>
+        <hr>
+    @endif
+    
+    {{-- Responsive Table --}}
+    <div class="table-responsive">
+        {!! $centerTable->table(['class' => 'table table-bordered table-striped w-100 nowrap text-center'], false) !!}
+    </div>
+</div>
+
+
+
 
   {{-- Insertion --}}
   <x-admin.insert size="modal-l" formId="centerForm">

@@ -29,48 +29,42 @@ class ReportDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->rawColumns(['action' , 'receipt', 'jalaliMonth'])
-            ->addColumn('jalaliMonth', function (Report $report){
+            ->rawColumns(['action' , 'receipt', 'date'])
+            ->addColumn('date', function (Report $report) {
 
                 $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
 
-                return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth);
+                return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) . $generalInfo->year;
 
-            })->filterColumn('jalaliMonth', function ($query, $keyword) {
+            })->filterColumn('date', function ($query, $keyword) {
                 // Define a mapping of Persian month names to their corresponding numbers
-                $monthMap = [
-                    'فروردین' => 1,
-                    'اردیبهشت' => 2,
-                    'خرداد' => 3,
-                    'تیر' => 4,
-                    'مرداد' => 5,
-                    'شهریور' => 6,
-                    'مهر' => 7,
-                    'آبان' => 8,
-                    'آذر' => 9,
-                    'دی' => 10,
-                    'بهمن' => 11,
-                    'اسفند' => 12,
-                ];
-                if (isset($monthMap[$keyword])) {
-                    // If it exists, convert the Persian month name to its corresponding number
-                    $monthNumber = $monthMap[$keyword];
+                // $monthMap = [
+                //     'فروردین' => 1,
+                //     'اردیبهشت' => 2,
+                //     'خرداد' => 3,
+                //     'تیر' => 4,
+                //     'مرداد' => 5,
+                //     'شهریور' => 6,
+                //     'مهر' => 7,
+                //     'آبان' => 8,
+                //     'آذر' => 9,
+                //     'دی' => 10,
+                //     'بهمن' => 11,
+                //     'اسفند' => 12,
+                // ];
+                // if (isset($monthMap[$keyword])) {
+                //     // If it exists, convert the Persian month name to its corresponding number
+                //     $monthNumber = $monthMap[$keyword];
             
-                    // Apply the filter based on the month number
-                    return $query->whereHas('generalInfo', function ($query) use ($monthNumber) {
-                        $query->where('jalaliMonth', $monthNumber);
-                    });
-                }
-            })
-            ->addColumn('jalaliYear', function (Report $report){
+                //     // Apply the filter based on the month number
+                //     return $query->whereHas('generalInfo', function ($query) use ($monthNumber) {
+                //         $query->where('jalaliMonth', $monthNumber);
+                //     });
+                // }
 
-                $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
+                // return $this->dataTable->filterColumn($query, 'general_info_id in 
+                //     (select id from general_infos where jalaliYear like ?)', $keyword);
 
-                return $generalInfo->jalaliYear;
-            })
-            ->filterColumn('jalaliYear', function ($query, $keyword) {
-                return $this->dataTable->filterColumn($query, 'general_info_id in 
-                    (select id from general_infos where jalaliYear like ?)', $keyword);
             })
             ->editColumn('receipt', function(Report $report) {
 
@@ -90,7 +84,17 @@ class ReportDataTable extends DataTable
                         return 'گزارش هزینه های سلامت';
                         break;
                 }
-            })->addColumn('action', function (Report $report){
+            })->addColumn('status', function(Report $report) {
+                switch($report->statuses->status) {
+                    case 0:
+                        return 'تایید نشده';
+                        break;
+                    case 1:
+                        return 'تایید شده';
+                        break;
+                }
+            })
+            ->addColumn('action', function (Report $report){
                 return $this->dataTable->setAction($report->id, 'report'); 
             });
     }
@@ -103,6 +107,12 @@ class ReportDataTable extends DataTable
      */
     public function query(Report $model)
     {
+        $user = Auth::user();
+
+        if ($user && $user->type === 1) {
+            return $model->newQuery();
+        }
+
         return $model->where('center_id', Auth::id());
     }
 
@@ -132,16 +142,12 @@ class ReportDataTable extends DataTable
                 ->title('ردیف ها در صورت حساب بانکی'),
             Column::make('receipt')
                 ->title('رسید'),
-            Column::make('description')
-                ->title('توضیحات'),
             Column::make('type')
                 ->title('نوع'),
-            Column::computed('jalaliMonth')
-                ->title('ماه')
-                ->searchable('true'),
-            Column::computed('jalaliYear')
-                ->title('سال')
-                ->searchable('true'),
+            Column::computed('date')
+                ->title('تاریخ'),
+            Column::computed('status') 
+                ->title('وضعیت'),
             $this->dataTable->setActionCol()
         ];
     }

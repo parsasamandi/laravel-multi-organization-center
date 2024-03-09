@@ -43,4 +43,11 @@ class GeneralInfo extends Model
     {
         return $this->hasMany('App\Models\Report', 'general_info_id');
     }
+
+    /*
+     * Get all of the general info's status.
+     */
+    public function statuses() {
+        return $this->morphOne('App\Models\Status', 'status');
+    }
 }

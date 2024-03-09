@@ -17,7 +17,7 @@
         // Clear existing options
         selectBox.innerHTML = '';
         // Get the current Jalali year
-        const currentYear = new Date().getFullYear() - 617; // Convert Gregorian to Jalali
+        const currentYear = new Date().getFullYear() - 612; // Convert Gregorian to Jalali
         // Set the range of years
         const startYear = currentYear - 10;
         const endYear = currentYear + 10;

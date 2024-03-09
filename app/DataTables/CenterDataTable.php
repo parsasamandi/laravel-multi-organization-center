@@ -41,7 +41,14 @@ class CenterDataTable extends DataTable
      */
     public function query(Center $model)
     {
-        return $model->where('id', Auth::id());
+        $user = Auth::user();
+
+        if ($user && $user->type === 1) {
+            return $model->newQuery();
+        }
+        
+        return $model->where('id', $user->id);
+        
     }
 
     /**

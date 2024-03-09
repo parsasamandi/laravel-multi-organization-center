@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreReportRequest;
+use App\Http\Requests\UpdateReportRequest;
 use App\Datatables\ReportDataTable;
 use App\Providers\SuccessMessages;
 use App\Providers\Action;
 use App\Models\Report;
 use App\Models\GeneralInfo;
+use App\Models\Status;
 use Yajra\DataTables\Html\Builder;
 use Symfony\Component\HttpFoundation\Response;
 use Auth;
@@ -42,19 +44,26 @@ class ReportController extends Controller
     public function store(StoreReportRequest $request) {
 
         $generalInfo = GeneralInfo::where('jalaliMonth', $request->get('jalaliMonth'))
-                            ->where('jalaliYear', $request->get('jalaliYear'))->where('center_id', Auth::id())->first();
+                            ->where('jalaliYear', $request->get('jalaliYear'))
+                            ->where('center_id', Auth::id())->first();
+
         if($generalInfo) {
 
             $receipt = $request->file('receipt');
             $file = $receipt->getClientOriginalName();
             $receipt->move(public_path('receipts'), $file);
 
-            Report::create(
+            $report = Report::create(
                 ['expenses' => $request->get('expenses'), 'range' => $request->get('range'), 
                 'receipt' => $file, 'description' => $request->get('description'), 
                 'type' => $request->get('type'), 'center_id' => Auth::id(), 
                 'general_info_id' => $generalInfo->id
             ]);
+
+            // Storing General info's status
+            $report->statuses()->create(
+                ['status' => Status::NOTCONFIRMED, 'status_type' => Report::class]
+            );
 
         } else {
             return response()->json(['success' => false, 
@@ -93,6 +102,7 @@ class ReportController extends Controller
             }
 
             return view('report.edit')->with('report', $values); 
+
         } else {
             return $this->failedResponse();
         }
@@ -100,7 +110,7 @@ class ReportController extends Controller
     }  
 
     // Update
-    public function update(Request $request) {
+    public function update(UpdateReportRequest $request) {
 
         $generalInfo = GeneralInfo::where('jalaliMonth', $request->get('jalaliMonth'))
                             ->where('jalaliYear', $request->get('jalaliYear'))->where('center_id', Auth::id())->first();
@@ -126,6 +136,10 @@ class ReportController extends Controller
                 $updateData['receipt'] = $file; // Include file in update data
             }
 
+            if($request->get('status') == 1) 
+                $updateData['status'] = 1; // status
+
+
             // Updating the report table
             $report->update($updateData);
 
@@ -137,19 +151,7 @@ class ReportController extends Controller
     
     // Details
     public function details($id) {
-
-        $report = Report::with('generalInfo')->where('id', $id)->first();
-
-        if (!$report) {
-            // Handle report not found scenario (e.g., return 404)
-            return abort(404);
-        }
-        
-        $vars = [
-            'report' => $report,
-        ];
-        
-        return view('report.details', $vars);
+        return view('report.details', ['report' => Report::with('generalInfo')->findOrFail($id)]);
     }
     
      // Print

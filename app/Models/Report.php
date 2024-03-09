@@ -51,4 +51,11 @@ class Report extends Model
     {
         return $this->belongsTo('App\Models\GeneralInfo', 'general_info_id');
     }
+
+    /*
+     * Get all of the course's status.
+     */
+    public function statuses() {
+        return $this->morphOne('App\Models\Status', 'status');
+    }
 }

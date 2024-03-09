@@ -13,6 +13,7 @@ use App\Providers\SuccessMessages;
 use App\Datatables\GeneralInfoDataTable;
 use App\Models\GeneralInfo;
 use App\Providers\Action;
+use App\Models\Status;
 use File;
 use Auth;
 
@@ -46,7 +47,8 @@ class GeneralInfoController extends Controller
         $file = $receipt->getClientOriginalName();
         $receipt->move(public_path('receipts'), $file);
 
-        GeneralInfo::create([
+        // Storing General info
+        $generalInfo = GeneralInfo::create([
             'jalaliMonth' => $request->get('jalaliMonth'),
             'jalaliYear' => $request->get('jalaliYear'),
             'bank_balance' => $request->get('bank_balance'),
@@ -54,7 +56,13 @@ class GeneralInfoController extends Controller
             'center_id' => Auth::id()
         ]);
 
+        // Storing General info's status
+        $generalInfo->statuses()->create(
+            ['status' => Status::NOTCONFIRMED, 'status_type' => GeneralInfo::class]
+        );
+
         return $this->getAction($request->get('button_action'));
+
     }
 
     // Update
@@ -78,6 +86,17 @@ class GeneralInfoController extends Controller
             $updateData['bank_statement_receipt'] = $file; // Include file in update data
         }
 
+        if($request->get('status') == 1) {
+
+            $updateData['status'] = 1; // status
+
+            // Storing General info's status
+            $generalInfo->statuses()->update(
+                ['status' => Status::CONFIRMED]
+            );
+        }
+
+
         // Update the GeneralInfo record
         $generalInfo->update($updateData);
 
@@ -89,6 +108,8 @@ class GeneralInfoController extends Controller
     public function delete($id) {
 
         $generalInfo = GeneralInfo::findOrFail($id);
+
+        Status::where('status_id', $id)->first()->delete();
 
         return $this->action->deleteWithFile(GeneralInfo::class, 
           $id, $generalInfo->bank_statement_receipt);

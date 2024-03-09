@@ -43,7 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/table/list', 'ReportController@reportTable')->name('list.table');
         Route::post('store', 'ReportController@store');
         Route::get('/edit/{id}', 'ReportController@edit');   
-        Route::post('/update', 'GeneralInfoController@update');
+        Route::post('/update', 'ReportController@update');
         Route::get('/details/{id}', 'ReportController@details');
         Route::get('delete/{id}','ReportController@delete');
     });

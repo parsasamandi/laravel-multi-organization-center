@@ -26,6 +26,12 @@
 
             <x-input type="number" key="bank_balance" placeholder="موجودی در پایان ماه"
                 class="col-md-4 mb-3" value="{{ $generalInfo->bank_balance }}"/>
+
+            <!-- Confirmed or Not confirmed status -->
+            @if(Auth::user()->type == 1)
+                {{-- Confirmation --}}
+                @include('confirmation')
+            @endif
         </div>
 
         <!-- File -->
@@ -33,7 +39,6 @@
         <input type="file" id="file" name="receipt" class="mb-3" 
             accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,application/csv"/>
 
-        <br/>
 
         {{-- Buttons --}}
         <div class="form-group" align="center">

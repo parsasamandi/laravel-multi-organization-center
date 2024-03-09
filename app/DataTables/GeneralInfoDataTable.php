@@ -32,14 +32,24 @@ class GeneralInfoDataTable extends DataTable
             ->editColumn('jalaliMonth', function(GeneralInfo $generalInfo) {
                 return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth);
             })
-            ->editColumn('jalaliYear', function(GeneralInfo $generalInfo) {
-                return $generalInfo->jalaliYear;
+            ->addColumn('status', function(GeneralInfo $generalInfo) {
+                switch($generalInfo->statuses->status) {
+                    case 0:
+                        return 'تایید نشده';
+                        break;
+                    case 1:
+                        return 'تایید شده';
+                        break;
+                }
             })
             ->editColumn('bank_statement_receipt', function(GeneralInfo $generalInfo) {
 
                 $fileUrl = asset("receipts/{$generalInfo->bank_statement_receipt}");
 
                 return "<a href=\"$fileUrl\" download>دانلود رسید بانک</a>";
+            })
+            ->editColumn('jalaliYear', function(GeneralInfo $generalInfo) {
+                return $generalInfo->jalaliYear;
             })
             ->addColumn('action', function(GeneralInfo $generalInfo) {
                 return $this->dataTable->setAction($generalInfo->id, 'generalInfo'); 
@@ -54,6 +64,12 @@ class GeneralInfoDataTable extends DataTable
      */
     public function query(GeneralInfo $model)
     {
+        $user = Auth::user();
+
+        if ($user && $user->type === 1) {
+            return $model->newQuery();
+        }
+
         return $model->where('center_id', Auth::id());
     }
 
@@ -87,6 +103,8 @@ class GeneralInfoDataTable extends DataTable
                 ->title('ماه'),
             Column::make('jalaliYear')
                 ->title('سال'),
+            Column::computed('status') 
+                ->title('وضعیت'),
             $this->dataTable->setActionCol()
         ];
     }

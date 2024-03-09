@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use App\Models\GeneralInfo;
 
-class StoreReportRequest extends FormRequest
+class UpdateReportRequest extends FormRequest
 {
 
     /**
@@ -21,7 +21,12 @@ class StoreReportRequest extends FormRequest
             'range' => 'required',
             'description' => 'required',
             'type' => 'required',
-            'jalaliMonth' => 'required', // Assuming this is also a required field
+            'jalaliMonth' => [
+                'required',
+                Rule::unique('general_infos')->where(function ($query) {
+                    return $query->where('jalaliYear', $this->input('jalaliYear'));
+                })
+            ],
             'jalaliYear' => 'required', // Assuming this is also a required field
         ];
     }
