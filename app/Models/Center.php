@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
+use ShiftOneLabs\LaravelCascadeDeletes\CascadesDeletes;
 
 /**
  * @property int $id
@@ -49,5 +50,12 @@ class Center extends Model implements Authenticatable
     public function report()
     {
         return $this->hasOne('App\Report', 'center_id');
+    }
+
+    /*
+     * Get all of the course's status.
+     */
+    public function statuses() {
+        return $this->morphOne('App\Models\Status', 'status');
     }
 }

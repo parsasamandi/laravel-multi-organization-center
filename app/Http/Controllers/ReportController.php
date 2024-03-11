@@ -31,6 +31,9 @@ class ReportController extends Controller
 
         $vars['reportTable'] = $ReportTable->html();
 
+        // Remained
+        $vars['date'] = GeneralInfo::where('center_id', Auth::id())->select('month', 'year')->get(); 
+
         return view('report.list', $vars);
     }
 
@@ -79,6 +82,9 @@ class ReportController extends Controller
     public function delete($id) {
 
         $report = Report::findOrFail($id);
+
+        // Use the composer package for status
+
 
         return $this->action->deleteWithFile(Report::class, $id, $report->receipt);
     }

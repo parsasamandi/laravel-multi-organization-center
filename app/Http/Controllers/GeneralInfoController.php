@@ -95,8 +95,7 @@ class GeneralInfoController extends Controller
                 ['status' => Status::CONFIRMED]
             );
         }
-
-
+        
         // Update the GeneralInfo record
         $generalInfo->update($updateData);
 

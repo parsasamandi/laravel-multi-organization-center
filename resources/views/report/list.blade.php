@@ -36,12 +36,7 @@
 
         <div class="col-md-12 mb-3">
           <!-- Type -->
-          <label for="type">نوع گزارش:</label>
-          <select name="type">
-              <option value="0">هزینه حقوق کارمندان</option>
-              <option value="1">هزینه آموزش</option>
-              <option value="2">هزینه های سلامت</option>
-          </select>
+          @include('includes.report.type')
         </div>
 
         {{-- Description --}}

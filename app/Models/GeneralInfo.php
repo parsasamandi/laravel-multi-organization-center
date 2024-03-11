@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use ShiftOneLabs\LaravelCascadeDeletes\CascadesDeletes;
 
 /**
  * @property int $id
@@ -22,6 +23,13 @@ class GeneralInfo extends Model
      * @var string
      */
     protected $table = 'general_infos';
+
+
+    /**
+     * Cascade On Delete.
+     */
+    use CascadesDeletes;
+    protected $cascadeDeletes = ['statuses'];
 
     /**
      * @var array

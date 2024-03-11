@@ -38,6 +38,24 @@
 @section('scripts')
 @parent
     <script>
+        $(document).ready(function() {
+            $('#generalInfoDetailsTable').DataTable({
+                searching: false,
+                lengthMenu: [], // Remove display length feature
+                info: false,
+                ordering: true,
+                responsive: true,
+                pageLength: 10,
+                dom: 'frti', // Remove display length feature
+                order: [[0, 'asc']], // Change column index and order direction as needed
+                language: {
+                    url: "{{ asset('js/persian.json') }}",
+                    lengthMenu: '' // Remove "Show 10 entries" text
+                }
+            });
+        });
+
+
         $('#print_button').click(function() {
             var $tableToPrint = $('#generalInfoDetailsTable').clone(); // Clone the table
             $tableToPrint.find('button').remove(); // Remove any buttons in the cloned table

@@ -23,7 +23,6 @@ class CenterController extends Controller
         return view('home');
     }
 
-
     // DataTable to blade
     public function list() {
         // dataTable

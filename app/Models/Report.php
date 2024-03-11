@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use ShiftOneLabs\LaravelCascadeDeletes\CascadesDeletes;
+
 
 /**
  * @property integer $id
@@ -24,6 +26,14 @@ class Report extends Model
     const HEALTHCARE = 2;
 
     public $timestamps = false;
+
+    /**
+     * Cascade On Delete.
+     */
+    use CascadesDeletes;
+    protected $cascadeDeletes = ['statuses'];
+
+
     /**
      * The "type" of the auto-incrementing ID.
      * 
@@ -53,7 +63,7 @@ class Report extends Model
     }
 
     /*
-     * Get all of the course's status.
+     * Get all of the report's status.
      */
     public function statuses() {
         return $this->morphOne('App\Models\Status', 'status');
