@@ -1,7 +1,7 @@
 <div class="container-fluid mt-3 right-text">
     {{-- List --}}
     <ol class="breadcrumb mb-4 right-text">
-        <li class="breadcrumb-item">جزئیات {{ $header ?? null }}</li>
+        <h5>جزئیات {{ $header ?? null }}</h5>
     </ol>
 
     <div class="row">

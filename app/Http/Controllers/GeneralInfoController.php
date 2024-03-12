@@ -86,7 +86,9 @@ class GeneralInfoController extends Controller
             $updateData['bank_statement_receipt'] = $file; // Include file in update data
         }
 
-        if($request->get('status') == 1) {
+
+        // Checking if it was confirmed
+        if($request->get('status') == Status::CONFIRMED) {
 
             $updateData['status'] = 1; // status
 
@@ -108,20 +110,13 @@ class GeneralInfoController extends Controller
 
         $generalInfo = GeneralInfo::findOrFail($id);
 
-        Status::where('status_id', $id)->first()->delete();
+        // Use the composer package
+        // Status::where('status_id', $id)->first()->delete();
 
         return $this->action->deleteWithFile(GeneralInfo::class, 
           $id, $generalInfo->bank_statement_receipt);
     }
 
-    // Edit
-    public function edit($id) {
-        // Fetch the data for the specified ID from the database
-        $generalInfo = GeneralInfo::findOrFail($id); // Replace with your actual model name
-
-        // Return the view with the data
-        return view('generalInfo.edit')->with('generalInfo', $generalInfo); 
-    }
 
     // Details
     public function details($id) {

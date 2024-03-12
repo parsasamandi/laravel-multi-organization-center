@@ -21,6 +21,12 @@ class UpdateReportRequest extends FormRequest
             'range' => 'required',
             'description' => 'required',
             'type' => 'required',
+            'jalaliMonth' => [
+                'required',
+                Rule::unique('general_infos')->where(function ($query) {
+                    return $query->where('jalaliYear', $this->input('jalaliYear'));
+                })
+            ],
         ];
     }
 
@@ -38,48 +44,5 @@ class UpdateReportRequest extends FormRequest
             'jalaliYear' => 'سال',
         ];
     }
-
-     /**
-     * Configure the validator instance.
-     *
-     * @param  \Illuminate\Validation\Validator  $validator
-     * @return void
-     */
-    public function withValidator($validator)
-    {
-        // Add a custom validation rule to check if "general_info" exists for the given month and year
-        $validator->after(function ($validator) {
-            $jalaliMonth = $this->input('jalaliMonth');
-            $jalaliYear = $this->input('jalaliYear');
-
-            $generalInfo = GeneralInfo::where('jalaliMonth', $jalaliMonth)
-                                      ->where('jalaliYear', $jalaliYear)
-                                      ->where('center_id', auth()->id())
-                                      ->exists();
-
-            if (!$generalInfo) {
-                $validator->errors()->add('general_info', 'مقدمات گزارش برای تاریخ مورد نظر وجود ندارد.');
-            }
-        });
-    }
-
-
-    /**
-     * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        $response = new JsonResponse([
-            'success' => false,
-            'message' => '<div class="alert alert-danger">در گذشته برای تاریخ انتخاب شده "مقدمات گزارش"وارد نشده است</div>'
-        ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
-
-        throw new HttpResponseException($response);
-    }
-
-
 
 }

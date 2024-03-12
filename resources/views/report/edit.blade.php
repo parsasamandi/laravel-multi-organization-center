@@ -15,16 +15,34 @@
         <span id="form_output"></span>
 
         <div class="row">
-
-            <!-- Jalali Years -->
-            <div class="col-md-4 mb-3">
-                @include('includes.jalaliYearsSelectBox')
+            <div class="col-md-12 mb-3">
+                <!-- Date -->
+                <label for="date">تاریخ:</label>
+                <select id="general_info_id" name="general_info_id">
+                    @php
+                    $months = [
+                        1 => 'فروردین',
+                        2 => 'اردیبهشت',
+                        3 => 'خرداد',
+                        4 => 'تیر',
+                        5 => 'مرداد',
+                        6 => 'شهریور',
+                        7 => 'مهر',
+                        8 => 'آبان',
+                        9 => 'آذر',
+                        10 => 'دی',
+                        11 => 'بهمن',
+                        12 => 'اسفند',
+                    ];
+                    @endphp
+                    @foreach ($dates as $date)
+                        <option value="{{ $date->id }}">
+                            {{ $months[$date->jalaliMonth] }} {{ $date->jalaliYear }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
-            <!-- Jalali Months -->
-            <div class="col-md-4">
-                @include('includes.jalaliMonthsSelectBox')
-            </div>
 
             <!-- Expenses -->
             <x-input type="number" key="expenses" placeholder="مبلغ هزینه"
@@ -32,7 +50,10 @@
 
             <!-- Range -->
             <x-input type="number" key="range" placeholder="ردیف هزینه"
-                class="col-md-6 mb-3" value="{{ $report['range'] }}" />
+                class="col-md-4 mb-3" value="{{ $report['range'] }}" />
+
+            <!-- Type -->
+            @include('includes.report.type')
 
             <!-- Description -->
             <x-textarea key="description" placeholder="توضیحات" class="col-md-12 mb-3" value="{{ $report['description'] }}" />
@@ -40,7 +61,7 @@
             <!-- Confirmed or Not confirmed status -->
             @if(Auth::user()->type == 1)
                 {{-- Confirmation --}}
-                @include('confirmation')
+                @include('includes.confirmation')
             @endif
 
         </div>
@@ -75,14 +96,11 @@
 <script>
     $(document).ready(function () {
 
-        // Jalali month
-        $('#jalaliMonth').val({{ json_encode($report['jalaliMonth']) }}).trigger('change');
-
-        // Jalali year
-        $('#jalaliYear').val({{ json_encode($report['jalaliYear']) }}).trigger('change');
-
         // Report type
         $('#type').val({{ json_encode($report['type']) }}).trigger('change');
+
+        // Default date
+        $('#general_info_id').val({{ json_encode($report['general_info_id']) }}).trigger('change');
 
 
         // Form submission for updating
@@ -104,11 +122,23 @@
                 processData: false,
                 success: function(response) {
                     // Handle success response
-                    success(response);
+                    $('#form_output').html(response.message);
+
+                    $(window.formId)[0].reset();
+
+                    if(window.dt != null) {
+                        window.dt.draw(false);
+                    }
                 },
                 error: function (response) {
                     // Handle error response
-                    error(response);
+                    var data = JSON.parse(response);
+                    // Error
+                    error_html = '';
+                    for(var all in data.errors) {
+                        error_html += '<div class="alert alert-danger">' + data.errors[all] + '</div>';
+                    }
+                    $('#form_output').html(error_html);
                 }
             });
         });

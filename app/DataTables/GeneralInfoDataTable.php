@@ -28,7 +28,7 @@ class GeneralInfoDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->rawColumns(['action', 'bank_statement_receipt', 'data']) 
+            ->rawColumns(['action', 'bank_statement_receipt', 'data', 'status']) 
             ->addColumn('date', function(GeneralInfo $generalInfo) {
                 return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) . ' ' . $generalInfo->jalaliYear;
             })
@@ -62,9 +62,28 @@ class GeneralInfoDataTable extends DataTable
                 $fileUrl = asset("receipts/{$generalInfo->bank_statement_receipt}");
 
                 return "<a href=\"$fileUrl\" download>دانلود رسید بانک</a>";
+
+            })->addColumn('status', function(GeneralInfo $generalInfo) {
+
+                switch($generalInfo->statuses->status) {
+                    case 0:
+                        return 'تایید نشده';
+                        break;
+                    case 1:
+                        return 'تایید شده';
+                        break;
+                }
             })
             ->addColumn('action', function(GeneralInfo $generalInfo) {
-                return $this->dataTable->setAction($generalInfo->id, 'generalInfo'); 
+                return <<<HTML
+                    <a onclick="showConfirmationModal('{$generalInfo->id}')">
+                        <i class="fa fa-trash text-primary" aria-hidden="true"></i>
+                    </a>
+                    &nbsp;
+                    <a href="/generalInfo/details/{$generalInfo->id}">
+                        <i class='fa fa-info-circle text-primary' aria-hidden="true"></i>
+                    </a>
+                HTML;
             });
     }
 
@@ -101,13 +120,15 @@ class GeneralInfoDataTable extends DataTable
         return [
             $this->dataTable->getIndexCol(),
             Column::make('bank_statement_receipt')
-                ->title('چاپ حساب بانکی'),
+                ->title('صورتحساب بانکی'),
             Column::make('bank_balance')
-                ->title('موجودی بانکی')
+                ->title('موجودی حساب')
                 ->orderable(false),
             Column::computed('date')
                 ->title('تاریخ')
                 ->searchable(true),
+            Column::computed('status') 
+                ->title('وضعیت'),
             $this->dataTable->setActionCol()
         ];
     }

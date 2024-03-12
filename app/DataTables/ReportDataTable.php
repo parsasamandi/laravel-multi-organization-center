@@ -34,37 +34,38 @@ class ReportDataTable extends DataTable
 
                 $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
 
-                return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) . $generalInfo->year;
+                return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) . ' ' . $generalInfo->jalaliYear;
 
             })->filterColumn('date', function ($query, $keyword) {
-                // Define a mapping of Persian month names to their corresponding numbers
-                // $monthMap = [
-                //     'فروردین' => 1,
-                //     'اردیبهشت' => 2,
-                //     'خرداد' => 3,
-                //     'تیر' => 4,
-                //     'مرداد' => 5,
-                //     'شهریور' => 6,
-                //     'مهر' => 7,
-                //     'آبان' => 8,
-                //     'آذر' => 9,
-                //     'دی' => 10,
-                //     'بهمن' => 11,
-                //     'اسفند' => 12,
-                // ];
-                // if (isset($monthMap[$keyword])) {
-                //     // If it exists, convert the Persian month name to its corresponding number
-                //     $monthNumber = $monthMap[$keyword];
+
+                $monthMap = [
+                    'فروردین' => 1,
+                    'اردیبهشت' => 2,
+                    'خرداد' => 3,
+                    'تیر' => 4,
+                    'مرداد' => 5,
+                    'شهریور' => 6,
+                    'مهر' => 7,
+                    'آبان' => 8,
+                    'آذر' => 9,
+                    'دی' => 10,
+                    'بهمن' => 11,
+                    'اسفند' => 12,
+                ];
             
-                //     // Apply the filter based on the month number
-                //     return $query->whereHas('generalInfo', function ($query) use ($monthNumber) {
-                //         $query->where('jalaliMonth', $monthNumber);
-                //     });
-                // }
+                if (isset($monthMap[$keyword])) {
+                    // If the keyword matches a Persian month name, convert it to its corresponding number
+                    $monthNumber = $monthMap[$keyword];
+            
+                    // Apply the filter based on the month number
+                    return $query->whereHas('generalInfo', function ($query) use ($monthNumber) {
+                        $query->where('jalaliMonth', $monthNumber);
+                    });
+                }
 
-                // return $this->dataTable->filterColumn($query, 'general_info_id in 
-                //     (select id from general_infos where jalaliYear like ?)', $keyword);
-
+                return $query->whereHas('generalInfo', function ($query) use ($keyword) {
+                    $query->where('jalaliYear', 'like', '%' . $keyword . '%');
+                });
             })
             ->editColumn('receipt', function(Report $report) {
 
@@ -75,13 +76,13 @@ class ReportDataTable extends DataTable
             ->editColumn('type', function (Report $report){
                 switch ($report->type) {
                     case 0:
-                        return 'گزارش حقوق کارمند';
+                        return 'هزینه حقوق کارمندان';
                         break;
                     case 1:
-                        return 'گزارش هزینه آموزش';
+                        return 'هزینه آموزش';
                         break;
                     case 2:
-                        return 'گزارش هزینه های سلامت';
+                        return 'هزینه های سلامت';
                         break;
                 }
             })->addColumn('status', function(Report $report) {
@@ -145,7 +146,8 @@ class ReportDataTable extends DataTable
             Column::make('type')
                 ->title('نوع'),
             Column::computed('date')
-                ->title('تاریخ'),
+                ->title('تاریخ')
+                ->searchable(true),
             Column::computed('status') 
                 ->title('وضعیت'),
             $this->dataTable->setActionCol()

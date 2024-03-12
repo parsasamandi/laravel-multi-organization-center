@@ -1,12 +1,12 @@
 @extends('layouts.admin')
-@section('title', 'جزئیات گزارش جزئی')
+@section('title', 'جزئیات گزارش یک ردیف هزینه‌کرد')
 
 @section('content')
 
 <!-- <div class="container-fluid mt-3 right-text"> -->
 <div id="content-to-print">
     {{-- List --}}
-    <x-details tableId="reportDetailsTable" header="گزارش جزئی">
+    <x-details tableId="reportDetailsTable" header="جزئیات کزارش یک ردیف هزینه‌کرد">
 
         <!-- Table header -->
         <x-slot name="tableHeader">

@@ -26,13 +26,14 @@ class ReportController extends Controller
 
     // DataTable to blade
     public function list() {
+
         // Report Table
         $ReportTable = new ReportDataTable;
 
         $vars['reportTable'] = $ReportTable->html();
 
-        // Remained
-        $vars['date'] = GeneralInfo::where('center_id', Auth::id())->select('month', 'year')->get(); 
+        // Dates
+        $vars['dates'] = GeneralInfo::where('center_id', Auth::id())->select('id', 'jalaliMonth', 'jalaliYear')->get();
 
         return view('report.list', $vars);
     }
@@ -46,113 +47,80 @@ class ReportController extends Controller
     // Insert
     public function store(StoreReportRequest $request) {
 
-        $generalInfo = GeneralInfo::where('jalaliMonth', $request->get('jalaliMonth'))
-                            ->where('jalaliYear', $request->get('jalaliYear'))
-                            ->where('center_id', Auth::id())->first();
+        $receipt = $request->file('receipt');
+        $file = $receipt->getClientOriginalName();
+        $receipt->move(public_path('receipts'), $file);
 
-        if($generalInfo) {
+        $report = Report::create(
+            ['expenses' => $request->get('expenses'), 'range' => $request->get('range'), 
+            'receipt' => $file, 'description' => $request->get('description'), 
+            'type' => $request->get('type'), 'center_id' => Auth::id(), 
+            'general_info_id' => $request->get('general_info_id')
+        ]);
 
-            $receipt = $request->file('receipt');
-            $file = $receipt->getClientOriginalName();
-            $receipt->move(public_path('receipts'), $file);
-
-            $report = Report::create(
-                ['expenses' => $request->get('expenses'), 'range' => $request->get('range'), 
-                'receipt' => $file, 'description' => $request->get('description'), 
-                'type' => $request->get('type'), 'center_id' => Auth::id(), 
-                'general_info_id' => $generalInfo->id
-            ]);
-
-            // Storing General info's status
-            $report->statuses()->create(
-                ['status' => Status::NOTCONFIRMED, 'status_type' => Report::class]
-            );
-
-        } else {
-            return response()->json(['success' => false, 
-                'message' => '<div class="alert alert-danger">برای تاریخ انتخاب شده "گزارش کلی" وارد نشده است</div>']); 
-
-        }
+        // Storing General info's status
+        $report->statuses()->create(
+            ['status' => Status::NOTCONFIRMED, 'status_type' => Report::class]
+        );
 
         return $this->getAction($request->get('button_action'));
-
     }
 
     // Delete
     public function delete($id) {
-
-        $report = Report::findOrFail($id);
-
-        // Use the composer package for status
-
-
         return $this->action->deleteWithFile(Report::class, $id, $report->receipt);
     }
 
     // Edit
     public function edit($id) {
 
-        $report = Report::find($id);
+        $vars['report'] = Report::find($id);
+    
+        if ($vars) {
 
-        if ($report) {
-            $generalInfo = GeneralInfo::find($report->general_info_id);
+            $vars['dates'] = GeneralInfo::where('center_id', Auth::id())
+                                ->select('id', 'jalaliMonth', 'jalaliYear')->get();
 
-            // Create an array with report properties
-            $values = $report->toArray();
-            
-            // Add jalaliMonth and jalaliYear from the associated GeneralInfo model
-            if ($generalInfo) {
-
-                $values['jalaliMonth'] = $generalInfo->jalaliMonth;
-                $values['jalaliYear'] = $generalInfo->jalaliYear;
-            }
-
-            return view('report.edit')->with('report', $values); 
-
-        } else {
-            return $this->failedResponse();
+            // Pass the report data and dates to the view
+            return view('report.edit', $vars);
         }
-
-    }  
-
+    }
+    
+    
     // Update
-    public function update(UpdateReportRequest $request) {
+    public function update(Request $request) {
 
-        $generalInfo = GeneralInfo::where('jalaliMonth', $request->get('jalaliMonth'))
-                            ->where('jalaliYear', $request->get('jalaliYear'))->where('center_id', Auth::id())->first();
-        if($generalInfo) {
+        // Report table
+        $report = Report::findOrFail($request->get('id'));
 
-            // Report table
-            $report = Report::findOrFail($request->get('id'));
+        $updateData = [
+            'expenses' => $request->get('expenses'),
+            'range' => $request->get('range'),
+            'description' => $request->get('description'), 
+            'type' => $request->get('type'), 
+            'center_id' => Auth::id(),
+            'general_info_id' => $request->get('general_info_id')
+        ];
 
-            $updateData = [
-                'expenses' => $request->get('expenses'),
-                'range' => $request->get('range'),
-                'description' => $request->get('description'), 
-                'type' => $request->get('type'), 
-                'center_id' => Auth::id(),
-                'general_info_id' => $generalInfo->id
-            ];
-
-            // Check if a receipt file is uploaded
-            if ($request->hasFile('receipt')) {
-                $receipt = $request->file('receipt');
-                $file = $receipt->getClientOriginalName();
-                $receipt->move(public_path('receipts'), $file);
-                $updateData['receipt'] = $file; // Include file in update data
-            }
-
-            if($request->get('status') == 1) 
-                $updateData['status'] = 1; // status
-
-
-            // Updating the report table
-            $report->update($updateData);
-
-        } else {
-            return response()->json(['success' => false, 
-                'message' => '<div class="alert alert-danger">در گذشته برای تاریخ انتخاب شده "مقدمات گزارش"وارد نشده است</div>']); 
+        // Check if a receipt file is uploaded
+        if ($request->hasFile('receipt')) {
+            $receipt = $request->file('receipt');
+            $file = $receipt->getClientOriginalName();
+            $receipt->move(public_path('receipts'), $file);
+            $updateData['receipt'] = $file; // Include file in update data
         }
+
+        if($request->get('status') == Status::CONFIRMED) {
+            // Storing report's status
+            $report->statuses()->update(
+                ['status' => Status::CONFIRMED]
+            );
+        }
+
+        // Updating the report table
+        $report->update($updateData);
+
+        return $this->getAction($request->get('button_action'));
     }
     
     // Details
