@@ -80,7 +80,6 @@
             <input type="submit" id="action" value="ویرایش" class="btn btn-primary" />
             <button type="button" id="return_button" class="btn btn-secondary" data-dismiss="modal">بازگشت</button>
             <input type="hidden" name="id" id="id" value="{{ $report['id'] }}"  />
-            <input type="hidden" name="button_action" id="button_action" value="update" />
         </div>
 
     </form>

@@ -42,29 +42,29 @@
         
     </x-details>
 
-    
-    <form id="generalInfoEditForm">
-        {{ csrf_field() }}
+    @if(Auth::user()->type == 1)
+        <form id="statusForm">
+            {{ csrf_field() }}
 
-        {{-- Output --}}
-        <span id="form_output"></span>
+            {{-- Output --}}
+            <span id="form_output"></span>
 
-        <div class="row">
-            <div class="col-md-12">
-                <!-- Confirmed or Not confirmed status -->
-                @if(Auth::user()->type == 1)
-                    {{-- Confirmation --}}
-                    @include('includes.confirmation')
-                @endif
-            </div>
-        </div>
-
-        {{-- Buttons --}}
-        <div class="form-group" align="center">
+            <!-- Id -->
             <input type="hidden" name="id" id="id" value="{{ $generalInfo->id }}"  />
-            <input type="hidden" name="button_action" id="button_action" value="update" />
-        </div>
-    </form>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Confirmed or Not confirmed status -->
+                    @include('includes.confirmation')
+                </div>
+            </div>
+            
+            <div class="col-md-12">   
+                <button type="button" type="submit" id="submit" class="btn btn-secondary">ثبت وضعیت</button>
+            </div>
+
+        </form>
+    @endif
 
     <!-- Return button -->
     <div class="text-center mt-3">
@@ -80,6 +80,7 @@
 @parent
     <script>
         $(document).ready(function() {
+
             $('#generalInfoDetailsTable').DataTable({
                 searching: false,
                 lengthMenu: [], // Remove display length feature
@@ -94,32 +95,26 @@
                     lengthMenu: '' // Remove "Show 10 entries" text
                 }
             });
-        });
 
-        // Form submission for updating
-        $('#generalInfoEditForm').on('submit', function (event) {
-          event.preventDefault();
+             // Form submission for updating
+             $('#submit').click(function () {
+                event.preventDefault();
 
-            // AJAX request
-            $.ajax({
-                url: '/generalInfo/update', 
-                method: 'POST',
-                headers: {
-                  'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                },
-                data: [
-                    confirmation: 
-                ],
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                  // Handle success response
-                  success(response);
-                },
-                error: function (response) {
-                    // Handle error response
-                    // error(response);
-                }
+                // AJAX request
+                $.ajax({
+                    url: '/generalInfo/update',
+                    method: 'POST',
+                    headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
+                    data: {
+                        id: $('#id').val(),
+                        status: $('#status').val(),
+                        button_action: $('#button_action').val()
+                    },
+                    success: function(response) {
+                        // Redirecting to the main page
+                        window.location.href = "/generalInfo/list";
+                    },
+                });
             });
         });
 

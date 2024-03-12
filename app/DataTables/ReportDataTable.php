@@ -36,8 +36,10 @@ class ReportDataTable extends DataTable
 
                 return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) . ' ' . $generalInfo->jalaliYear;
 
-            })->filterColumn('date', function ($query, $keyword) {
+            })->filterColumn('date', function ($query, $keyword) {   
 
+                // Search
+                
                 $monthMap = [
                     'فروردین' => 1,
                     'اردیبهشت' => 2,
@@ -52,19 +54,17 @@ class ReportDataTable extends DataTable
                     'بهمن' => 11,
                     'اسفند' => 12,
                 ];
-            
-                if (isset($monthMap[$keyword])) {
-                    // If the keyword matches a Persian month name, convert it to its corresponding number
-                    $monthNumber = $monthMap[$keyword];
-            
-                    // Apply the filter based on the month number
-                    return $query->whereHas('generalInfo', function ($query) use ($monthNumber) {
-                        $query->where('jalaliMonth', $monthNumber);
-                    });
-                }
+                
+                // Apply the filter based on the month number
+                return $query->whereHas('generalInfo', function ($query) use ($monthMap) {
+                    $query->where('jalaliMonth', $monthMap)
+                    ->orWhere(function ($query) use ($keyword, $monthMap) {
 
-                return $query->whereHas('generalInfo', function ($query) use ($keyword) {
-                    $query->where('jalaliYear', 'like', '%' . $keyword . '%');
+                        $monthNumeric = $monthMap[$keyword] ?? null;
+
+                        if ($monthNumeric !== null) {
+                            $query->where('jalaliMonth', $monthNumeric);
+                        }
                 });
             })
             ->editColumn('receipt', function(Report $report) {

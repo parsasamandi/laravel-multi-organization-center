@@ -66,43 +66,20 @@ class GeneralInfoController extends Controller
     }
 
     // Update
-    public function update(UpdateGeneralInfoRequest $request) {
+    public function update(Request $request) {
 
         $generalInfo = GeneralInfo::findOrFail($request->get('id'));
 
-        // Initialize $updateData array
-        $updateData = [
-            'jalaliMonth' => $request->get('jalaliMonth'),
-            'jalaliYear' => $request->get('jalaliYear'),
-            'bank_balance' => $request->get('bank_balance'),
-            'center_id' => Auth::id(),
-        ];
-
-        // Check if a receipt file is uploaded
-        if ($request->hasFile('receipt')) {
-            $receipt = $request->file('receipt');
-            $file = $receipt->getClientOriginalName();
-            $receipt->move(public_path('receipts'), $file);
-            $updateData['bank_statement_receipt'] = $file; // Include file in update data
-        }
-
-
         // Checking if it was confirmed
         if($request->get('status') == Status::CONFIRMED) {
-
-            $updateData['status'] = 1; // status
 
             // Storing General info's status
             $generalInfo->statuses()->update(
                 ['status' => Status::CONFIRMED]
             );
         }
-        
-        // Update the GeneralInfo record
-        $generalInfo->update($updateData);
 
-
-        return $this->getAction($request->get('button_action'));
+        return 'success';
     }
 
     // Delete
