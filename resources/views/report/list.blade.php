@@ -4,8 +4,8 @@
 @section('content')
 
   {{-- Header --}}
-  <x-header pageName="گزارشات جزئیات هزینه کرد" pageDescription="گزارشات جزئیات هزینه‌کرد" 
-    buttonValue="گزارش جزئی هزینه کرد">
+  <x-header pageName="گزارشات جزئیات هزینه‌کرد" pageDescription="گزارشات جزئیات هزینه‌کرد" 
+    buttonValue="گزارش جزئی هزینه‌کرد">
     <x-slot name="table">
       <x-table :table="$reportTable" />
     </x-slot>

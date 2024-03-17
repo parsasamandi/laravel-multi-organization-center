@@ -52,6 +52,7 @@
     <div class="text-center mt-3">
         <button type="button" id="return_button" class="btn btn-secondary">بازگشت</button>
         <button type="button" id="print_button" class="btn btn-secondary">چاپ</button>
+        <button id="exportExcelButton" class="btn btn-secondary">خروجی اکسل</button>
     </div>
 
 </div>
@@ -106,7 +107,7 @@
             });
         });
 
-
+        // Print button
         $('#print_button').click(function() {
             var $tableToPrint = $('#generalInfoDetailsTable').clone(); // Clone the table
             $tableToPrint.find('button').remove(); // Remove any buttons in the cloned table
@@ -117,6 +118,42 @@
             $printWindow.print(); // Print the window
             $printWindow.close(); // Close the window after printing
         });
+
+         // Export button
+         $('#exportExcelButton').click(function() {
+            // Get the table data as a worksheet
+            var worksheet = XLSX.utils.table_to_sheet(document.getElementById('generalInfoDetailsTable'));
+
+            // Create a workbook and add the worksheet to it
+            var workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'یک ردیف از اطلاعات کلی');
+
+            // Convert the workbook to an Excel file (binary string)
+            var excelBinaryString = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+
+            // Convert the binary string to a Blob
+            var blob = new Blob([s2ab(excelBinaryString)], { type: 'application/octet-stream' });
+
+            // Create a temporary anchor element
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'جزئیات-اطلاعات-کلی.xlsx'; // Set the filename for the downloaded file
+
+            // Append the anchor element to the document body and trigger a click event to start the download
+            document.body.appendChild(a);
+            a.click();
+
+            // Remove the anchor element from the document body
+            document.body.removeChild(a);
+        });
+
+        // Function to convert string to ArrayBuffer
+        function s2ab(s) {
+            var buf = new ArrayBuffer(s.length);
+            var view = new Uint8Array(buf);
+            for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
     </script>
 @endsection
 

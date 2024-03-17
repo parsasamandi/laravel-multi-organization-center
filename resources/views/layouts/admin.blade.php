@@ -114,6 +114,9 @@
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.bootstrap.min.js"></script>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+
+
         <script>
             // Ajax Setup
             $.ajaxSetup({ processing: true, dataType: "json" });
