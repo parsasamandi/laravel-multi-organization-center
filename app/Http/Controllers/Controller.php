@@ -19,7 +19,7 @@ class Controller extends BaseController
             $success_output = $this->getInsertionMessage();
         }
         // Update
-        else if($action == 'update') {
+        else if($action == "update") {
             $success_output = $this->getUpdateMessage();
         }
         

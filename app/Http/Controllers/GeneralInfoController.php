@@ -43,6 +43,7 @@ class GeneralInfoController extends Controller
     // Insert
     public function store(StoreGeneralInfoRequest $request) {
 
+
         $receipt = $request->file('receipt');
         $file = $receipt->getClientOriginalName();
         $receipt->move(public_path('receipts'), $file);
@@ -77,28 +78,30 @@ class GeneralInfoController extends Controller
             $generalInfo->statuses()->update(
                 ['status' => Status::CONFIRMED]
             );
+        } else {
+             // Storing General info's status
+             $generalInfo->statuses()->update(
+                ['status' => Status::NOTCONFIRMED]
+            );
         }
 
-        return 'success';
+        return response()->json(['success' => true], Response::HTTP_CREATED); 
     }
 
     // Delete
     public function delete($id) {
 
-        $generalInfo = GeneralInfo::findOrFail($id);
-
-        // Use the composer package
-        // Status::where('status_id', $id)->first()->delete();
+        $generalInfo = GeneralInfo::find($id);
 
         return $this->action->deleteWithFile(GeneralInfo::class, 
-          $id, $generalInfo->bank_statement_receipt);
+            $id, $generalInfo->bank_statement_receipt);
     }
 
 
     // Details
     public function details($id) {
         // Fetch the data for the specified ID from the database
-        $generalInfo = GeneralInfo::where('id', $id)->first(); 
+        $generalInfo = GeneralInfo::where('id', $id)->with('statuses')->first(); 
 
         // Return the view with the data
         return view('generalInfo.details')->with('generalInfo', $generalInfo); 

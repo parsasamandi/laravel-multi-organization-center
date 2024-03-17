@@ -38,7 +38,7 @@
 
 
   {{-- Delete --}}
-  <x-admin.delete title="'گزارش'" />
+  <x-admin.delete title="'گزارش کلی'" />
 
   
 @endsection

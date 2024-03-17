@@ -5,7 +5,7 @@
 
 <div class="container-fluid mt-3 right-text">
 
-    <x-details tableId="generalInfoDetailsTable" header="جزئیات یک ردیف از گزارش کلی">
+    <x-details tableId="generalInfoDetailsTable" header="یک ردیف از گزارش کلی">
         <!-- Table header -->
         <x-slot name="tableHeader">
             <th>سال</th>
@@ -18,23 +18,7 @@
         <x-slot name="tableData">
             <td>{{ $generalInfo->jalaliYear }}</td>
              <!-- Jalali months -->
-             @php
-                $months = [
-                    1 => 'فروردین',
-                    2 => 'اردیبهشت',
-                    3 => 'خرداد',
-                    4 => 'تیر',
-                    5 => 'مرداد',
-                    6 => 'شهریور',
-                    7 => 'مهر',
-                    8 => 'آبان',
-                    9 => 'آذر',
-                    10 => 'دی',
-                    11 => 'بهمن',
-                    12 => 'اسفند',
-                ];
-            @endphp
-            <td>{{ $months[$generalInfo->jalaliMonth] }}</td>
+            <td>{{ $generalInfo->jalaliMonth }}</td>
             <td>{{ $generalInfo->bank_balance }}</td>
             <td><a href="{{ url('/receipts/' . $generalInfo->bank_statement_receipt) }}" download>دانلود  
                 {{ $generalInfo->bank_statement_receipt }} </a></td>
@@ -53,10 +37,8 @@
             <input type="hidden" name="id" id="id" value="{{ $generalInfo->id }}"  />
 
             <div class="row">
-                <div class="col-md-12">
-                    <!-- Confirmed or Not confirmed status -->
-                    @include('includes.confirmation')
-                </div>
+                <!-- Confirmed or Not confirmed status -->
+                @include('includes.confirmation')
             </div>
             
             <div class="col-md-12">   
@@ -80,6 +62,9 @@
 @parent
     <script>
         $(document).ready(function() {
+
+            // Status
+            $('#status').val({{ json_encode($generalInfo->statuses->status) }}).trigger('change');
 
             $('#generalInfoDetailsTable').DataTable({
                 searching: false,
@@ -111,8 +96,11 @@
                         button_action: $('#button_action').val()
                     },
                     success: function(response) {
+                        console.log('test');
                         // Redirecting to the main page
                         window.location.href = "/generalInfo/list";
+                    }, error: function(response) {
+                        console.log(response.responseText);
                     },
                 });
             });

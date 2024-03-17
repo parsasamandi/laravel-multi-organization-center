@@ -4,15 +4,15 @@
 @section('content')
 
 <!-- <div class="container-fluid mt-3 right-text"> -->
-<div id="content-to-print">
+<div class="container-fluid mt-3 right-text">
     {{-- List --}}
-    <x-details tableId="reportDetailsTable" header="جزئیات کزارش یک ردیف هزینه‌کرد">
+    <x-details tableId="reportDetailsTable" header="گزارش یک ردیف هزینه‌کرد">
 
         <!-- Table header -->
         <x-slot name="tableHeader">
             <th>مبلغ هزینه</th>
             <th>ردیف ها در صورتحساب بانکی</th>
-            <th>نوع</th>
+            <th>نوع گزارش</th>
             <th>ماه</th>
             <th>سال</th>
             <th>دانلود رسید</th>
@@ -24,41 +24,26 @@
             <td>{{ $report->expenses }}</td>
             <!-- Range -->
             <td>{{ $report->range }}</td>
+
             <!-- Type -->
             @switch($report->type)
                 @case(0)
-                    <td>گزارش حقوق کارمند</td>
+                    <td>حقوق کارمند</td>
                     @break
                 @case(1)
-                    <td>گزارش هزینه آموزش</td>
+                    <td>هزینه آموزش</td>
                     @break
                 @case(2)
-                    <td>گزارش هزینه های سلامت</td>
+                    <td>هزینه های سلامت</td>
                     @break
             @endswitch
 
             <!-- Jalali months -->
-            @php
-                $months = [
-                    1 => 'فروردین',
-                    2 => 'اردیبهشت',
-                    3 => 'خرداد',
-                    4 => 'تیر',
-                    5 => 'مرداد',
-                    6 => 'شهریور',
-                    7 => 'مهر',
-                    8 => 'آبان',
-                    9 => 'آذر',
-                    10 => 'دی',
-                    11 => 'بهمن',
-                    12 => 'اسفند',
-                ];
-            @endphp
-
-            <td>{{ $months[$report->generalInfo->jalaliMonth] }}</td>
+            <td>{{ $report->generalInfo->jalaliMonth }}</td>
 
             <!-- Jalali Year -->
             <td>{{ $report->generalInfo->jalaliYear }}</td>
+
             <!-- Receipt -->
             <td><a href="{{ url('/receipts/' . $report->receipt) }}" download>دانلود  
                     {{ $report->receipt }} </a></td>
@@ -67,7 +52,7 @@
     </x-details>
 
     <!-- Description -->
-    <x-textarea key="description" class="col-md-12" rows="2" placeholder="توضیحات" value="{{ $report->description }}" readonly />
+    <x-textarea key="description" class="mt-2" rows="2" placeholder="توضیحات" value="{{ $report->description }}" readonly />
 
 
     <!-- Return button -->
@@ -89,7 +74,7 @@
                 searching: false,
                 lengthMenu: [], // Remove display length feature
                 info: false,
-                ordering: true,
+                ordering: false,
                 responsive: true,
                 pageLength: 10,
                 dom: 'frti', // Remove display length feature

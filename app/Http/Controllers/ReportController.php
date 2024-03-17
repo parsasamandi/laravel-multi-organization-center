@@ -68,6 +68,8 @@ class ReportController extends Controller
 
     // Delete
     public function delete($id) {
+        $report = Report::find($id);
+
         return $this->action->deleteWithFile(Report::class, $id, $report->receipt);
     }
 
@@ -104,23 +106,34 @@ class ReportController extends Controller
 
         // Check if a receipt file is uploaded
         if ($request->hasFile('receipt')) {
+
+            unlink(public_path('receipts') . '/' . $report->receipt);
+
+
             $receipt = $request->file('receipt');
             $file = $receipt->getClientOriginalName();
             $receipt->move(public_path('receipts'), $file);
             $updateData['receipt'] = $file; // Include file in update data
         }
 
+        // Checking if it was confirmed
         if($request->get('status') == Status::CONFIRMED) {
-            // Storing report's status
+
+            // Storing General info's status
             $report->statuses()->update(
                 ['status' => Status::CONFIRMED]
+            );
+        } else {
+             // Storing General info's status
+             $report->statuses()->update(
+                ['status' => Status::NOTCONFIRMED]
             );
         }
 
         // Updating the report table
         $report->update($updateData);
 
-        return $this->getAction($request->get('button_action'));
+        return $this->getAction("update");
     }
     
     // Details

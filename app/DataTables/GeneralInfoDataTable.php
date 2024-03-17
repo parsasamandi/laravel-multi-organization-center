@@ -30,32 +30,13 @@ class GeneralInfoDataTable extends DataTable
             ->addIndexColumn()
             ->rawColumns(['action', 'bank_statement_receipt', 'data', 'status']) 
             ->addColumn('date', function(GeneralInfo $generalInfo) {
-                return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) . ' ' . $generalInfo->jalaliYear;
+                return $generalInfo->jalaliMonth . ' ' . $generalInfo->jalaliYear;
             })
             ->filterColumn('date', function ($query, $keyword) {
 
-                $monthMap = [
-                    'فروردین' => 1,
-                    'اردیبهشت' => 2,
-                    'خرداد' => 3,
-                    'تیر' => 4,
-                    'مرداد' => 5,
-                    'شهریور' => 6,
-                    'مهر' => 7,
-                    'آبان' => 8,
-                    'آذر' => 9,
-                    'دی' => 10,
-                    'بهمن' => 11,
-                    'اسفند' => 12,
-                ];
-    
                 return $query->where('jalaliYear', 'LIKE', "%{$keyword}%")
-                    ->orWhere(function ($query) use ($keyword, $monthMap) {
-                        $monthNumeric = $monthMap[$keyword] ?? null;
-                        if ($monthNumeric !== null) {
-                            $query->where('jalaliMonth', $monthNumeric);
-                        }
-                });
+                    ->orWhere('jalaliMonth', 'LIKE', "%{$keyword}%");
+  
             })
             ->editColumn('bank_statement_receipt', function(GeneralInfo $generalInfo) {
 
@@ -73,6 +54,7 @@ class GeneralInfoDataTable extends DataTable
                         return 'تایید شده';
                         break;
                 }
+                
             })
             ->addColumn('action', function(GeneralInfo $generalInfo) {
                 return <<<HTML

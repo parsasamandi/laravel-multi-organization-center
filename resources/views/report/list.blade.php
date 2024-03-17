@@ -21,25 +21,9 @@
         <div class="col-md-12 mb-3">
           <!-- Label for date -->
           <label for="jalaliMonth">تاریخ:</label>
-            @php
-              $months = [
-                1 => 'فروردین',
-                2 => 'اردیبهشت',
-                3 => 'خرداد',
-                4 => 'تیر',
-                5 => 'مرداد',
-                6 => 'شهریور',
-                7 => 'مهر',
-                8 => 'آبان',
-                9 => 'آذر',
-                10 => 'دی',
-                11 => 'بهمن',
-                12 => 'اسفند',
-              ];
-            @endphp
           <select name="general_info_id">
             @foreach($dates as $date)
-              <option value="{{ $date->id }}">{{ $months[$date->jalaliMonth]}} {{ $date->jalaliYear }}</option>
+              <option value="{{ $date->id }}">{{ $date->jalaliMonth }} {{ $date->jalaliYear }}</option>
             @endforeach
           </select>
         </div>
@@ -52,7 +36,9 @@
           class="col-md-6 mb-3" />
 
         <!-- Type -->
-        @include('includes.report.type')
+        <div class="col-md-12 mb-3">
+          @include('includes.report.type')
+        </div>
 
         {{-- Description --}}
         <x-textarea key="description" placeholder="توضیحات" class="col-md-12 mb-2" />

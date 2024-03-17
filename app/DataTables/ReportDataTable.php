@@ -29,74 +29,40 @@ class ReportDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->rawColumns(['action' , 'receipt', 'date'])
+            ->rawColumns(['action', 'receipt', 'date'])
             ->addColumn('date', function (Report $report) {
-
                 $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
-
-                return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) . ' ' . $generalInfo->jalaliYear;
-
-            })->filterColumn('date', function ($query, $keyword) {   
-
-                // Search
-                
-                $monthMap = [
-                    'فروردین' => 1,
-                    'اردیبهشت' => 2,
-                    'خرداد' => 3,
-                    'تیر' => 4,
-                    'مرداد' => 5,
-                    'شهریور' => 6,
-                    'مهر' => 7,
-                    'آبان' => 8,
-                    'آذر' => 9,
-                    'دی' => 10,
-                    'بهمن' => 11,
-                    'اسفند' => 12,
-                ];
-                
-                // Apply the filter based on the month number
-                return $query->whereHas('generalInfo', function ($query) use ($monthMap) {
-                    $query->where('jalaliMonth', $monthMap)
-                    ->orWhere(function ($query) use ($keyword, $monthMap) {
-
-                        $monthNumeric = $monthMap[$keyword] ?? null;
-
-                        if ($monthNumeric !== null) {
-                            $query->where('jalaliMonth', $monthNumeric);
-                        }
-                });
+                if ($generalInfo) {
+                    return $generalInfo->jalaliMonth . ' ' . $generalInfo->jalaliYear;
+                } else {
+                    return ''; // Or any appropriate handling for null $generalInfo
+                }
+            })->filterColumn('date', function ($query, $keyword) {
+                // Filter based on the month number or name
             })
             ->editColumn('receipt', function(Report $report) {
-
                 $fileUrl = asset("receipts/{$report->receipt}");
-
-                return "<a href=\"$fileUrl\" download>دانلود رسید بانک</a>";;
+                return "<a href=\"$fileUrl\" download>دانلود رسید بانک</a>";
             })
-            ->editColumn('type', function (Report $report){
+            ->editColumn('type', function (Report $report) {
                 switch ($report->type) {
                     case 0:
                         return 'هزینه حقوق کارمندان';
-                        break;
                     case 1:
                         return 'هزینه آموزش';
-                        break;
                     case 2:
                         return 'هزینه های سلامت';
-                        break;
                 }
             })->addColumn('status', function(Report $report) {
                 switch($report->statuses->status) {
                     case 0:
                         return 'تایید نشده';
-                        break;
                     case 1:
                         return 'تایید شده';
-                        break;
                 }
             })
-            ->addColumn('action', function (Report $report){
-                return $this->dataTable->setAction($report->id, 'report'); 
+            ->addColumn('action', function (Report $report) {
+                return $this->dataTable->setAction($report->id, 'report');
             });
     }
 
@@ -106,8 +72,7 @@ class ReportDataTable extends DataTable
      * @param \App\Models\Report $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Report $model)
-    {
+    public function query(Report $model) {
         $user = Auth::user();
 
         if ($user && $user->type === 1) {

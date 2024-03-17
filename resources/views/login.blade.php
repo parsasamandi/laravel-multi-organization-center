@@ -9,6 +9,18 @@
     </head>
     <body>
         <div class="wrapper">
+
+            {{-- Errors --}}
+            <div class="mt-2">
+                @if($errors->any())
+                    @foreach ($errors->all() as $error)
+                        <div class="alert alert-danger">
+                            {{ $error }}
+                        </div>
+                    @endforeach
+                @endif
+            </div>
+            
             {{-- Form --}}
             <form action="{{ url('login')}} " method="POST" class="login">
                 @csrf
@@ -34,16 +46,7 @@
                     <span class="state">ورود</span>
                 </button>
             </form>
-            {{-- Errors --}}
-            <div class="mt-2">
-                @if($errors->any())
-                    @foreach ($errors->all() as $error)
-                        <div class="alert alert-danger">
-                            {{ $error }}
-                        </div>
-                    @endforeach
-                @endif
-            </div>
+
         </div>
     </body>
 </html>
