@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\StoreGeneralInfoRequest;
 use App\Http\Requests\UpdateGeneralInfoRequest;
 use App\Providers\SuccessMessages;
@@ -66,8 +66,40 @@ class GeneralInfoController extends Controller
 
     }
 
+    // Edit
+    public function edit($id) {
+        // Fetch the data for the specified ID from the database
+        $generalInfo = GeneralInfo::findOrFail($id); // Replace with your actual model name
+
+        // Return the view with the data
+        return view('generalInfo.edit')->with('generalInfo', $generalInfo); 
+    }
+
     // Update
     public function update(Request $request) {
+
+        $generalInfo = GeneralInfo::findOrFail($request->get('id'));
+
+        // Initialize $updateData array
+        $updateData = [
+            'bank_balance' => $request->get('bank_balance'),
+            'center_id' => Auth::id(),
+        ];
+
+        // Check if a receipt file is uploaded
+        if ($request->hasFile('receipt')) {
+            $receipt = $request->file('receipt');
+            $file = $receipt->getClientOriginalName();
+            $receipt->move(public_path('receipts'), $file);
+            $updateData['bank_statement_receipt'] = $file; // Include file in update data
+        }
+
+        // Update the GeneralInfo record
+        $generalInfo->update($updateData);
+    }
+
+    // Confirming the General Info status
+    public function confrimStatus(Request $request) {
 
         $generalInfo = GeneralInfo::findOrFail($request->get('id'));
 

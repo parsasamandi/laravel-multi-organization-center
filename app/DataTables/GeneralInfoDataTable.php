@@ -57,15 +57,7 @@ class GeneralInfoDataTable extends DataTable
                 
             })
             ->addColumn('action', function(GeneralInfo $generalInfo) {
-                return <<<HTML
-                    <a onclick="showConfirmationModal('{$generalInfo->id}')">
-                        <i class="fa fa-trash text-primary" aria-hidden="true"></i>
-                    </a>
-                    &nbsp;
-                    <a href="/generalInfo/details/{$generalInfo->id}">
-                        <i class='fa fa-info-circle text-primary' aria-hidden="true"></i>
-                    </a>
-                HTML;
+                return $this->dataTable->setAction($generalInfo->id, 'generalInfo');
             });
     }
 
@@ -77,6 +69,12 @@ class GeneralInfoDataTable extends DataTable
      */
     public function query(GeneralInfo $model)
     {
+        $user = Auth::user();
+
+        if ($user && $user->type === 1) {
+            return $model->newQuery();
+        }
+
         return $model->where('center_id', Auth::id());
     }
 

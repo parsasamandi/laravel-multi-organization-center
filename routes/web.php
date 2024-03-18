@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('list', 'GeneralInfoController@list');
         Route::get('/table/list', 'GeneralInfoController@generalInfoTable')->name('list.table');
         Route::post('store', 'GeneralInfoController@store');
+        Route::get('/edit/{id}', 'GeneralInfoController@edit');   
         Route::get('/details/{id}', 'GeneralInfoController@details');
         Route::post('/update', 'GeneralInfoController@update');
         Route::get('delete/{id}','GeneralInfoController@delete');

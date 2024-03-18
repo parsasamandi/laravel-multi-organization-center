@@ -42,14 +42,21 @@ class CenterController extends Controller
     // Store
     public function store(StoreCenterRequest $request) {
 
-        // Insert or update
-        $password = Hash::make($request->get('password'));
+        $data = [
+            'name' => $request->get('name'),
+            'phone_number' => $request->get('phone_number'), 
+            'email' => $request->get('email'), 
+            'password' => Hash::make($request->get('password'))
+        ];
 
-        Center::updateOrCreate(
-            ['id' => $request->get('id')],
-            ['name' => $request->get('name'), 'phone_number' => $request->get('phone_number'), 
-            'email' => $request->get('email'), 'password' => $password]
-        );
+        if($request->get('type') == Center::SUPERADMIN) {
+            $data['type'] = Center::SUPERADMIN;
+        } else {
+            $data['type'] = Center::CENTER;
+        }
+
+        // Insert or update
+        Center::updateOrCreate(['id' => $request->get('id')], $data);
 
         return $this->getAction($request->get('button_action'));
     }

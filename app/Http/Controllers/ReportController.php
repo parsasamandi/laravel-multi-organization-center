@@ -12,6 +12,7 @@ use App\Providers\Action;
 use App\Models\Report;
 use App\Models\GeneralInfo;
 use App\Models\Status;
+use App\Models\Center;
 use Yajra\DataTables\Html\Builder;
 use Symfony\Component\HttpFoundation\Response;
 use Auth;
@@ -33,7 +34,11 @@ class ReportController extends Controller
         $vars['reportTable'] = $ReportTable->html();
 
         // Dates
-        $vars['dates'] = GeneralInfo::where('center_id', Auth::id())->select('id', 'jalaliMonth', 'jalaliYear')->get();
+        // Dates
+        if(Auth::user()->type == Center::SUPERADMIN)
+            $vars['dates'] = GeneralInfo::select('id', 'jalaliMonth', 'jalaliYear')->get();
+        else
+            $vars['dates'] = GeneralInfo::where('center_id', Auth::id())->select('id', 'jalaliMonth', 'jalaliYear')->get();
 
         return view('report.list', $vars);
     }
@@ -80,8 +85,11 @@ class ReportController extends Controller
     
         if ($vars) {
 
-            $vars['dates'] = GeneralInfo::where('center_id', Auth::id())
-                                ->select('id', 'jalaliMonth', 'jalaliYear')->get();
+            // Dates
+            if(Auth::user()->type == Center::SUPERADMIN)
+                $vars['dates'] = GeneralInfo::select('id', 'jalaliMonth', 'jalaliYear')->get();
+            else
+                $vars['dates'] = GeneralInfo::where('center_id', Auth::id())->select('id', 'jalaliMonth', 'jalaliYear')->get();
 
             // Pass the report data and dates to the view
             return view('report.edit', $vars);
@@ -94,7 +102,7 @@ class ReportController extends Controller
 
         // Report table
         $report = Report::findOrFail($request->get('id'));
-
+        
         $updateData = [
             'expenses' => $request->get('expenses'),
             'range' => $request->get('range'),

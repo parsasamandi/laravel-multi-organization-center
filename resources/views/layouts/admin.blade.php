@@ -5,7 +5,7 @@
 @section('head')
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="پنل ادمین، کنترل ادمین"> 
+    <meta name="description" content="اتوماسیون ادمین، کنترل ادمین"> 
     <meta name="keywords" content="ادمین، داشبورد، پنل">  
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>@yield('title')</title>
@@ -69,7 +69,7 @@
                             <x-admin.urlAddressParent text="گزارش هزینه های ماهانه" fontAwesome="fa fa-info">
                                 <x-slot name="content">
                                     {{-- General Info --}}
-                                    <x-admin.urlAddress text="گزارش کلی" fontAwesome="null" route="{{ url('generalInfo/list') }}" />
+                                    <x-admin.urlAddress text="گزارش موجودی و صورت حساب" fontAwesome="null" route="{{ url('generalInfo/list') }}" />
                                     {{-- Reports --}}
                                     <x-admin.urlAddress text="گزارش جزئیات هزینه‌کرد" fontAwesome="null" route="{{ url('report/list') }}"  />
                                 </x-slot>

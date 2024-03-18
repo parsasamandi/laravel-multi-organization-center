@@ -21,7 +21,7 @@
                 <select id="general_info_id" name="general_info_id">
                     @foreach ($dates as $date)
                         <option value="{{ $date->id }}">
-                            {{ $date->jalaliMonth }} {{ $date->id }}
+                            {{ $date->jalaliMonth }} {{ $date->jalaliYear }}
                         </option>
                     @endforeach
                 </select>
@@ -29,11 +29,11 @@
 
 
             <!-- Expenses -->
-            <x-input type="number" key="expenses" placeholder="مبلغ هزینه"
-                class="col-md-4 mb-3" value="{{ $report['expenses'] }}" />
+            <x-input type="number" key="expenses" placeholder="مبلغ هزینه (ریال)"
+                class="col-md-4 mb-3" value="{{ $report['bank_balance'] }}" />
 
             <!-- Range -->
-            <x-input type="number" key="range" placeholder="ردیف هزینه"
+            <x-input type="number" key="range" placeholder="ردیف هزینه (ریال)"
                 class="col-md-4 mb-3" value="{{ $report['range'] }}" />
 
             <!-- Type -->

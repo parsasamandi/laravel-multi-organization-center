@@ -22,9 +22,7 @@
     <div class="table-responsive">
         {!! $centerTable->table(['class' => 'table table-bordered table-striped w-100 nowrap text-center'], false) !!}
     </div>
-</div>
-
-
+  </div>
 
 
   {{-- Insertion --}}
@@ -32,21 +30,34 @@
     <x-slot name="content">
       {{-- Form --}}
       <div class="row">
+        <!-- Center name -->
         <x-input key="name" placeholder="نام مرکز" 
           class="col-md-12 mb-3" />
 
+        <!-- Email -->
         <x-input key="email" placeholder="ایمیل مرکز"
           class="col-md-12 mb-3" />
 
+        <!-- Phone number -->
         <x-input key="phone_number" placeholder="شماره تلفن"
           class="col-md-12 mb-3" />
 
-          {{-- Passwords --}}
+        <!-- Type -->
+        <div class="col-md-12 mb-2">
+          <label for="type">نوع ادمین:</label>
+          <select id="type" name="type">
+            <option value="0">مرکز</option>
+            <option value="1">سوپرادمین</option>
+          </select>
+        </div>
+
+        {{-- Passwords --}}
         <div class="col-md-12 mb-3">
           <label for="password">رمز جدید:</label>
           <input type="password" name="password" id="password" class="form-control" 
             placeholder="رمز جدید" autocomplete="new-password">
         </div>
+
         <div class="col-md-12">
           <label for="password-confirm">تکرار رمز جدید:</label>
           <input type="password" name="password-confirm" id="password-confirm" class="form-control"  
@@ -106,6 +117,7 @@
           action.editOnSuccess($url);
           $('#name').val(data.name);
           $('#phone_number').val(data.phone_number);
+          $('#type').val(data.type).trigger('change');
           $('#email').val(data.email);
           $('#password').val('new_password');
           $('#password-confirm').val('new_password');
