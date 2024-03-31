@@ -30,13 +30,16 @@ class GeneralInfoDataTable extends DataTable
             ->addIndexColumn()
             ->rawColumns(['action', 'bank_statement_receipt', 'data', 'status']) 
             ->addColumn('date', function(GeneralInfo $generalInfo) {
-                return $generalInfo->jalaliMonth . ' ' . $generalInfo->jalaliYear;
+                return $generalInfo->jalaliMonth . ' ' . $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
             })
             ->filterColumn('date', function ($query, $keyword) {
 
                 return $query->where('jalaliYear', 'LIKE', "%{$keyword}%")
                     ->orWhere('jalaliMonth', 'LIKE', "%{$keyword}%");
   
+            })
+            ->editColumn('bank_balance', function(GeneralInfo $generalInfo) {
+                return $this->dataTable->englishToPersianNumbers($generalInfo->bank_balance);
             })
             ->editColumn('bank_statement_receipt', function(GeneralInfo $generalInfo) {
 

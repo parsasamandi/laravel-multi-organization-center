@@ -34,6 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/edit/{id}', 'GeneralInfoController@edit');   
         Route::get('/details/{id}', 'GeneralInfoController@details');
         Route::post('/update', 'GeneralInfoController@update');
+        Route::post('/confirmStatus', 'GeneralInfoController@confirmStatus');
         Route::get('delete/{id}','GeneralInfoController@delete');
     });
 
@@ -44,6 +45,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('store', 'ReportController@store');
         Route::get('/edit/{id}', 'ReportController@edit');   
         Route::post('/update', 'ReportController@update');
+        Route::post('/confirmStatus', 'ReportController@confirmStatus');
         Route::get('/details/{id}', 'ReportController@details');
         Route::get('delete/{id}','ReportController@delete');
     });

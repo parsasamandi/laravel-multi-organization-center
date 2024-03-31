@@ -34,7 +34,6 @@ class ReportController extends Controller
         $vars['reportTable'] = $ReportTable->html();
 
         // Dates
-        // Dates
         if(Auth::user()->type == Center::SUPERADMIN)
             $vars['dates'] = GeneralInfo::select('id', 'jalaliMonth', 'jalaliYear')->get();
         else
@@ -95,7 +94,27 @@ class ReportController extends Controller
             return view('report.edit', $vars);
         }
     }
-    
+
+    public function confirmStatus(Request $request) {
+
+        $report = Report::findOrFail($request->get('id'));
+
+        // Checking if it was confirmed
+        if($request->get('status') == Status::CONFIRMED) {
+
+            // Updating General info's status into "Confirmed"
+            $report->statuses()->update(
+                ['status' => Status::CONFIRMED]
+            );
+        } else {
+             // Updating General info's status into "Not confirmed"
+             $report->statuses()->update(
+                ['status' => Status::NOTCONFIRMED]
+            );
+        }
+
+        return response()->json(['success' => true], Response::HTTP_CREATED); 
+    }
     
     // Update
     public function update(Request $request) {
@@ -124,22 +143,6 @@ class ReportController extends Controller
             $updateData['receipt'] = $file; // Include file in update data
         }
 
-        // Checking if it was confirmed
-        if($request->get('status') == Status::CONFIRMED) {
-
-            // Storing General info's status
-            $report->statuses()->update(
-                ['status' => Status::CONFIRMED]
-            );
-        } else {
-             // Storing General info's status
-             $report->statuses()->update(
-                ['status' => Status::NOTCONFIRMED]
-            );
-        }
-
-        // Updating the report table
-        $report->update($updateData);
 
         return $this->getAction("update");
     }

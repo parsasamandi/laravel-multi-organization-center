@@ -33,12 +33,20 @@ class ReportDataTable extends DataTable
             ->addColumn('date', function (Report $report) {
                 $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
                 if ($generalInfo) {
-                    return $generalInfo->jalaliMonth . ' ' . $generalInfo->jalaliYear;
-                } else {
-                    return ''; // Or any appropriate handling for null $generalInfo
+                    return $generalInfo->jalaliMonth . ' ' . 
+                        $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
                 }
             })->filterColumn('date', function ($query, $keyword) {
-                // Filter based on the month number or name
+                $query->whereHas('generalInfo', function ($query) use ($keyword) {
+                    $query->where('jalaliYear', 'LIKE', "%{$keyword}%")
+                          ->orWhere('jalaliMonth', 'LIKE', "%{$keyword}%");
+                });
+            })
+            ->editColumn('expenses', function(Report $report) {
+                return $this->dataTable->englishToPersianNumbers($report->expenses);
+            })
+            ->editColumn('range', function(Report $report) {
+                return $this->dataTable->englishToPersianNumbers($report->range);
             })
             ->editColumn('receipt', function(Report $report) {
                 $fileUrl = asset("receipts/{$report->receipt}");

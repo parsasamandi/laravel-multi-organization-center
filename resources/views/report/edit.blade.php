@@ -21,7 +21,7 @@
                 <select id="general_info_id" name="general_info_id">
                     @foreach ($dates as $date)
                         <option value="{{ $date->id }}">
-                            {{ $date->jalaliMonth }} {{ $date->id }}
+                            {{ $date->jalaliMonth }} {{ $date->jalaliYear }}
                         </option>
                     @endforeach
                 </select>
@@ -43,12 +43,6 @@
 
             <!-- Description -->
             <x-textarea key="description" placeholder="توضیحات" class="col-md-12 mb-3" value="{{ $report['description'] }}" />
-
-            <!-- Confirmed or Not confirmed status -->
-            @if(Auth::user()->type == 1)
-                {{-- Confirmation --}}
-                @include('includes.confirmation')
-            @endif
 
         </div>
 
@@ -81,8 +75,6 @@
 <script>
     $(document).ready(function () {
 
-        console.log({{ json_encode($report['general_info_id']) }});
-
         // Report type
         $('#type').val({{ json_encode($report['type']) }}).trigger('change');
 
@@ -109,13 +101,8 @@
                 processData: false,
                 success: function(response) {
                     // Handle success response
-                    $('#form_output').html(response.message);
-
-                    $(window.formId)[0].reset();
-
-                    if(window.dt != null) {
-                        window.dt.draw(false);
-                    }
+                    // $('#form_output').html(response.message);
+                  success(response);
                 },
                 error: function (response) {
                     // Handle error response

@@ -6,7 +6,8 @@
 
     <div class="row">
         <div class="col-md-12">
-            <table id="{{ $tableId ?? null }}" class="table table-bordered table-striped w-100 nowrap text-center dataTable no-footer dtr-inline collapsed">
+            <table id="{{ $tableId ?? null }}" class="table table-bordered table-striped w-100 
+                                                        nowrap text-center dataTable no-footer dtr-inline collapsed">
                 <thead>
                     <tr>
                         {!! $tableHeader ?? null !!} 

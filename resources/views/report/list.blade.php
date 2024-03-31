@@ -47,7 +47,7 @@
       <!-- File -->
       <h6>ارسال رسید</h6>
       <input type="file" id="file" name="receipt" class="mb-3" 
-        accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,application/csv"/>
+        accept=".pdf,.doc,.docx,.csv,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
 
     </x-slot>
   </x-admin.insert>

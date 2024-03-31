@@ -54,6 +54,8 @@
     <!-- Description -->
     <x-textarea key="description" class="mt-2" rows="2" placeholder="توضیحات" value="{{ $report->description }}" readonly />
 
+    <!-- Status form -->
+    @include('includes.form.status', ['id' => $report->id])
 
     <!-- Return button -->
     <div class="text-center mt-3">
@@ -83,6 +85,30 @@
                 language: {
                     url: "{{ asset('js/persian.json') }}",
                     lengthMenu: '' // Remove "Show 10 entries" text
+                }
+            });
+        });
+
+         // Form submission for updating
+         $('#confirmStatus').click(function (event) {
+            event.preventDefault();
+
+            // Get form data
+            var formData = $('#statusForm').serialize(); 
+
+            // AJAX request
+            $.ajax({
+                url: '/report/confirmStatus',
+                method: 'POST',
+                headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
+                data: formData,
+                success: function(response) {
+                    // Handle success response
+                    window.location.href = '/report/list';      
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response
+                    error(error);      
                 }
             });
         });
@@ -133,7 +159,6 @@
             for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
             return buf;
         }
-
 
     </script>
 

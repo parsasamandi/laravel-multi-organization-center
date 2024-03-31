@@ -89,6 +89,8 @@ function success(data) {
 
 // Error
 function error(data) {
+    // Console log
+    console.log(data.responseText);
     // Parse To Json
     var data = JSON.parse(data.responseText);
     // Error

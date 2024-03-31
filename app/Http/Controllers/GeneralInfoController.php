@@ -96,23 +96,25 @@ class GeneralInfoController extends Controller
 
         // Update the GeneralInfo record
         $generalInfo->update($updateData);
+
+        return $this->getAction("update");
     }
 
     // Confirming the General Info status
-    public function confrimStatus(Request $request) {
+    public function confirmStatus(Request $request) {
 
         $generalInfo = GeneralInfo::findOrFail($request->get('id'));
 
         // Checking if it was confirmed
         if($request->get('status') == Status::CONFIRMED) {
 
-            // Storing General info's status
+            // Updating General info's status into "Confirmed"
             $generalInfo->statuses()->update(
                 ['status' => Status::CONFIRMED]
             );
         } else {
-             // Storing General info's status
-             $generalInfo->statuses()->update(
+            // Updating General info's status into "Not confirmed"
+            $generalInfo->statuses()->update(
                 ['status' => Status::NOTCONFIRMED]
             );
         }

@@ -26,27 +26,8 @@
         
     </x-details>
 
-    @if(Auth::user()->type == 1)
-        <form id="statusForm">
-            {{ csrf_field() }}
-
-            {{-- Output --}}
-            <span id="form_output"></span>
-
-            <!-- Id -->
-            <input type="hidden" name="id" id="id" value="{{ $generalInfo->id }}"  />
-
-            <div class="row">
-                <!-- Confirmed or Not confirmed status -->
-                @include('includes.confirmation')
-            </div>
-            
-            <div class="col-md-12">   
-                <button type="button" type="submit" id="submit" class="btn btn-secondary">ثبت وضعیت</button>
-            </div>
-
-        </form>
-    @endif
+    <!-- Status form -->
+    @include('includes.form.status', ['id' => $generalInfo->id])
 
     <!-- Return button -->
     <div class="text-center mt-3">
@@ -82,27 +63,27 @@
                 }
             });
 
-             // Form submission for updating
-             $('#submit').click(function () {
+            // Form submission for updating
+            $('#confirmStatus').click(function (event) {
                 event.preventDefault();
+
+                // Get form data
+                var formData = $('#statusForm').serialize(); 
 
                 // AJAX request
                 $.ajax({
-                    url: '/generalInfo/update',
+                    url: '/generalInfo/confirmStatus',
                     method: 'POST',
                     headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
-                    data: {
-                        id: $('#id').val(),
-                        status: $('#status').val(),
-                        button_action: $('#button_action').val()
-                    },
+                    data: formData,
                     success: function(response) {
-                        console.log('test');
-                        // Redirecting to the main page
-                        window.location.href = "/generalInfo/list";
-                    }, error: function(response) {
-                        console.log(response.responseText);
+                        // Handle success response
+                        window.location.href = '/generalInfo/list';      
                     },
+                    error: function(xhr, status, error) {
+                        // Handle error response
+                        error(error);      
+                    }
                 });
             });
         });

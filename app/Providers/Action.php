@@ -93,6 +93,12 @@ class Action {
         $imageUploader->save();
     }
 
+    // English to Persian conversion
+    function englishToPersianNumbers($number) {
+        $persianNumbers = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
+        $englishNumbers = range(0, 9);
+        return str_replace($englishNumbers, $persianNumbers, $number);
+    }
 
     // Response with error
     public function failedResponse() {
