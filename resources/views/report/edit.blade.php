@@ -49,9 +49,10 @@
         <!-- File -->
         <h6>ارسال چاپ صورت حساب بانکی</h6>  
         <input type="file" id="file" name="receipt" class="mb-3"
-            accept="application/vnd.ms-excel,
-            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
-            text/csv,application/csv"/>
+            accept=".pdf,.doc,.docx,.csv,application/msword,application/
+            vnd.openxmlformats-officedocument.wordprocessingml.document,application/
+            vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+
 
         <br/>
 
@@ -100,8 +101,7 @@
                 contentType: false,
                 processData: false,
                 success: function(response) {
-                    // Handle success response
-                    // $('#form_output').html(response.message);
+                // Handle success response
                   success(response);
                 },
                 error: function (response) {

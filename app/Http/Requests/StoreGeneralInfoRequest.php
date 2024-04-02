@@ -21,7 +21,7 @@ class StoreGeneralInfoRequest extends FormRequest
     {
         // Validation rules
         return [
-            'bank_balance' => 'required',
+            'bank_balance' => 'required | numeric',
             'receipt' => 'required',
             'jalaliMonth' => [
                 'required',

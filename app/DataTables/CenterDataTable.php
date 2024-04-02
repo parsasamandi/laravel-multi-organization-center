@@ -30,6 +30,8 @@ class CenterDataTable extends DataTable
             ->rawColumns(['action'])
             ->addColumn('action', function (Center $center){
                 return $this->dataTable->setAction($center->id); 
+            })->editColumn('phone_number', function (Center $center) {
+                return $this->dataTable->englishToPersianNumbers($center->phone_number);
             });
     }
 

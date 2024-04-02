@@ -31,13 +31,26 @@ class ReportController extends Controller
         // Report Table
         $ReportTable = new ReportDataTable;
 
-        $vars['reportTable'] = $ReportTable->html();
-
         // Dates
-        if(Auth::user()->type == Center::SUPERADMIN)
-            $vars['dates'] = GeneralInfo::select('id', 'jalaliMonth', 'jalaliYear')->get();
-        else
-            $vars['dates'] = GeneralInfo::where('center_id', Auth::id())->select('id', 'jalaliMonth', 'jalaliYear')->get();
+        if(Auth::user()->type == Center::SUPERADMIN) {
+            $dates = GeneralInfo::select('id', 'jalaliMonth', 'jalaliYear')->get();
+        } else {
+            $dates = GeneralInfo::where('center_id', Auth::id())
+                ->select('id', 'jalaliMonth', 'jalaliYear')
+                ->get();
+        }
+
+        // Convert jalaliYear to Persian numbers
+        $dates->transform(function ($date) {
+            $date->jalaliYear = $this->action->englishToPersianNumbers($date->jalaliYear);
+            return $date;
+        });
+
+        // Prepare other variables
+        $vars = [
+            'reportTable' => $ReportTable->html(),
+            'dates' => $dates,
+        ];
 
         return view('report.list', $vars);
     }
@@ -142,6 +155,8 @@ class ReportController extends Controller
             $receipt->move(public_path('receipts'), $file);
             $updateData['receipt'] = $file; // Include file in update data
         }
+
+        $report->update($updateData);
 
 
         return $this->getAction("update");

@@ -17,16 +17,10 @@ class UpdateReportRequest extends FormRequest
     public function rules(Request $request)
     {
         return [
-            'expenses' => 'required',
-            'range' => 'required',
+            'expenses' => 'required | numeric',
+            'range' => 'required | numeric',
             'description' => 'required',
-            'type' => 'required',
-            'jalaliMonth' => [
-                'required',
-                Rule::unique('general_infos')->where(function ($query) {
-                    return $query->where('jalaliYear', $this->input('jalaliYear'));
-                })
-            ],
+            'type' => 'required'
         ];
     }
 

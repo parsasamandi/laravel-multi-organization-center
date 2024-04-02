@@ -23,7 +23,9 @@
         <!-- File -->
         <h6>ارسال چاپ صورت حساب بانکی</h6>
         <input type="file" id="file" name="receipt" class="mb-3" 
-            accept=".pdf,.doc,.docx,.csv,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+            accept=".pdf,.doc,.docx,.csv,application/msword,application/
+            vnd.openxmlformats-officedocument.wordprocessingml.document,application/
+            vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
 
 
         <br/>
