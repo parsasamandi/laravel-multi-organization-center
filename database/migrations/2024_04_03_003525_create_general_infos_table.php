@@ -18,7 +18,7 @@ class CreateGeneralInfosTable extends Migration {
 			$table->integer('id', true);
 			$table->text('bank_statement_receipt')->nullable();
 			$table->float('bank_balance', 10, 0);
-			$table->integer('jalaliMonth');
+			$table->string('jalaliMonth', 50);
 			$table->integer('jalaliYear');
 			$table->integer('center_id');
 		});

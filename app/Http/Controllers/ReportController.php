@@ -166,13 +166,5 @@ class ReportController extends Controller
     public function details($id) {
         return view('report.details', ['report' => Report::with('generalInfo')->findOrFail($id)]);
     }
-    
-     // Print
-     public function printReport() {
-        // Retrieve all reports from the database
-        $reports = Report::all();
-        
-        // Pass the reports data to the printable view
-        return view('vendor.datatables.print', compact('reports'));
-    }
+
 }

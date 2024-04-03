@@ -4,7 +4,7 @@
 @section('content')
 
 @php
-    // Assuming $action is an instance of the Action class
+    // $action is an instance of the Action class
     $action = new \App\Providers\Action();
 @endphp
 
@@ -97,15 +97,12 @@
          $('#confirmStatus').click(function (event) {
             event.preventDefault();
 
-            // Get form data
-            var formData = $('#statusForm').serialize(); 
-
             // AJAX request
             $.ajax({
                 url: '/report/confirmStatus',
                 method: 'POST',
                 headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
-                data: formData,
+                data: $('#statusForm').serialize(),
                 success: function(response) {
                     // Handle success response
                     window.location.href = '/report/list';      

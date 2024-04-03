@@ -3,6 +3,11 @@
 
 @section('content')
 
+@php
+    // $action is an instance of the Action class
+    $action = new \App\Providers\Action();
+@endphp
+
 <div class="container-fluid mt-3 right-text">
     {{-- List --}}
     <ol class="breadcrumb mb-4 right-text">
@@ -17,7 +22,7 @@
 
         <div class="row">
             <x-input type="number" key="bank_balance" placeholder="موجودی در پایان ماه (ریال)" 
-                class="col-md-4 mb-3" value="{{ $generalInfo->bank_balance }}"/>
+                class="col-md-4 mb-3" value="{{ $action->englishToPersianNumbers($generalInfo->bank_balance) }}"/>
         </div>
 
         <!-- File -->
@@ -26,7 +31,6 @@
             accept=".pdf,.doc,.docx,.csv,application/msword,application/
             vnd.openxmlformats-officedocument.wordprocessingml.document,application/
             vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
-
 
         <br/>
 
