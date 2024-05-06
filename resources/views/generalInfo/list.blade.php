@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('title', 'فهرست گزارشات کالی')
+@section('title', 'فهرست گزارشات موجودی و صورت حساب')
 
 @section('content')
 
   {{-- Header --}}
-  <x-header pageName="گزارشات کلی" pageDescription="گزارشات موجودی و صورت حساب" buttonValue="گزارش موجودی و صورت حساب جدید">
+  <x-header pageName="گزارشات موجودی و صورت حساب" pageDescription="گزارشات موجودی و صورت حساب" buttonValue="گزارش موجودی و صورت حساب جدید">
     <x-slot name="table">
       <x-table :table="$generalInfoTable" />
     </x-slot>
@@ -31,7 +31,10 @@
       <!-- File -->
       <h6>ارسال چاپ صورت حساب بانکی</h6>
       <input type="file" id="file" name="receipt" class="mb-3" 
-        accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,application/csv"/>
+        accept=".pdf,.doc,.docx,.csv,application/msword,application/
+        vnd.openxmlformats-officedocument.wordprocessingml.document,application/
+        vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+      
 
     </x-slot>
   </x-admin.insert>

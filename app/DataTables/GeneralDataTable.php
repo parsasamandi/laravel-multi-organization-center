@@ -121,6 +121,18 @@ class GeneralDataTable
         return $query->whereRaw($sql, ["%{$keyword}%"]);
     }
 
+    // English to Persian numbers
+    function englishToPersianNumbers($number) {
+        // Define the mapping of English digits to Persian digits
+        $englishDigits = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+        $persianDigits = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
+    
+        // Convert each English digit in the number to its Persian equivalent
+        $persianNumber = str_replace($englishDigits, $persianDigits, $number);
+    
+        return $persianNumber;
+    }
+
     // Returning Jalali months
     public function jalaliMonth($column) {
         switch ($column) {

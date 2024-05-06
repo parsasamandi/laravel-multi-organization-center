@@ -16,6 +16,7 @@ use App\Models\Center;
 use Yajra\DataTables\Html\Builder;
 use Symfony\Component\HttpFoundation\Response;
 use Auth;
+use Storage;
 
 class ReportController extends Controller
 {
@@ -31,14 +32,26 @@ class ReportController extends Controller
         // Report Table
         $ReportTable = new ReportDataTable;
 
-        $vars['reportTable'] = $ReportTable->html();
+        // Dates
+        if(Auth::user()->type == Center::SUPERADMIN) {
+            $dates = GeneralInfo::select('id', 'jalaliMonth', 'jalaliYear')->get();
+        } else {
+            $dates = GeneralInfo::where('center_id', Auth::id())
+                ->select('id', 'jalaliMonth', 'jalaliYear')
+                ->get();
+        }
 
-        // Dates
-        // Dates
-        if(Auth::user()->type == Center::SUPERADMIN)
-            $vars['dates'] = GeneralInfo::select('id', 'jalaliMonth', 'jalaliYear')->get();
-        else
-            $vars['dates'] = GeneralInfo::where('center_id', Auth::id())->select('id', 'jalaliMonth', 'jalaliYear')->get();
+        // Convert jalaliYear to Persian numbers
+        $dates->transform(function ($date) {
+            $date->jalaliYear = $this->action->englishToPersianNumbers($date->jalaliYear);
+            return $date;
+        });
+
+        // Prepare other variables
+        $vars = [
+            'reportTable' => $ReportTable->html(),
+            'dates' => $dates,
+        ];
 
         return view('report.list', $vars);
     }
@@ -52,18 +65,22 @@ class ReportController extends Controller
     // Insert
     public function store(StoreReportRequest $request) {
 
+        // Getting the file
         $receipt = $request->file('receipt');
-        $file = $receipt->getClientOriginalName();
-        $receipt->move(public_path('receipts'), $file);
+        // File name
+        $file_name = 'receipts/' . $receipt->getClientOriginalName();
+        // Storing file to S3
+        $receipt->storeAs('receipts', $file_name, 's3');
 
         $report = Report::create(
-            ['expenses' => $request->get('expenses'), 'range' => $request->get('range'), 
-            'receipt' => $file, 'description' => $request->get('description'), 
+            ['expenses' => $this->action->persianToEnglishNumbers($request->get('expenses')), 
+            'range' => $this->action->persianToEnglishNumbers($request->get('range')), 
+            'receipt' => $file_name, 'description' => $request->get('description'), 
             'type' => $request->get('type'), 'center_id' => Auth::id(), 
             'general_info_id' => $request->get('general_info_id')
         ]);
 
-        // Storing General info's status
+        // Storing General info's status 
         $report->statuses()->create(
             ['status' => Status::NOTCONFIRMED, 'status_type' => Report::class]
         );
@@ -95,7 +112,27 @@ class ReportController extends Controller
             return view('report.edit', $vars);
         }
     }
-    
+
+    public function confirmStatus(Request $request) {
+
+        $report = Report::findOrFail($request->get('id'));
+
+        // Checking if it was confirmed
+        if($request->get('status') == Status::CONFIRMED) {
+
+            // Updating General info's status into "Confirmed"
+            $report->statuses()->update(
+                ['status' => Status::CONFIRMED]
+            );
+        } else {
+             // Updating General info's status into "Not confirmed"
+             $report->statuses()->update(
+                ['status' => Status::NOTCONFIRMED]
+            );
+        }
+
+        return response()->json(['success' => true], Response::HTTP_CREATED); 
+    }
     
     // Update
     public function update(Request $request) {
@@ -124,22 +161,8 @@ class ReportController extends Controller
             $updateData['receipt'] = $file; // Include file in update data
         }
 
-        // Checking if it was confirmed
-        if($request->get('status') == Status::CONFIRMED) {
-
-            // Storing General info's status
-            $report->statuses()->update(
-                ['status' => Status::CONFIRMED]
-            );
-        } else {
-             // Storing General info's status
-             $report->statuses()->update(
-                ['status' => Status::NOTCONFIRMED]
-            );
-        }
-
-        // Updating the report table
         $report->update($updateData);
+
 
         return $this->getAction("update");
     }
@@ -148,13 +171,5 @@ class ReportController extends Controller
     public function details($id) {
         return view('report.details', ['report' => Report::with('generalInfo')->findOrFail($id)]);
     }
-    
-     // Print
-     public function printReport() {
-        // Retrieve all reports from the database
-        $reports = Report::all();
-        
-        // Pass the reports data to the printable view
-        return view('vendor.datatables.print', compact('reports'));
-    }
+
 }

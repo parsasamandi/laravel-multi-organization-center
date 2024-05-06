@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\Auth;
+use Storage;
 
 class ReportDataTable extends DataTable
 {
@@ -33,16 +34,27 @@ class ReportDataTable extends DataTable
             ->addColumn('date', function (Report $report) {
                 $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
                 if ($generalInfo) {
-                    return $generalInfo->jalaliMonth . ' ' . $generalInfo->jalaliYear;
-                } else {
-                    return ''; // Or any appropriate handling for null $generalInfo
+                    return $generalInfo->jalaliMonth . ' ' . 
+                        $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
                 }
             })->filterColumn('date', function ($query, $keyword) {
-                // Filter based on the month number or name
+                $query->whereHas('generalInfo', function ($query) use ($keyword) {
+                    $query->where('jalaliYear', 'LIKE', "%{$keyword}%")
+                          ->orWhere('jalaliMonth', 'LIKE', "%{$keyword}%");
+                });
+            })
+            ->editColumn('expenses', function(Report $report) {
+                return $this->dataTable->englishToPersianNumbers($report->expenses);
+            })
+            ->editColumn('range', function(Report $report) {
+                return $this->dataTable->englishToPersianNumbers($report->range);
             })
             ->editColumn('receipt', function(Report $report) {
-                $fileUrl = asset("receipts/{$report->receipt}");
-                return "<a href=\"$fileUrl\" download>دانلود رسید بانک</a>";
+                // Get the URL for the file from S3 storage
+                $file_url = Storage::disk('s3')->url($report->receipt);
+                
+                // Return a link to the file
+                return '<a href="' . $file_url . '" target="_blank">بارگیری کردن</a>';
             })
             ->editColumn('type', function (Report $report) {
                 switch ($report->type) {
@@ -105,7 +117,7 @@ class ReportDataTable extends DataTable
             Column::make('expenses')
                 ->title('مبلغ هزینه'),
             Column::make('range')
-                ->title('ردیف ها در صورت حساب بانکی'),
+                ->title('ردیف ها در صورت‌حساب بانکی'),
             Column::make('receipt')
                 ->title('رسید'),
             Column::make('type')

@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'فهرست گزارش جزئی')
+@section('title', 'فهرست گزارش جزئیات هزینه‌کرد')
 
 @section('content')
 
@@ -16,7 +16,6 @@
     <x-slot name="content">
       {{-- Form --}}
       <div class="row">
-
         <!-- Date -->
         <div class="col-md-12 mb-3">
           <!-- Label for date -->
@@ -29,10 +28,11 @@
         </div>
 
         <!-- Expenses -->
-        <x-input type="number" key="expenses" placeholder="مبلغ هزینه (ریال)"
+        <x-input key="expenses" placeholder="مبلغ هزینه (ریال)"
           class="col-md-6 mb-3" />
+        
         <!-- Range -->
-        <x-input type="number" key="range" placeholder="ردیف هزینه (ریال)"
+        <x-input key="range" placeholder="ردیف هزینه (ریال)"
           class="col-md-6 mb-3" />
 
         <!-- Type -->
@@ -47,7 +47,9 @@
       <!-- File -->
       <h6>ارسال رسید</h6>
       <input type="file" id="file" name="receipt" class="mb-3" 
-        accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,application/csv"/>
+        accept=".pdf,.doc,.docx,.csv,application/msword,application/
+        vnd.openxmlformats-officedocument.wordprocessingml.document,application/
+        vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
 
     </x-slot>
   </x-admin.insert>

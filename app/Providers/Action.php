@@ -76,7 +76,7 @@ class Action {
         }
         $imageUploader->media_id = $media_id;
         $imageUploader->media_type = $class;
-        // // 0 = image
+        // 0 = Image
         $imageUploader->type = Media::IMAGE;
 
         // File
@@ -93,6 +93,29 @@ class Action {
         $imageUploader->save();
     }
 
+    public function englishToPersianNumbers($number) {
+        // Define the mapping of English digits to Persian digits
+        $englishDigits = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+        $persianDigits = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
+    
+        // Convert each English digit in the number to its Persian equivalent
+        $persianNumber = str_replace($englishDigits, $persianDigits, $number);
+    
+        return $persianNumber;
+    }
+
+    public function persianToEnglishNumbers($number) {
+        // Define the mapping of English digits to Persian digits
+        $persianDigits = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
+        $englishDigits = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+    
+        // Convert each English digit in the number to its Persian equivalent
+        $englishNumber = str_replace($persianDigits, $englishDigits, $number);
+    
+        return $englishNumber;
+    }
+
+    
 
     // Response with error
     public function failedResponse() {

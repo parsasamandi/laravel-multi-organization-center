@@ -16,6 +16,7 @@ use App\Providers\Action;
 use App\Models\Status;
 use File;
 use Auth;
+use Storage;
 
 class GeneralInfoController extends Controller
 {
@@ -41,30 +42,32 @@ class GeneralInfoController extends Controller
     }
 
     // Insert
-    public function store(StoreGeneralInfoRequest $request) {
+    public function store(UpdateGeneralInfoRequest $request) {
 
-
+        // Getting the file
         $receipt = $request->file('receipt');
-        $file = $receipt->getClientOriginalName();
-        $receipt->move(public_path('receipts'), $file);
+        // File name
+        $file_name = 'receipts/' . $receipt->getClientOriginalName();
+        // Storing file to S3
+        $receipt->storeAs('receipts', $file_name, 's3');
 
         // Storing General info
         $generalInfo = GeneralInfo::create([
             'jalaliMonth' => $request->get('jalaliMonth'),
             'jalaliYear' => $request->get('jalaliYear'),
             'bank_balance' => $request->get('bank_balance'),
-            'bank_statement_receipt' => $file,
+            'bank_statement_receipt' => $file_name,
             'center_id' => Auth::id()
         ]);
-
+    
         // Storing General info's status
         $generalInfo->statuses()->create(
             ['status' => Status::NOTCONFIRMED, 'status_type' => GeneralInfo::class]
         );
-
+    
         return $this->getAction($request->get('button_action'));
-
     }
+    
 
     // Edit
     public function edit($id) {

@@ -3,6 +3,11 @@
 
 @section('content')
 
+@php
+    // $action is an instance of the Action class
+    $action = new \App\Providers\Action();
+@endphp
+
 <!-- <div class="container-fluid mt-3 right-text"> -->
 <div class="container-fluid mt-3 right-text">
     {{-- List --}}
@@ -21,9 +26,9 @@
         <!-- Table data -->
         <x-slot name="tableData">
             <!-- Expenses -->
-            <td>{{ $report->expenses }}</td>
+            <td>{{ $action->englishToPersianNumbers($report->expenses) }}</td>
             <!-- Range -->
-            <td>{{ $report->range }}</td>
+            <td>{{ $action->englishToPersianNumbers($report->range) }}</td>
 
             <!-- Type -->
             @switch($report->type)
@@ -42,24 +47,25 @@
             <td>{{ $report->generalInfo->jalaliMonth }}</td>
 
             <!-- Jalali Year -->
-            <td>{{ $report->generalInfo->jalaliYear }}</td>
+            <td>{{ $action->englishToPersianNumbers($report->generalInfo->jalaliYear) }}</td>
 
             <!-- Receipt -->
             <td><a href="{{ url('/receipts/' . $report->receipt) }}" download>دانلود  
                     {{ $report->receipt }} </a></td>
         </x-slot>
 
-    </x-details>
+    </x-details>    
 
     <!-- Description -->
     <x-textarea key="description" class="mt-2" rows="2" placeholder="توضیحات" value="{{ $report->description }}" readonly />
 
+    <!-- Status form -->
+    @include('includes.form.status', ['id' => $report->id])
 
     <!-- Return button -->
     <div class="text-center mt-3">
         <button type="button" id="return_button" class="btn btn-secondary">بازگشت</button>
         <button type="button" id="print_button" class="btn btn-secondary">چاپ</button>
-        <button id="exportExcelButton" class="btn btn-secondary">خروجی اکسل</button>
     </div>
     
 
@@ -87,6 +93,27 @@
             });
         });
 
+         // Form submission for updating
+         $('#confirmStatus').click(function (event) {
+            event.preventDefault();
+
+            // AJAX request
+            $.ajax({
+                url: '/report/confirmStatus',
+                method: 'POST',
+                headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
+                data: $('#statusForm').serialize(),
+                success: function(response) {
+                    // Handle success response
+                    window.location.href = '/report/list';      
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response
+                    error(error);      
+                }
+            });
+        });
+
         $('#print_button').click(function() {
             var $tableToPrint = $('#reportDetailsTable').clone(); // Clone the table
             $tableToPrint.find('button').remove(); // Remove any buttons in the cloned table
@@ -99,46 +126,41 @@
         });
 
         // Export button
-        $('#exportExcelButton').click(function() {
-            // Get the table data as a worksheet
-            var worksheet = XLSX.utils.table_to_sheet(document.getElementById('reportDetailsTable'));
+        // $('#exportExcelButton').click(function() {
+        //     // Get the table data as a worksheet
+        //     var worksheet = XLSX.utils.table_to_sheet(document.getElementById('reportDetailsTable'));
 
-            // Create a workbook and add the worksheet to it
-            var workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'جزئیات یک ردیف هزینه‌کرد');
+        //     // Create a workbook and add the worksheet to it
+        //     var workbook = XLSX.utils.book_new();
+        //     XLSX.utils.book_append_sheet(workbook, worksheet, 'جزئیات یک ردیف هزینه‌کرد');
 
-            // Convert the workbook to an Excel file (binary string)
-            var excelBinaryString = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+        //     // Convert the workbook to an Excel file (binary string)
+        //     var excelBinaryString = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
 
-            // Convert the binary string to a Blob
-            var blob = new Blob([s2ab(excelBinaryString)], { type: 'application/octet-stream' });
+        //     // Convert the binary string to a Blob
+        //     var blob = new Blob([s2ab(excelBinaryString)], { type: 'application/octet-stream' });
 
-            // Create a temporary anchor element
-            var a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'جزئیات-هزینه‌کرد.xlsx'; // Set the filename for the downloaded file
+        //     // Create a temporary anchor element
+        //     var a = document.createElement('a');
+        //     a.href = URL.createObjectURL(blob);
+        //     a.download = 'جزئیات-هزینه‌کرد.xlsx'; // Set the filename for the downloaded file
 
-            // Append the anchor element to the document body and trigger a click event to start the download
-            document.body.appendChild(a);
-            a.click();
+        //     // Append the anchor element to the document body and trigger a click event to start the download
+        //     document.body.appendChild(a);
+        //     a.click();
 
-            // Remove the anchor element from the document body
-            document.body.removeChild(a);
-        });
+        //     // Remove the anchor element from the document body
+        //     document.body.removeChild(a);
+        // });
 
-        // Function to convert string to ArrayBuffer
-        function s2ab(s) {
-            var buf = new ArrayBuffer(s.length);
-            var view = new Uint8Array(buf);
-            for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-            return buf;
-        }
-
+        // // Function to convert string to ArrayBuffer
+        // function s2ab(s) {
+        //     var buf = new ArrayBuffer(s.length);
+        //     var view = new Uint8Array(buf);
+        //     for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+        //     return buf;
+        // }
 
     </script>
 
 @endsection
-
-
-
-
