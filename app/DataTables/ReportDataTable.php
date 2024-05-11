@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\Auth;
+use Storage;
 
 class ReportDataTable extends DataTable
 {
@@ -49,8 +50,11 @@ class ReportDataTable extends DataTable
                 return $this->dataTable->englishToPersianNumbers($report->range);
             })
             ->editColumn('receipt', function(Report $report) {
-                $fileUrl = asset("receipts/{$report->receipt}");
-                return "<a href=\"$fileUrl\" download>دانلود رسید بانک</a>";
+                // Get the URL for the file from S3 storage
+                $file_url = Storage::disk('s3')->url($report->receipt);
+                
+                // Return a link to the file
+                return '<a href="' . $file_url . '" target="_blank">بارگیری کردن</a>';
             })
             ->editColumn('type', function (Report $report) {
                 switch ($report->type) {
@@ -113,7 +117,7 @@ class ReportDataTable extends DataTable
             Column::make('expenses')
                 ->title('مبلغ هزینه'),
             Column::make('range')
-                ->title('ردیف ها در صورت حساب بانکی'),
+                ->title('ردیف ها در صورت‌حساب بانکی'),
             Column::make('receipt')
                 ->title('رسید'),
             Column::make('type')

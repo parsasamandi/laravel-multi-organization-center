@@ -16,6 +16,7 @@ use App\Models\Center;
 use Yajra\DataTables\Html\Builder;
 use Symfony\Component\HttpFoundation\Response;
 use Auth;
+use Storage;
 
 class ReportController extends Controller
 {
@@ -64,18 +65,22 @@ class ReportController extends Controller
     // Insert
     public function store(StoreReportRequest $request) {
 
+        // Getting the file
         $receipt = $request->file('receipt');
-        $file = $receipt->getClientOriginalName();
-        $receipt->move(public_path('receipts'), $file);
+        // File name
+        $file_name = 'receipts/' . $receipt->getClientOriginalName();
+        // Storing file to S3
+        $receipt->storeAs('receipts', $file_name, 's3');
 
         $report = Report::create(
-            ['expenses' => $request->get('expenses'), 'range' => $request->get('range'), 
-            'receipt' => $file, 'description' => $request->get('description'), 
+            ['expenses' => $this->action->persianToEnglishNumbers($request->get('expenses')), 
+            'range' => $this->action->persianToEnglishNumbers($request->get('range')), 
+            'receipt' => $file_name, 'description' => $request->get('description'), 
             'type' => $request->get('type'), 'center_id' => Auth::id(), 
             'general_info_id' => $request->get('general_info_id')
         ]);
 
-        // Storing General info's status
+        // Storing General info's status 
         $report->statuses()->create(
             ['status' => Status::NOTCONFIRMED, 'status_type' => Report::class]
         );

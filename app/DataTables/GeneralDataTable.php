@@ -121,11 +121,66 @@ class GeneralDataTable
         return $query->whereRaw($sql, ["%{$keyword}%"]);
     }
 
+<<<<<<< HEAD
     // English to Persian conversion
     function englishToPersianNumbers($number) {
         $persianNumbers = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
         $englishNumbers = range(0, 9);
         return str_replace($englishNumbers, $persianNumbers, $number);
+=======
+    // English to Persian numbers
+    function englishToPersianNumbers($number) {
+        // Define the mapping of English digits to Persian digits
+        $englishDigits = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+        $persianDigits = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
+    
+        // Convert each English digit in the number to its Persian equivalent
+        $persianNumber = str_replace($englishDigits, $persianDigits, $number);
+    
+        return $persianNumber;
+    }
+
+    // Returning Jalali months
+    public function jalaliMonth($column) {
+        switch ($column) {
+            case 1:
+                return 'فروردین';
+                break;
+            case 2:
+                return 'اردیبهشت';
+                break;
+            case 3:
+                return 'خرداد';
+                break;
+            case 4:
+                return 'تیر';
+                break;
+            case 5:
+                return 'مرداد';
+                break;
+            case 6:
+                return 'شهریور';
+                break;
+            case 7:
+                return 'مهر';
+                break;
+            case 8:
+                return 'آبان';
+                break;
+            case 9:
+                return 'آذر';
+                break;
+            case 10:
+                return 'دی';
+                break;
+            case 11:
+                return 'بهمن';
+                break;
+            case 12:
+                return 'اسفند';
+                break;
+        }
+>>>>>>> c2417751
     }
 
 }
