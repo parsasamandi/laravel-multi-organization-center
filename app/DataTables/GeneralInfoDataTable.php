@@ -31,15 +31,12 @@ class GeneralInfoDataTable extends DataTable
             ->addIndexColumn()
             ->rawColumns(['action', 'bank_statement_receipt', 'data', 'status']) 
             ->addColumn('date', function(GeneralInfo $generalInfo) {
-<<<<<<< HEAD
                 return $generalInfo->jalaliMonth . ' ' . $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
-=======
                 return $generalInfo->jalaliMonth . ' ' .  
                     $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
             })
             ->editColumn('bank_balance', function(GeneralInfo $generalInfo) {
                 return $this->dataTable->englishToPersianNumbers($generalInfo->bank_balance);
->>>>>>> c2417751
             })
             ->filterColumn('date', function ($query, $keyword) {
 
@@ -47,27 +44,17 @@ class GeneralInfoDataTable extends DataTable
                     ->orWhere('jalaliMonth', 'LIKE', "%{$keyword}%");
   
             })
-<<<<<<< HEAD
             ->editColumn('bank_balance', function(GeneralInfo $generalInfo) {
                 return $this->dataTable->englishToPersianNumbers($generalInfo->bank_balance);
             })
             ->editColumn('bank_statement_receipt', function(GeneralInfo $generalInfo) {
-
-                $fileUrl = asset("receipts/{$generalInfo->bank_statement_receipt}");
-
-                return "<a href=\"$fileUrl\" download>دانلود رسید بانک</a>";
-
-            })->addColumn('status', function(GeneralInfo $generalInfo) {
-=======
-            ->editColumn('bank_statement_receipt', function (GeneralInfo $generalInfo) {
                 // Get the URL for the file from S3 storage
                 $file_url = Storage::disk('s3')->url($generalInfo->bank_statement_receipt);
                 
                 // Return a link to the file
-                return '<a href="' . $file_url . '" target="_blank">بارگیری کردن</a>';
-            })
-            ->addColumn('status', function(GeneralInfo $generalInfo) {
->>>>>>> c2417751
+                return '<a href="' . $file_url . '" target="_blank">بارگیری</a>';
+
+            })->addColumn('status', function(GeneralInfo $generalInfo) {
 
                 switch($generalInfo->statuses->status) {
                     case 0:

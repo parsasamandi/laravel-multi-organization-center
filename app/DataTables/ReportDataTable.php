@@ -54,7 +54,7 @@ class ReportDataTable extends DataTable
                 $file_url = Storage::disk('s3')->url($report->receipt);
                 
                 // Return a link to the file
-                return '<a href="' . $file_url . '" target="_blank">بارگیری کردن</a>';
+                return '<a href="' . $file_url . '" target="_blank">بارگیری</a>';
             })
             ->editColumn('type', function (Report $report) {
                 switch ($report->type) {

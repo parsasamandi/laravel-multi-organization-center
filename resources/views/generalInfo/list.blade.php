@@ -4,7 +4,7 @@
 @section('content')
 
   {{-- Header --}}
-  <x-header pageName="گزارشات موجودی و صورت حساب" pageDescription="گزارشات موجودی و صورت حساب" buttonValue="گزارش موجودی و صورت حساب جدید">
+  <x-header pageName="گزارشات موجودی و صورت‌حساب" pageDescription="گزارشات موجودی و صورت‌حساب" buttonValue="گزارش موجودی و صورت‌حساب جدید">
     <x-slot name="table">
       <x-table :table="$generalInfoTable" />
     </x-slot>

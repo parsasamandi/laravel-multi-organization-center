@@ -42,7 +42,7 @@ class GeneralInfoController extends Controller
     }
 
     // Insert
-    public function store(UpdateGeneralInfoRequest $request) {
+    public function store(StoreGeneralInfoRequest $request) {
 
         // Getting the file
         $receipt = $request->file('receipt');
@@ -79,7 +79,7 @@ class GeneralInfoController extends Controller
     }
 
     // Update
-    public function update(Request $request) {
+    public function update(UpdateGeneralInfoRequest $request) {
 
         $generalInfo = GeneralInfo::findOrFail($request->get('id'));
 

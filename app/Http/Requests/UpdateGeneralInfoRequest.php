@@ -19,7 +19,7 @@ class UpdateGeneralInfoRequest extends FormRequest
     {
         // Validation rules
         return [
-            'bank_balance' => 'double',
+            'bank_balance' => 'numeric',
         ];
     }
 

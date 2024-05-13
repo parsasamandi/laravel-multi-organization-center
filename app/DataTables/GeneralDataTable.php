@@ -121,15 +121,8 @@ class GeneralDataTable
         return $query->whereRaw($sql, ["%{$keyword}%"]);
     }
 
-<<<<<<< HEAD
-    // English to Persian conversion
-    function englishToPersianNumbers($number) {
-        $persianNumbers = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
-        $englishNumbers = range(0, 9);
-        return str_replace($englishNumbers, $persianNumbers, $number);
-=======
     // English to Persian numbers
-    function englishToPersianNumbers($number) {
+    public function englishToPersianNumbers($number) {
         // Define the mapping of English digits to Persian digits
         $englishDigits = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
         $persianDigits = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
@@ -180,7 +173,6 @@ class GeneralDataTable
                 return 'اسفند';
                 break;
         }
->>>>>>> c2417751
     }
 
 }

@@ -1,13 +1,10 @@
 @extends('layouts.admin')
 @section('title', 'ویرایش گزارشات موجودی و صورت حساب')
-<<<<<<< HEAD
-=======
 
 @php
     // $action is an instance of the Action class
     $action = new \App\Providers\Action();
 @endphp
->>>>>>> c2417751
 
 @section('content')
 
@@ -29,11 +26,7 @@
         <span id="form_output"></span>
 
         <div class="row">
-<<<<<<< HEAD
-            <x-input type="number" key="bank_balance" placeholder="موجودی در پایان ماه (ریال)" 
-=======
             <x-input key="bank_balance" placeholder="موجودی در پایان ماه (ریال)" 
->>>>>>> c2417751
                 class="col-md-4 mb-3" value="{{ $action->englishToPersianNumbers($generalInfo->bank_balance) }}"/>
         </div>
 
