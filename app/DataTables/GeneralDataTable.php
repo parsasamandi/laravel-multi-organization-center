@@ -4,18 +4,18 @@ namespace App\DataTables;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 
-class GeneralDataTable 
+class GeneralDataTable
 {
     /**
      * html builder | dataTable builder / table columns / table name
-     * 
+     *
      * @return \Yajra\DataTables\Html\Builder
      */
     public function html($builder, $columns, $table)
     {
         return $builder
             ->setTableId("{$table}Table")
-            ->minifiedAjax(route("{$table}.list.table"))
+            ->minifiedAjax(route("{$table}.list.table", [], false))
             ->columns($columns)
             ->buttons(
                 Button::make('excel'),
@@ -53,8 +53,8 @@ class GeneralDataTable
 
         return $baseHtml;
     }
-    
-    
+
+
 
     /**
      * Get index column(0 | 1 | 2 .....).
@@ -65,7 +65,7 @@ class GeneralDataTable
                 ->title('#')
                 ->searchable(false)
                 ->orderable(false);
-    } 
+    }
 
     /**
      * Get action column.
@@ -78,7 +78,7 @@ class GeneralDataTable
                 ->printable(false)
                 ->orderable(false)
                 ->title("حذف | ویرایش | جزئیات");
-    }  
+    }
 
 
     // Set status column
@@ -88,30 +88,30 @@ class GeneralDataTable
         else if($status == Status::INACTIVE) return 'ناموجود';
     }
 
-    // Filter status column 
+    // Filter status column
     public function filterStatusCol($query, $rkeyword) {
 
         switch($keyword) {
-            case 'موجود': $keyword = 0; 
+            case 'موجود': $keyword = 0;
             break;
             case 'ناموجود': $keyword = 1;
         }
 
-        return $this->filterColumn($query, 'id in (select status_id from 
+        return $this->filterColumn($query, 'id in (select status_id from
                         status where status like ?)', $keyword);
     }
 
     // Filter category column
     public function filterCategoryCol($query, $keyword) {
 
-        return $this->filterColumn($query, 'category_id in 
+        return $this->filterColumn($query, 'category_id in
                 (select id from categories where name like ?)', $keyword);
-    } 
+    }
 
     // Filter product column
     public function filterProductCol($query, $keyword) {
 
-        return $this->filterColumn($query, 'product_id in 
+        return $this->filterColumn($query, 'product_id in
                     (select id from product where name like ?)', $keyword);
 
     }
@@ -126,10 +126,10 @@ class GeneralDataTable
         // Define the mapping of English digits to Persian digits
         $englishDigits = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
         $persianDigits = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
-    
+
         // Convert each English digit in the number to its Persian equivalent
         $persianNumber = str_replace($englishDigits, $persianDigits, $number);
-    
+
         return $persianNumber;
     }
 
