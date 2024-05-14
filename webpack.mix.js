@@ -15,8 +15,6 @@ mix.js('resources/assets/js/app.js',  'public/js')
     .js('resources/assets/js/isotope.js','public/js/isotope.json')
     // Home js
     .js('resources/assets/js/main.js','public/js/main.js')
-    // DataTable persian language
-    .js('resources/assets/js/persian.json','public/js/persian.json')
     // Isotope
     .js('resources/assets/js/isotope.js','public/js/isotope.js')
     // Ajax request handler
@@ -24,7 +22,9 @@ mix.js('resources/assets/js/app.js',  'public/js')
     // Fonts
     .copy('resources/assets/fonts','public/fonts')
     // Images
-    .copy('resources/assets/images','public/images');
+    .copy('resources/assets/images','public/images')
+    // DataTable persian language
+    .copy('resources/assets/js/persian.json','public/js/persian.json');
 
 mix.sourceMaps();
 mix.version();
