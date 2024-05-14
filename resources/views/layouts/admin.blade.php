@@ -5,8 +5,8 @@
 @section('head')
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="اتوماسیون ادمین، کنترل ادمین"> 
-    <meta name="keywords" content="ادمین، داشبورد، پنل">  
+    <meta name="description" content="اتوماسیون ادمین، کنترل ادمین">
+    <meta name="keywords" content="ادمین، داشبورد، پنل">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>@yield('title')</title>
     {{-- App --}}
@@ -27,7 +27,7 @@
             </ul>
 
             {{-- Logout --}}
-            <form method="POST" class="form-inline ml-3" action="{{ url('logout') }}">
+            <form method="POST" class="form-inline ml-3" action="{{ route('logout', [], false) }}">
                 @csrf
                 <div class="input-group input-group-sm">
 
@@ -47,7 +47,7 @@
                 </div>
             </form>
         </nav>
-        
+
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary">
             <!-- Brand Logo -->

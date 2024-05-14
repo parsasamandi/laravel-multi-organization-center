@@ -22,7 +22,7 @@
             </div>
 
             {{-- Form --}}
-            <form action="{{ url('login')}} " method="POST" class="login">
+            <form action="{{ route('login', [], false)}} " method="POST" class="login">
                 @csrf
                 <!-- Title -->
                 <p class="title">ورود</p>
