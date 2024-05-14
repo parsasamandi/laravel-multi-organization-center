@@ -18,8 +18,6 @@ require('superfish');
 require('owl.carousel');
 // Venobox
 require('venobox');
-// Aos
-window.AOS = require('AOS');
 // Select 2
 require('select2/dist/js/select2');
 // DataTables

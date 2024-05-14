@@ -6,7 +6,7 @@
 */
 !(function($) {
     "use strict";
-  
+
     // Header fixed and Back to top button
     $(window).scroll(function() {
       if ($(this).scrollTop() > 100) {
@@ -17,14 +17,14 @@
         $('#header').removeClass('header-fixed');
       }
     });
-  
+
     $('.back-to-top').click(function() {
       $('html, body').animate({
         scrollTop: 0
       }, 1500, 'easeInOutExpo');
       return false;
     });
-  
+
     // Initiate superfish on nav menu
     $('.nav-menu').superfish({
       animation: {
@@ -32,7 +32,7 @@
       },
       speed: 400
     });
-  
+
     // Mobile Navigation
     if ($('#nav-menu-container').length) {
       var $mobile_nav = $('#nav-menu-container').clone().prop({
@@ -46,19 +46,19 @@
       $('body').prepend('<button type="button" id="mobile-nav-toggle"><i class="fa fa-bars"></i></button>');
       $('body').append('<div id="mobile-body-overly"></div>');
       $('#mobile-nav').find('.menu-has-children').prepend('<i class="fa fa-chevron-down"></i>');
-  
+
       $(document).on('click', '.menu-has-children i', function(e) {
         $(this).next().toggleClass('menu-item-active');
         $(this).nextAll('ul').eq(0).slideToggle();
         $(this).toggleClass("fa-chevron-up fa-chevron-down");
       });
-  
+
       $(document).on('click', '#mobile-nav-toggle', function(e) {
         $('body').toggleClass('mobile-nav-active');
         $('#mobile-nav-toggle i').toggleClass('fa-times fa-bars');
         $('#mobile-body-overly').toggle();
       });
-  
+
       $(document).click(function(e) {
         var container = $("#mobile-nav, #mobile-nav-toggle");
         if (!container.is(e.target) && container.has(e.target).length === 0) {
@@ -79,18 +79,18 @@
         var target = $(this.hash);
         if (target.length) {
           e.preventDefault();
-  
+
           var scrollto = target.offset().top - scrolltoOffset;
-  
+
           $('html, body').animate({
             scrollTop: scrollto
           }, 1500, 'easeInOutExpo');
-  
+
           if ($(this).parents('.nav-menu').length) {
             $('.nav-menu .menu-active').removeClass('menu-active');
             $(this).closest('li').addClass('menu-active');
           }
-  
+
           if ($('body').hasClass('mobile-nav-active')) {
             $('body').removeClass('mobile-nav-active');
             $('#mobile-nav-toggle i').toggleClass('fa-times fa-bars');
@@ -100,7 +100,7 @@
         }
       }
     });
-  
+
     // Activate smooth scroll on page load with hash links in the url
     $(document).ready(function() {
       if (window.location.hash) {
@@ -113,18 +113,18 @@
         }
       }
     });
-  
+
     // Navigation active state on scroll
     var nav_sections = $('section');
     var main_nav = $('.nav-menu, #mobile-nav');
-  
+
     $(window).on('scroll', function() {
       var cur_pos = $(this).scrollTop() + 200;
-  
+
       nav_sections.each(function() {
         var top = $(this).offset().top,
           bottom = top + $(this).outerHeight();
-  
+
         if (cur_pos >= top && cur_pos <= bottom) {
           if (cur_pos <= bottom) {
             main_nav.find('li').removeClass('menu-active');
@@ -136,25 +136,24 @@
         }
       });
     });
-  
+
     // Porfolio isotope and filter
     $(window).on('load', function() {
       var portfolioIsotope = $('.portfolio-container').isotope({
         itemSelector: '.portfolio-item',
         layoutMode: 'fitRows'
       });
-  
+
       $('#product-flters li').on('click', function() {
         $("#product-flters li").removeClass('filter-active');
         $(this).addClass('filter-active');
-  
+
         portfolioIsotope.isotope({
           filter: $(this).data('filter')
         });
-        aos_init();
       });
     });
-  
+
     // Portfolio details carousel
     $(".portfolio-details-carousel").owlCarousel({
       slideSpeed : 300,
@@ -163,23 +162,12 @@
       dots: true,
       items: 1,
     });
-  
-  
-    // Init AOS
-    function aos_init() {
-      AOS.init({
-        duration: 1000,
-        once: true
-      });
-    }
-    $(window).on('load', function() {
-      aos_init();
-    });
-  
+
+
     // Initiate venobox (lightbox feature used in portofilo)
     $(document).ready(function() {
       $('.venobox').venobox();
     });
-  
-  
+
+
   })(jQuery);
