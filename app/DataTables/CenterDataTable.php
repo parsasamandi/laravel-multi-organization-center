@@ -3,7 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Center;
-use App\Datatables\GeneralDataTable;
+use App\DataTables\GeneralDataTable;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use Auth;
@@ -15,7 +15,7 @@ class CenterDataTable extends DataTable
     public function __construct() {
         $this->dataTable = new GeneralDataTable();
     }
-    
+
     /**
      * Build DataTable class.
      *
@@ -29,7 +29,7 @@ class CenterDataTable extends DataTable
             ->addIndexColumn()
             ->rawColumns(['action'])
             ->addColumn('action', function (Center $center){
-                return $this->dataTable->setAction($center->id); 
+                return $this->dataTable->setAction($center->id);
             })->editColumn('phone_number', function (Center $center) {
                 return $this->dataTable->englishToPersianNumbers($center->phone_number);
             });
@@ -48,9 +48,9 @@ class CenterDataTable extends DataTable
         if ($user && $user->type === 1) {
             return $model->newQuery();
         }
-        
+
         return $model->where('id', $user->id);
-        
+
     }
 
     /**
@@ -60,9 +60,9 @@ class CenterDataTable extends DataTable
      */
     public function html()
     {
-        return $this->dataTable->html($this->builder(), 
+        return $this->dataTable->html($this->builder(),
                 $this->getColumns(), 'center');
-    }    
+    }
 
     /**
      * Get columns.
