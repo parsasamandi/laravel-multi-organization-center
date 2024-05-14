@@ -105,10 +105,10 @@
         <script src="{{ mix('js/manifest.js') }}"></script>
         <script src="{{ mix('js/vendor.js') }}"></script>
         <script src="{{ mix('js/app.js') }}"></script>
-        <script src="{{ asset('js/RequestHandler.js') }}"></script>
+        <script src="{{ mix('js/RequestHandler.js') }}"></script>
 
         <!-- DataTables JavaScript -->
-        <script src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
         <!-- DataTables Buttons JavaScript -->
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
