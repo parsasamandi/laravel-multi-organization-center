@@ -15,7 +15,7 @@
 
 Route::group(['middleware' => 'auth'], function () {
     // Logout
-    Route::post('/logout', 'Auth\LoginController@logout');
+    Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
     // Center
     Route::get('/','CenterController@center');
     Route::group(['prefix' => 'center','as' => 'center.'], function() {
