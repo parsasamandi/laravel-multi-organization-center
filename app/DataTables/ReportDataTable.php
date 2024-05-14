@@ -51,10 +51,10 @@ class ReportDataTable extends DataTable
             })
             ->editColumn('receipt', function(Report $report) {
                 // Get the URL for the file from S3 storage
-                $file_url = Storage::disk('s3')->url($report->receipt);
+                $presignedUrl = Storage::disk('s3')->temporaryUrl($report->receipt, now()->addHours(1));
                 
                 // Return a link to the file
-                return '<a href="' . $file_url . '" target="_blank">بارگیری</a>';
+                return '<a href="' . $presignedUrl . '" target="_blank">بارگیری</a>';
             })
             ->editColumn('type', function (Report $report) {
                 switch ($report->type) {
