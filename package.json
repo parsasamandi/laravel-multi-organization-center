@@ -5,7 +5,8 @@
     "watch": "mix watch",
     "watch-poll": "mix watch -- --watch-options-poll=1000",
     "hot": "mix watch --hot",
-    "production": "mix --production"
+    "production": "mix --production",
+    "build": "mix --production"
   },
   "devDependencies": {
     "axios": "^0.21.1",
@@ -47,16 +48,12 @@
     "superfish": "^1.7.10",
     "venobox": "^1.9.2"
   },
-  "name": "Golestan_Finance_Panel",
-  "description": "<p align=\"center\"><img src=\"https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg\" width=\"400\"></p>",
+  "name": "golestan-finance-panel",
+  "description": "Finance CMS for Golestan Foundation",
   "version": "1.0.0",
   "main": "webpack.mix.js",
   "directories": {
     "test": "tests"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://gitea.astiz.ir/parsasamandizadeh/mofidSanat.git"
   },
   "keywords": [],
   "author": "",
