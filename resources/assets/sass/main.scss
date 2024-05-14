@@ -78,18 +78,6 @@
     padding: 0;
   }
 
-  /* Prelaoder */
-  #preloader {
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 999;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    background: #fff url("../img/preloader.svg") no-repeat center center;
-  }
-
   /* Back to top button */
   .back-to-top {
     position: fixed;
@@ -161,11 +149,11 @@
   .navbar-toggle {
     text-align: right;
   }
-  
+
 	.vbox-prev span {
 		color: transparent;
   }
-  
+
   /*--------------------------------------------------------------
   # Disable AOS delay on mobile
   --------------------------------------------------------------*/

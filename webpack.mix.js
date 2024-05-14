@@ -8,9 +8,9 @@ mix.setResourceRoot('../');
 mix.js('resources/assets/js/app.js',  'public/js')
     .sass('resources/assets/sass/app.scss','public/css')
     // Home
-    .styles('resources/assets/sass/main.scss','public/css/main.css')
+    .sass('resources/assets/sass/main.scss','public/css/main.css')
     // Authentication
-    .styles('resources/assets/sass/auth.scss','public/css/auth.css')
+    .sass('resources/assets/sass/auth.scss','public/css/auth.css')
     // Isotope
     .js('resources/assets/js/isotope.js','public/js/isotope.json')
     // Home js
@@ -22,7 +22,9 @@ mix.js('resources/assets/js/app.js',  'public/js')
     // Ajax request handler
     .scripts('resources/assets/js/RequestHandler.js', 'public/js/RequestHandler.js')
     // Fonts
-    .copy('resources/assets/fonts','public/fonts');
+    .copy('resources/assets/fonts','public/fonts')
+    // Images
+    .copy('resources/assets/images','public/images');
 
 mix.sourceMaps();
 mix.version();

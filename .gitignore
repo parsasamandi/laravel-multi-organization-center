@@ -1,2 +1,9 @@
 /node_modules
-.envrc
+.env
+.idea
+
+/public/css
+/public/fonts
+/public/images
+/public/js
+/public/mix-manifest.json

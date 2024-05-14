@@ -3,7 +3,7 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         {{-- Authentication --}}
-        <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+        <link rel="stylesheet" href="{{ mix('css/auth.css') }}">
         {{-- App css --}}
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     </head>
@@ -20,7 +20,7 @@
                     @endforeach
                 @endif
             </div>
-            
+
             {{-- Form --}}
             <form action="{{ url('login')}} " method="POST" class="login">
                 @csrf
@@ -39,7 +39,7 @@
                 <label class="form-remember">
                     <input type="checkbox" name="remember_me"/>
                     <span>
-                        مرا به خاطر بسپارید     
+                        مرا به خاطر بسپارید
                     </span>
                 </label>
                 <button>
