@@ -2,8 +2,7 @@
     {{-- Label --}}
     <label for="{{ $key }}">{{ $placeholder ? (string) $placeholder : '' }}:</label>
     {{-- Textarea --}}
-    <textarea name="{{ $key }}" id="{{ $key }}" rows="{{ $rows ?? 2 }}" class="form-control" 
-        placeholder="{{ $placeholder ? (string) $placeholder : '' }}" @if(isset($readonly) && $readonly) readonly @endif>
-        {{ $value instanceof \Illuminate\Support\Optional ? $value->value() : $value }}
-    </textarea>
+    <textarea name="{{ $key }}" id="{{ $key }}" rows="{{ $rows ?? 2 }}" class="form-control"
+        placeholder="{{ $placeholder ? (string) $placeholder : '' }}"
+        @if(isset($readonly) && $readonly) readonly @endif>{{ $value && $value instanceof \Illuminate\Support\Optional ? $value->value() : $value ?? null }}</textarea>
 </div>

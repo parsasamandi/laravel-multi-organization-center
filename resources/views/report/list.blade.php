@@ -4,7 +4,7 @@
 @section('content')
 
   {{-- Header --}}
-  <x-header pageName="گزارشات جزئیات هزینه‌کرد" pageDescription="گزارشات جزئیات هزینه‌کرد" 
+  <x-header pageName="گزارشات جزئیات هزینه‌کرد" pageDescription="گزارشات جزئیات هزینه‌کرد"
     buttonValue="گزارش جزئی هزینه‌کرد">
     <x-slot name="table">
       <x-table :table="$reportTable" />
@@ -30,7 +30,7 @@
         <!-- Expenses -->
         <x-input key="expenses" placeholder="مبلغ هزینه (ریال)"
           class="col-md-6 mb-3" />
-        
+
         <!-- Range -->
         <x-input key="range" placeholder="ردیف هزینه (ریال)"
           class="col-md-6 mb-3" />
@@ -46,7 +46,7 @@
 
       <!-- File -->
       <h6>ارسال رسید</h6>
-      <input type="file" id="file" name="receipt" class="mb-3" 
+      <input type="file" id="file" name="receipt" class="mb-3"
         accept=".pdf,.doc,.docx,.csv,application/msword,application/
         vnd.openxmlformats-officedocument.wordprocessingml.document,application/
         vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
@@ -57,7 +57,7 @@
   {{-- Delete --}}
   <x-admin.delete title="گزارش جزئی" />
 
-  
+
 @endsection
 
 @section('scripts')
@@ -91,7 +91,7 @@
     window.showEditModal = function showEditModal(url) {
       action.redirectPage('/report/edit/' + url);
     }
-    
+
   });
 </script>
 @endsection
