@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreReportRequest;
 use App\Http\Requests\UpdateReportRequest;
-use App\Datatables\ReportDataTable;
+use App\DataTables\ReportDataTable;
 use App\Providers\SuccessMessages;
 use App\Providers\Action;
 use App\Models\Report;
@@ -58,7 +58,7 @@ class ReportController extends Controller
 
     // Rendering Report Table
     public function reportTable(ReportDataTable $reportTable) {
-        return $reportTable->render('report.list'); 
+        return $reportTable->render('report.list');
     }
 
 
@@ -73,14 +73,14 @@ class ReportController extends Controller
         $receipt->storeAs('receipts', $file_name, 's3');
 
         $report = Report::create(
-            ['expenses' => $this->action->persianToEnglishNumbers($request->get('expenses')), 
-            'range' => $this->action->persianToEnglishNumbers($request->get('range')), 
-            'receipt' => $file_name, 'description' => $request->get('description'), 
-            'type' => $request->get('type'), 'center_id' => Auth::id(), 
+            ['expenses' => $this->action->persianToEnglishNumbers($request->get('expenses')),
+            'range' => $this->action->persianToEnglishNumbers($request->get('range')),
+            'receipt' => $file_name, 'description' => $request->get('description'),
+            'type' => $request->get('type'), 'center_id' => Auth::id(),
             'general_info_id' => $request->get('general_info_id')
         ]);
 
-        // Storing General info's status 
+        // Storing General info's status
         $report->statuses()->create(
             ['status' => Status::NOTCONFIRMED, 'status_type' => Report::class]
         );
@@ -99,7 +99,7 @@ class ReportController extends Controller
     public function edit($id) {
 
         $vars['report'] = Report::find($id);
-    
+
         if ($vars) {
 
             // Dates
@@ -131,20 +131,20 @@ class ReportController extends Controller
             );
         }
 
-        return response()->json(['success' => true], Response::HTTP_CREATED); 
+        return response()->json(['success' => true], Response::HTTP_CREATED);
     }
-    
+
     // Update
     public function update(Request $request) {
 
         // Report table
         $report = Report::findOrFail($request->get('id'));
-        
+
         $updateData = [
             'expenses' => $request->get('expenses'),
             'range' => $request->get('range'),
-            'description' => $request->get('description'), 
-            'type' => $request->get('type'), 
+            'description' => $request->get('description'),
+            'type' => $request->get('type'),
             'center_id' => Auth::id(),
             'general_info_id' => $request->get('general_info_id')
         ];
@@ -166,7 +166,7 @@ class ReportController extends Controller
 
         return $this->getAction("update");
     }
-    
+
     // Details
     public function details($id) {
         return view('report.details', ['report' => Report::with('generalInfo')->findOrFail($id)]);

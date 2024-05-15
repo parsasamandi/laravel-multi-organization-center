@@ -3,7 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\GeneralInfo;
-use App\Datatables\GeneralDataTable;
+use App\DataTables\GeneralDataTable;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
@@ -17,7 +17,7 @@ class GeneralInfoDataTable extends DataTable
     public function __construct() {
         $this->dataTable = new GeneralDataTable();
     }
-    
+
     /**
      * Build DataTable class.
      *
@@ -29,10 +29,10 @@ class GeneralInfoDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->rawColumns(['action', 'bank_statement_receipt', 'data', 'status']) 
+            ->rawColumns(['action', 'bank_statement_receipt', 'data', 'status'])
             ->addColumn('date', function(GeneralInfo $generalInfo) {
                 return $generalInfo->jalaliMonth . ' ' . $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
-                return $generalInfo->jalaliMonth . ' ' .  
+                return $generalInfo->jalaliMonth . ' ' .
                     $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
             })
             ->editColumn('bank_balance', function(GeneralInfo $generalInfo) {
@@ -42,7 +42,7 @@ class GeneralInfoDataTable extends DataTable
 
                 return $query->where('jalaliYear', 'LIKE', "%{$keyword}%")
                     ->orWhere('jalaliMonth', 'LIKE', "%{$keyword}%");
-  
+
             })
             ->editColumn('bank_balance', function(GeneralInfo $generalInfo) {
                 return $this->dataTable->englishToPersianNumbers($generalInfo->bank_balance);
@@ -50,7 +50,7 @@ class GeneralInfoDataTable extends DataTable
             ->editColumn('bank_statement_receipt', function(GeneralInfo $generalInfo) {
                 // Get the URL for the file from S3 storage
                 $file_url = Storage::disk('s3')->url($generalInfo->bank_statement_receipt);
-                
+
                 // Return a link to the file
                 return '<a href="' . $file_url . '" target="_blank">بارگیری</a>';
 
@@ -64,7 +64,7 @@ class GeneralInfoDataTable extends DataTable
                         return 'تایید شده';
                         break;
                 }
-                
+
             })
             ->addColumn('action', function(GeneralInfo $generalInfo) {
                 return $this->dataTable->setAction($generalInfo->id, 'generalInfo');
@@ -96,7 +96,7 @@ class GeneralInfoDataTable extends DataTable
      */
     public function html()
     {
-        return $this->dataTable->html($this->builder(), 
+        return $this->dataTable->html($this->builder(),
                 $this->getColumns(), 'generalInfo');
     }
 
@@ -117,7 +117,7 @@ class GeneralInfoDataTable extends DataTable
             Column::computed('date')
                 ->title('تاریخ')
                 ->searchable(true),
-            Column::computed('status') 
+            Column::computed('status')
                 ->title('وضعیت'),
             $this->dataTable->setActionCol()
         ];

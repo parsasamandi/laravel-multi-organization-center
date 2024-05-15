@@ -4,7 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Report;
 use App\Models\GeneralInfo;
-use App\Datatables\GeneralDataTable;
+use App\DataTables\GeneralDataTable;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Services\DataTable;
@@ -18,7 +18,7 @@ class ReportDataTable extends DataTable
     public function __construct() {
         $this->dataTable = new GeneralDataTable();
     }
-    
+
     /**
      * Build DataTable class.
      *
@@ -34,7 +34,7 @@ class ReportDataTable extends DataTable
             ->addColumn('date', function (Report $report) {
                 $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
                 if ($generalInfo) {
-                    return $generalInfo->jalaliMonth . ' ' . 
+                    return $generalInfo->jalaliMonth . ' ' .
                         $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
                 }
             })->filterColumn('date', function ($query, $keyword) {
@@ -52,7 +52,7 @@ class ReportDataTable extends DataTable
             ->editColumn('receipt', function(Report $report) {
                 // Get the URL for the file from S3 storage
                 $presignedUrl = Storage::disk('s3')->temporaryUrl($report->receipt, now()->addHours(1));
-                
+
                 // Return a link to the file
                 return '<a href="' . $presignedUrl . '" target="_blank">بارگیری</a>';
             })
@@ -101,9 +101,9 @@ class ReportDataTable extends DataTable
      */
     public function html()
     {
-        return $this->dataTable->html($this->builder(), 
+        return $this->dataTable->html($this->builder(),
                 $this->getColumns(), 'report');
-    }    
+    }
 
     /**
      * Get columns.
@@ -125,7 +125,7 @@ class ReportDataTable extends DataTable
             Column::computed('date')
                 ->title('تاریخ')
                 ->searchable(true),
-            Column::computed('status') 
+            Column::computed('status')
                 ->title('وضعیت'),
             $this->dataTable->setActionCol()
         ];

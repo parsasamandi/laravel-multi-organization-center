@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\StoreGeneralInfoRequest;
 use App\Http\Requests\UpdateGeneralInfoRequest;
 use App\Providers\SuccessMessages;
-use App\Datatables\GeneralInfoDataTable;
+use App\DataTables\GeneralInfoDataTable;
 use App\Models\GeneralInfo;
 use App\Providers\Action;
 use App\Models\Status;
@@ -38,7 +38,7 @@ class GeneralInfoController extends Controller
 
     // Rendering General Info Table
     public function generalInfoTable(GeneralInfoDataTable $generalInfoTable) {
-        return $generalInfoTable->render('generalInfo.list'); 
+        return $generalInfoTable->render('generalInfo.list');
     }
 
     // Insert
@@ -59,15 +59,15 @@ class GeneralInfoController extends Controller
             'bank_statement_receipt' => $file_name,
             'center_id' => Auth::id()
         ]);
-    
+
         // Storing General info's status
         $generalInfo->statuses()->create(
             ['status' => Status::NOTCONFIRMED, 'status_type' => GeneralInfo::class]
         );
-    
+
         return $this->getAction($request->get('button_action'));
     }
-    
+
 
     // Edit
     public function edit($id) {
@@ -75,7 +75,7 @@ class GeneralInfoController extends Controller
         $generalInfo = GeneralInfo::findOrFail($id); // Replace with your actual model name
 
         // Return the view with the data
-        return view('generalInfo.edit')->with('generalInfo', $generalInfo); 
+        return view('generalInfo.edit')->with('generalInfo', $generalInfo);
     }
 
     // Update
@@ -122,7 +122,7 @@ class GeneralInfoController extends Controller
             );
         }
 
-        return response()->json(['success' => true], Response::HTTP_CREATED); 
+        return response()->json(['success' => true], Response::HTTP_CREATED);
     }
 
     // Delete
@@ -130,7 +130,7 @@ class GeneralInfoController extends Controller
 
         $generalInfo = GeneralInfo::find($id);
 
-        return $this->action->deleteWithFile(GeneralInfo::class, 
+        return $this->action->deleteWithFile(GeneralInfo::class,
             $id, $generalInfo->bank_statement_receipt);
     }
 
@@ -138,10 +138,10 @@ class GeneralInfoController extends Controller
     // Details
     public function details($id) {
         // Fetch the data for the specified ID from the database
-        $generalInfo = GeneralInfo::where('id', $id)->with('statuses')->first(); 
+        $generalInfo = GeneralInfo::where('id', $id)->with('statuses')->first();
 
         // Return the view with the data
-        return view('generalInfo.details')->with('generalInfo', $generalInfo); 
+        return view('generalInfo.details')->with('generalInfo', $generalInfo);
     }
 
 }
