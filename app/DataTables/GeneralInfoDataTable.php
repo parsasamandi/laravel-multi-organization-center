@@ -49,10 +49,10 @@ class GeneralInfoDataTable extends DataTable
             })
             ->editColumn('bank_statement_receipt', function(GeneralInfo $generalInfo) {
                 // Get the URL for the file from S3 storage
-                $file_url = Storage::disk('s3')->url($generalInfo->bank_statement_receipt);
-
+                $presignedUrl = Storage::disk('s3')->temporaryUrl($generalInfo->bank_statement_receipt, now()->addHours(1));
+                
                 // Return a link to the file
-                return '<a href="' . $file_url . '" target="_blank">بارگیری</a>';
+                return '<a href="' . $presignedUrl . '" target="_blank">بارگیری</a>';
 
             })->addColumn('status', function(GeneralInfo $generalInfo) {
 
