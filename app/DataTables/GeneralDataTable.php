@@ -17,10 +17,10 @@ class GeneralDataTable
             ->setTableId("{$table}Table")
             ->minifiedAjax(route("{$table}.list.table", [], false))
             ->columns($columns)
-            ->buttons(
-                Button::make('excel'),
-                Button::make('csv'),
-                Button::make('copy'),
+            ->columnDefs(
+                [
+                    ["className" => 'dt-center text-center', "target" => '_all'],
+                ]
             )
             ->searching(true)
             ->lengthMenu([10,25,40])
