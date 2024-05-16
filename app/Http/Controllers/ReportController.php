@@ -88,12 +88,6 @@ class ReportController extends Controller
         return $this->getAction($request->get('button_action'));
     }
 
-    // Delete
-    public function delete($id) {
-        $report = Report::find($id);
-
-        return $this->action->deleteWithFile(Report::class, $id, $report->receipt);
-    }
 
     // Edit
     public function edit($id) {
@@ -152,13 +146,17 @@ class ReportController extends Controller
         // Check if a receipt file is uploaded
         if ($request->hasFile('receipt')) {
 
-            unlink(public_path('receipts') . '/' . $report->receipt);
+            // Deleting from storage
+            Storage::disk('s3')->delete($report->receipt);
 
-
+            // Getting the file
             $receipt = $request->file('receipt');
-            $file = $receipt->getClientOriginalName();
-            $receipt->move(public_path('receipts'), $file);
-            $updateData['receipt'] = $file; // Include file in update data
+            // File name
+            $file_name = 'receipts/' . $receipt->getClientOriginalName();
+            // Storing file to S3
+            $receipt->storeAs('receipts', $file_name, 's3');
+            
+            $updateData['receipt'] = $file_name; // Include file in update data
         }
 
         $report->update($updateData);
@@ -170,6 +168,17 @@ class ReportController extends Controller
     // Details
     public function details($id) {
         return view('report.details', ['report' => Report::with('generalInfo')->findOrFail($id)]);
+    }
+
+    // Delete
+    public function delete($id) {
+        
+        $report = Report::find($id);
+        
+        // Deleting from storage
+        Storage::disk('s3')->delete($report->receipt);
+    
+        return $this->action->delete(Report::class, $id);
     }
 
 }
