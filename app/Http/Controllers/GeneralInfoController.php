@@ -129,9 +129,11 @@ class GeneralInfoController extends Controller
     public function delete($id) {
 
         $generalInfo = GeneralInfo::find($id);
-
-        return $this->action->deleteWithFile(GeneralInfo::class,
-            $id, $generalInfo->bank_statement_receipt);
+        
+        // Deleting from storage
+        Storage::disk('s3')->delete($generalInfo->bank_statement_receipt);
+    
+        return $this->action->delete(GeneralInfo::class, $id);
     }
 
 
