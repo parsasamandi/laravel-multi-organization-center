@@ -31,12 +31,12 @@ class CenterController extends Controller
         // Center table
         $vars['centerTable'] = $dataTable->html();
 
-        return view('centerList', $vars);
+        return view('center.list', $vars);
     }
 
     // Get Table
     public function centerTable(CenterDataTable $centerTable) {
-        return $centerTable->render('centerList');
+        return $centerTable->render('center.list');
     }
 
     // Store
