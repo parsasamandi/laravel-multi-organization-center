@@ -7,7 +7,7 @@
 
     {{-- Button --}}
     <button type="button" id="create_record"
-        class="btn btn-primary btn-sm">فرستادن {{ $buttonValue }}</button>
+        class="btn btn-primary btn-sm">ارسال {{ $buttonValue }}</button>
 
     <hr>
     

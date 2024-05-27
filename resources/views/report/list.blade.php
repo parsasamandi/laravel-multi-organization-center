@@ -1,11 +1,11 @@
 @extends('layouts.admin')
-@section('title', 'فهرست گزارش جزئیات هزینه‌کرد')
+@section('title', 'فهرست گزارش جزئیات هزینه')
 
 @section('content')
 
   {{-- Header --}}
-  <x-header pageName="گزارشات جزئیات هزینه‌کرد" pageDescription="گزارشات جزئیات هزینه‌کرد"
-    buttonValue="گزارش جزئی هزینه‌کرد">
+  <x-header pageName="گزارشات جزئیات هزینه" pageDescription="گزارشات جزئیات هزینه"
+    buttonValue="گزارش جزئی هزینه">
     <x-slot name="table">
       <x-table :table="$reportTable" />
     </x-slot>
@@ -18,12 +18,13 @@
       <div class="row">
         <!-- Date -->
         <div class="col-md-12 mb-3">
-          <!-- Label for date -->
-          <label for="jalaliMonth">تاریخ:</label>
-          <select name="general_info_id">
-            @foreach($dates as $date)
-              <option value="{{ $date->id }}">{{ $date->jalaliMonth }} {{ $date->jalaliYear }}</option>
-            @endforeach
+          <label for="date">تاریخ:</label>
+          <select id="general_info_id" name="general_info_id">
+              @foreach ($dates as $date)
+                <option value="{{ $date->id }}">
+                  {{ $date->jalaliMonth }} {{ $date->jalaliYear }}
+                </option>
+              @endforeach
           </select>
         </div>
 
@@ -32,7 +33,7 @@
           class="col-md-6 mb-3" />
 
         <!-- Range -->
-        <x-input key="range" placeholder="ردیف هزینه (ریال)"
+        <x-input key="range" placeholder="ردیف های هزینه"
           class="col-md-6 mb-3" />
 
         <!-- Type -->
@@ -66,7 +67,6 @@
 <!-- Report Data Table -->
 {!! $reportTable->scripts() !!}
 
-
 <script>
   $(document).ready(function () {
 
@@ -79,17 +79,13 @@
       action.openInsertionModal();
     });
 
+
     // Insert
     action.insert();
 
     // Delete
     window.showConfirmationModal = function showConfirmationModal(url) {
       action.delete(url);
-    }
-
-    // Edit
-    window.showEditModal = function showEditModal(url) {
-      action.redirectPage('/report/edit/' + url);
     }
 
   });

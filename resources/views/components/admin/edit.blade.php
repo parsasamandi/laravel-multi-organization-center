@@ -1,8 +1,3 @@
-@extends('layouts.admin')
-@section('title', 'ویرایش گزارش جزئیات هزینه‌')
-
-@section('content')
-
 <div class="container-fluid mt-3 right-text">
     {{-- List --}}
     <ol class="breadcrumb mb-4 right-text">
@@ -33,7 +28,7 @@
                 class="col-md-4 mb-3" value="{{ $report['expenses'] }}" />
 
             <!-- Range -->
-            <x-input type="number" key="range" placeholder="ردیف های هزینه"
+            <x-input type="number" key="range" placeholder="ردیف هزینه"
                 class="col-md-4 mb-3" value="{{ $report['range'] }}" />
 
             <!-- Type -->
@@ -47,7 +42,7 @@
         </div>
 
         <!-- File -->
-        <h6>ارسال چاپ صورت‌حساب بانکی</h6>  
+        <h6>ارسال چاپ صورتحساب بانکی</h6>  
         <input type="file" id="file" name="receipt" class="mb-3"
             accept=".pdf,.doc,.docx,.csv,application/msword,application/
             vnd.openxmlformats-officedocument.wordprocessingml.document,application/
@@ -66,56 +61,3 @@
     </form>
 
 </div>
-
-
-@endsection
-
-@section('scripts')
-@parent
-
-<script>
-    $(document).ready(function () {
-
-        // Report type
-        $('#type').val({{ json_encode($report['type']) }}).trigger('change');
-
-        // Default date
-        $('#general_info_id').val({{ json_encode($report['general_info_id']) }}).trigger('change');
-
-
-        // Form submission for updating
-        $('#reportEditForm').on('submit', function (event) {
-          event.preventDefault();
-
-          var formData = new FormData(this);
-          formData.append('file', formData);
-
-            // AJAX request
-            $.ajax({
-                url: '/report/update', 
-                method: 'POST',
-                headers: {
-                  'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                },
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                // Handle success response
-                  success(response);
-                },
-                error: function (response) {
-                    // Handle error response
-                    var data = JSON.parse(response);
-                    // Error
-                    error_html = '';
-                    for(var all in data.errors) {
-                        error_html += '<div class="alert alert-danger">' + data.errors[all] + '</div>';
-                    }
-                    $('#form_output').html(error_html);
-                }
-            });
-        });
-    });
-</script>
-@endsection

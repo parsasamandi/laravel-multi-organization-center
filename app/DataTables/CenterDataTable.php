@@ -74,7 +74,7 @@ class CenterDataTable extends DataTable
         return [
             $this->dataTable->getIndexCol(),
             Column::make('name')
-                ->title('نام'),
+                ->title('نام مرکز'),
             Column::make('email')
                 ->title('ایمیل'),
             Column::make('phone_number')

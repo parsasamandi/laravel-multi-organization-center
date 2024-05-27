@@ -42,7 +42,7 @@ class StoreGeneralInfoRequest extends FormRequest
     public function attributes()
     {
         return [
-            'receipt' => '"رسید صورت‌حساب بانکی"',
+            'receipt' => '"رسید صورتحساب بانکی"',
             'bank_balance' => '"موجودی در پایان ماه"',
             'jalaliMonth' => 'ماه و سال',                  
         ];

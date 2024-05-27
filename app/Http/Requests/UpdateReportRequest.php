@@ -33,7 +33,7 @@ class UpdateReportRequest extends FormRequest
     {
         return [
             'expenses' => 'هزینه',
-            'range' => 'ردیف های بانکی',
+            'range' => 'ردیف های هزینه در صورتحساب',
             'jalaliMonth' => 'ماه',
             'jalaliYear' => 'سال',
         ];

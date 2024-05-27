@@ -117,7 +117,7 @@ class ReportDataTable extends DataTable
             Column::make('expenses')
                 ->title('مبلغ هزینه'),
             Column::make('range')
-                ->title('ردیف ها در صورت‌حساب بانکی'),
+                ->title('ردیف هزینه در صورتحساب'),
             Column::make('receipt')
                 ->title('رسید'),
             Column::make('type')

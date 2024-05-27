@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Providers\EnglishConvertion;
 use Illuminate\Http\Request;
 
+// تیم گلستان
+// برای ماه و سال انتخاب شده، صورتحساب قبلا ثبت شده است
 class StoreCenterRequest extends FormRequest
 {
     /**

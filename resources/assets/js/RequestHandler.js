@@ -1,3 +1,4 @@
+// Efficient process of handling ajax requests
 class RequestHandler {
     // Constructor
     constructor(dt,formId,url) {
@@ -15,7 +16,7 @@ class RequestHandler {
         $(window.formId)[0].reset();
     }
 
-    // Insert
+    // Insertion
     insert() {
         // Store or Update
         $(window.formId).on('submit', function (event) {
@@ -73,6 +74,33 @@ class RequestHandler {
     }
 }
 
+
+// class ajaxInsertion {
+
+//     // Store or Update
+//     $("test").on('submit', function (event) {
+//         event.preventDefault();
+//         // Form Data
+//         var form_data = new FormData(this);
+//         form_data.append('file', form_data);
+
+//         $.ajax({
+//             url: "/" + window.url + "/store",
+//             method: "POST",
+//             contentType: false,
+//             processData: false,
+//             cache: false,
+//             data: form_data,
+//             success: function (data) { 
+//                 success(data);
+//             },
+//             error: function (data) {
+//                 error(data);
+//             }
+//         })
+//     });
+// }
+
 // Success
 function success(data) {
     $('#form_output').html(data.message);
@@ -93,3 +121,4 @@ function error(data) {
     }
     $('#form_output').html(error_html);
 }
+

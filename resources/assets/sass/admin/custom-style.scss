@@ -317,6 +317,10 @@ $datatable_color: #2DC997;
     color: #FFF;
 }
 
+table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, table.dataTable tfoot td {
+    text-align: center;
+}
+
 td.dtr-control:before, table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control:before {
     right: 5px;
 }

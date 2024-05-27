@@ -1,16 +1,16 @@
 <!-- Label for Jalali months -->
 <label for="jalaliMonth">ماه:</label>
 <select name="jalaliMonth" id="jalaliMonth" required>
-    <option value="فروردین">فروردین</option>
-    <option value="اردیبهشت">اردیبهشت</option>
-    <option value="خرداد">خرداد</option>
-    <option value="تیر">تیر</option>
-    <option value="مرداد">مرداد</option>
-    <option value="شهریور">شهریور</option>
-    <option value="مهر">مهر</option>
-    <option value="آبان">آبان</option>
-    <option value="آذر">آذر</option>
-    <option value="دی">دی</option>
-    <option value="بهمن">بهمن</option>
-    <option value="اسفند">اسفند</option>
+    <option value="1">فروردین</option>
+    <option value="2">اردیبهشت</option>
+    <option value="3">خرداد</option>
+    <option value="4">تیر</option>
+    <option value="5">مرداد</option>
+    <option value="6">شهریور</option>
+    <option value="7">مهر</option>
+    <option value="8">آبان</option>
+    <option value="9">آذر</option>
+    <option value="10">دی</option>
+    <option value="11">بهمن</option>
+    <option value="12">اسفند</option>
 </select>

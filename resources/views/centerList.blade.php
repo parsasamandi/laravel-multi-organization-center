@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'فهرست مرکز')
+@section('title', 'فهرست اطلاعات مرکز')
 
 @section('content')
 
@@ -47,7 +47,7 @@
           <label for="type">نوع ادمین:</label>
           <select id="type" name="type">
             <option value="0">مرکز</option>
-            <option value="1">سوپرادمین</option>
+            <option value="1">تیم گلستان</option>
           </select>
         </div>
 
@@ -101,29 +101,14 @@
       action.delete(url);
     }
 
-    // Edit
-    window.showEditModal = function showEditModal(url) {
-      edit(url);
+    // Delete
+    window.showConfirmationModal = function showConfirmationModal(url) {
+      action.delete(url);
     }
-    function edit($url) {
-      // Edit
-      action.reloadModal();
 
-      $.ajax({
-        url: "{{ url('center/edit') }}",
-        method: 'get',
-        data: { id: $url },
-        success: function (data) {  
-          action.editOnSuccess($url);
-          $('#name').val(data.name);
-          $('#phone_number').val(data.phone_number);
-          $('#type').val(data.type).trigger('change');
-          $('#email').val(data.email);
-          $('#password').val('new_password');
-          $('#password-confirm').val('new_password');
-        }
-      })
-    }
+    
+
+
   });
 </script>
 @endsection

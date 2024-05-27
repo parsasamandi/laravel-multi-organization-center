@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('title', 'فهرست گزارشات موجودی و صورت حساب')
+@section('title', 'فهرست گزارشات موجودی و صورتحساب')
 
 @section('content')
 
   {{-- Header --}}
-  <x-header pageName="گزارشات موجودی و صورت‌حساب" pageDescription="گزارشات موجودی و صورت‌حساب" buttonValue="گزارش موجودی و صورت‌حساب جدید">
+  <x-header pageName="گزارشات موجودی و صورتحساب" pageDescription="گزارشات موجودی و صورتحساب" buttonValue="صورتحساب جدید">
     <x-slot name="table">
       <x-table :table="$generalInfoTable" />
     </x-slot>
@@ -41,9 +41,8 @@
 
 
   {{-- Delete --}}
-  <x-admin.delete title="'گزارش کلی'" />
+  <x-admin.delete title="'صورتحساب'" />
 
-  
 @endsection
 
 @section('scripts')
@@ -71,9 +70,24 @@
       action.delete(url);
     }
 
-    // Edit
+    // Edit Modal
     window.showEditModal = function showEditModal(url) {
-      action.redirectPage('/generalInfo/edit/' + url);
+      function edit($url) {
+        // Edit
+        action.reloadModal();
+
+        $.ajax({
+          url: "{{ url('generalInfo/edit') }}",
+          method: 'get',
+          data: { id: $url },
+          success: function (data) {  
+            action.editOnSuccess($url);
+            $('#number').val(data.number);
+            $('#jalaliMonth').val(data.type).trigger('change');
+            $('#jalaliYear').val(data.jalaliYear).trigeer('change');
+          }
+        })
+      }
     }
   });
 </script>

@@ -31,12 +31,12 @@ class CenterController extends Controller
         // Center table
         $vars['centerTable'] = $dataTable->html();
 
-        return view('center.list', $vars);
+        return view('centerList', $vars);
     }
 
     // Get Table
     public function centerTable(CenterDataTable $centerTable) {
-        return $centerTable->render('center.list');
+        return $centerTable->render('centerList');
     }
 
     // Store
@@ -61,9 +61,46 @@ class CenterController extends Controller
         return $this->getAction($request->get('button_action'));
     }
     
-    // Edit 
-    public function edit(Request $request) {
-        return $this->action->edit(Center::class, $request->get('id'));
+
+    // Edit
+    public function edit($id) {
+        // Fetch the data for the specified ID from the database
+        $center = Center::findOrFail($id); // Replace with your actual model name
+
+        // Return the view with the data
+        return view('center.edit')->with('center', $center);
+    }
+
+    // Update
+    public function update(UpdateGeneralInfoRequest $request) {
+
+        $generalInfo = GeneralInfo::findOrFail($request->get('id'));
+
+        // Initialize $updateData array
+        $updateData = [
+            'bank_balance' => $request->get('bank_balance'),
+            'center_id' => Auth::id(),
+        ];
+
+        // Check if a receipt file is uploaded
+        if ($request->hasFile('receipt')) {
+            // Deleting from storage
+            Storage::disk('s3')->delete($generalInfo->bank_statement_receipt);
+
+            // Getting the file
+            $receipt = $request->file('receipt');
+            // File name
+            $file_name = 'receipts/' . $receipt->getClientOriginalName();
+            // Storing file to S3
+            $receipt->storeAs('receipts', $file_name, 's3');
+            
+            $updateData['bank_statement_receipt'] = $file_name; // Include file in update dataa
+        }
+
+        // Update the GeneralInfo record
+        $generalInfo->update($updateData);
+
+        return $this->getAction("update");
     }
 
     // Delete

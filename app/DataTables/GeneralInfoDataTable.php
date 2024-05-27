@@ -110,7 +110,7 @@ class GeneralInfoDataTable extends DataTable
         return [
             $this->dataTable->getIndexCol(),
             Column::make('bank_statement_receipt')
-                ->title('صورت‌حساب بانکی'),
+                ->title('صورتحساب بانکی'),
             Column::make('bank_balance')
                 ->title('موجودی حساب')
                 ->orderable(false),
