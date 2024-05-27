@@ -49,8 +49,8 @@ class CenterController extends Controller
             'password' => Hash::make($request->get('password'))
         ];
 
-        if($request->get('type') == Center::SUPERADMIN) {
-            $data['type'] = Center::SUPERADMIN;
+        if($request->get('type') == Center::GOLESTANTEAM) {
+            $data['type'] = Center::GOLESTANTEAM;
         } else {
             $data['type'] = Center::CENTER;
         }
@@ -63,12 +63,8 @@ class CenterController extends Controller
     
 
     // Edit
-    public function edit($id) {
-        // Fetch the data for the specified ID from the database
-        $center = Center::findOrFail($id); // Replace with your actual model name
-
-        // Return the view with the data
-        return view('center.edit')->with('center', $center);
+    public function edit(Request $request) {
+        return $this->action->edit(Center::class, $request->get('id'));
     }
 
     // Update

@@ -17,7 +17,7 @@ class CreateReportsTable extends Migration {
 		{
 			$table->integer('id', true);
 			$table->float('expenses', 10, 0);
-			$table->float('range', 10, 0);
+			$table->string('range', 256);
 			$table->text('receipt');
 			$table->text('description')->nullable();
 			$table->integer('type')->comment('0 = Employee Income Expenses;

@@ -20,7 +20,7 @@ class Center extends Model implements Authenticatable
     public $timestamps = false;
 
     const CENTER = 0;
-    const SUPERADMIN = 1;
+    const GOLESTANTEAM = 1;
 
     /**
      * The table associated with the model.
@@ -33,7 +33,7 @@ class Center extends Model implements Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'phone_number', 'email', 'password', 'type'
+        'code', 'name', 'phone_number', 'email', 'password', 'type'
     ];
 
     /**

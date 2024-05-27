@@ -10,7 +10,7 @@
 
 <div class="container-fluid mt-3 right-text">
 
-    <x-details tableId="generalInfoDetailsTable" header="یک ردیف از گزارش کلی">
+    <x-details tableId="generalInfoDetailsTable" header="یک ردیف از صورتحساب">
         <!-- Table header -->
         <x-slot name="tableHeader">
             <th>سال</th>
@@ -23,10 +23,14 @@
         <x-slot name="tableData">
             <td>{{ $action->englishToPersianNumbers($generalInfo->jalaliYear) }}</td>
              <!-- Jalali months -->
-            <td>{{ $generalInfo->jalaliMonth }}</td>
+            <td>{{ $action->jalaliMonth($generalInfo->jalaliMonth) }}</td>
             <td>{{ $action->englishToPersianNumbers($generalInfo->bank_balance) }}</td>
-            <td><a href="{{ url('/receipts/' . $generalInfo->bank_statement_receipt) }}" download>دانلود  
-                {{ $generalInfo->bank_statement_receipt }} </a></td>
+            <td>
+                <a href="{{ Storage::disk('s3')->temporaryUrl('receipts/' . 
+                        $generalInfo->bank_statement_receipt, now()->addHours(1)) }}" download>دانلود</a>
+            </td>
+
+
         </x-slot>
         
     </x-details>
@@ -56,7 +60,7 @@
                 searching: false,
                 lengthMenu: [], // Remove display length feature
                 info: false,
-                ordering: true,
+                ordering: false,
                 responsive: true,
                 pageLength: 10,
                 dom: 'frti', // Remove display length feature

@@ -4,7 +4,7 @@
 @section('content')
 
   {{-- Header --}}
-  <x-header pageName="گزارشات موجودی و صورتحساب" pageDescription="گزارشات موجودی و صورتحساب" buttonValue="صورتحساب جدید">
+  <x-header pageName="صورتحساب" pageDescription="صورتحساب" buttonValue="صورتحساب جدید">
     <x-slot name="table">
       <x-table :table="$generalInfoTable" />
     </x-slot>
@@ -29,7 +29,7 @@
 
       </div>
       <!-- File -->
-      <h6>ارسال چاپ صورت حساب بانکی</h6>
+      <h6>پیوست فایل صورتحساب بانکی</h6>
       <input type="file" id="file" name="receipt" class="mb-3" 
         accept=".pdf,.doc,.docx,.csv,application/msword,application/
         vnd.openxmlformats-officedocument.wordprocessingml.document,application/
@@ -72,22 +72,21 @@
 
     // Edit Modal
     window.showEditModal = function showEditModal(url) {
-      function edit($url) {
-        // Edit
-        action.reloadModal();
 
-        $.ajax({
-          url: "{{ url('generalInfo/edit') }}",
-          method: 'get',
-          data: { id: $url },
-          success: function (data) {  
-            action.editOnSuccess($url);
-            $('#number').val(data.number);
-            $('#jalaliMonth').val(data.type).trigger('change');
-            $('#jalaliYear').val(data.jalaliYear).trigeer('change');
-          }
-        })
-      }
+      // Edit
+      action.reloadModal();
+
+      $.ajax({
+        url: "{{ url('generalInfo/edit') }}",
+        method: 'get',
+        data: { id: url },
+        success: function (data) {  
+          action.editOnSuccess(url);
+          $('#bank_balance').val(data.bank_balance);
+          $('#jalaliMonth').val(data.jalaliMonth).trigger('change');
+          $('#jalaliYear').val(data.jalaliYear).trigeer('change');
+        }
+      })
     }
   });
 </script>

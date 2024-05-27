@@ -43,13 +43,13 @@ class CenterDataTable extends DataTable
      */
     public function query(Center $model)
     {
-        $user = Auth::user();
+        $center = Auth::user();
 
-        if ($user && $user->type === 1) {
+        if ($center && $center->type === 1) {
             return $model->newQuery();
         }
 
-        return $model->where('id', $user->id);
+        return $model->where('id', $center->id);
 
     }
 
@@ -73,6 +73,8 @@ class CenterDataTable extends DataTable
     {
         return [
             $this->dataTable->getIndexCol(),
+            Column::make('code')
+                ->title('کد مرکز'),
             Column::make('name')
                 ->title('نام مرکز'),
             Column::make('email')

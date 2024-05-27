@@ -1,5 +1,5 @@
 <!-- Type -->
-<label for="type">نوع گزارش:</label>
+<label for="type">نوع هزینه:</label>
 <select id="type" name="type">
     <option value="0">هزینه حقوق کارمندان</option>
     <option value="1">هزینه آموزش</option>

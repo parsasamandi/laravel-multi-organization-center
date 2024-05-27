@@ -101,9 +101,25 @@
       action.delete(url);
     }
 
-    // Delete
-    window.showConfirmationModal = function showConfirmationModal(url) {
-      action.delete(url);
+    // Edit
+    window.showEditModal = function showEditModal(url) {
+      // Edit
+      action.reloadModal();
+
+      $.ajax({
+        url: "{{ url('center/edit') }}",
+        method: 'get',
+        data: { id: url },
+        success: function (data) {  
+          action.editOnSuccess(url);
+          $('#name').val(data.name);
+          $('#email').val(data.email);
+          $('#phone_number').val(data.phone_number);
+          $('#type').val(data.type).trigger('change');
+          $('#password').val('Password');
+          $('#password-confirm').val('Password');
+        }
+      })
     }
 
     

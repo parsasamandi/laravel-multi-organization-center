@@ -17,7 +17,7 @@
         <x-slot name="tableHeader">
             <th>مبلغ هزینه</th>
             <th>ردیف ها در صورتحساب بانکی</th>
-            <th>نوع گزارش</th>
+            <th>نوع هزینه</th>
             <th>ماه</th>
             <th>سال</th>
             <th>دانلود رسید</th>
@@ -50,8 +50,10 @@
             <td>{{ $action->englishToPersianNumbers($report->generalInfo->jalaliYear) }}</td>
 
             <!-- Receipt -->
-            <td><a href="{{ url('/receipts/' . $report->receipt) }}" download>دانلود  
-                    {{ $report->receipt }} </a></td>
+            <td>
+                <a href="{{ Storage::disk('s3')->temporaryUrl('receipts/' . 
+                        $generalInfo->receipt, now()->addHours(1)) }}" download>دانلود</a>
+            </td>
         </x-slot>
 
     </x-details>    

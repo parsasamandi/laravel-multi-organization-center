@@ -8,7 +8,9 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Center;
 use Storage;
+
 
 class GeneralInfoDataTable extends DataTable
 {
@@ -29,14 +31,20 @@ class GeneralInfoDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->rawColumns(['action', 'bank_statement_receipt', 'data', 'status'])
+            ->rawColumns(['action', 'bank_statement_receipt', 'data', 'status', 'center_name'])
+            ->addColumn('center_name', function(GeneralInfo $generalInfo) {
+                $center = Center::find($generalInfo->center_id);
+                return $center->name;
+            })
+            ->filterColumn('center_name', function ($query, $keyword) {
+                return $query->whereHas('center', function ($q) use ($keyword) {
+                    $q->where('name', 'like', "%{$keyword}%");
+                });
+            })
             ->addColumn('date', function(GeneralInfo $generalInfo) {
-                return $generalInfo->jalaliMonth . ' ' . $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
+                return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) . ' ' . $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
                 return $generalInfo->jalaliMonth . ' ' .
                     $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
-            })
-            ->editColumn('bank_balance', function(GeneralInfo $generalInfo) {
-                return $this->dataTable->englishToPersianNumbers($generalInfo->bank_balance);
             })
             ->filterColumn('date', function ($query, $keyword) {
 
@@ -44,12 +52,19 @@ class GeneralInfoDataTable extends DataTable
                     ->orWhere('jalaliMonth', 'LIKE', "%{$keyword}%");
 
             })
+            ->orderColumn('date', function ($query, $direction) {
+                $query->orderBy('jalaliYear', $direction)
+                      ->orderBy('jalaliMonth', $direction);
+            })
+            ->editColumn('bank_balance', function(GeneralInfo $generalInfo) {
+                return $this->dataTable->englishToPersianNumbers($generalInfo->bank_balance);
+            })
             ->editColumn('bank_balance', function(GeneralInfo $generalInfo) {
                 return $this->dataTable->englishToPersianNumbers($generalInfo->bank_balance);
             })
             ->editColumn('bank_statement_receipt', function(GeneralInfo $generalInfo) {
                 // Get the URL for the file from S3 storage
-                $presignedUrl = Storage::disk('s3')->temporaryUrl($generalInfo->bank_statement_receipt, now()->addHours(1));
+                $presignedUrl = Storage::disk('s3')->temporaryUrl('receipts/' . $generalInfo->bank_statement_receipt, now()->addHours(1));
                 
                 // Return a link to the file
                 return '<a href="' . $presignedUrl . '" target="_blank">بارگیری</a>';
@@ -79,13 +94,13 @@ class GeneralInfoDataTable extends DataTable
      */
     public function query(GeneralInfo $model)
     {
-        $user = Auth::user();
+        $center = Auth::user();
 
-        if ($user && $user->type === 1) {
+        if ($center && $center->type === Center::GOLESTANTEAM) {
             return $model->newQuery();
         }
 
-        return $model->where('center_id', Auth::id());
+        return $model->where('center_id', $center->id);
     }
 
 
@@ -109,14 +124,18 @@ class GeneralInfoDataTable extends DataTable
     {
         return [
             $this->dataTable->getIndexCol(),
+            Column::computed('center_name')
+                ->title('نام مرکز')
+                ->searchable(true)
+                ->orderable(false),
             Column::make('bank_statement_receipt')
                 ->title('صورتحساب بانکی'),
             Column::make('bank_balance')
-                ->title('موجودی حساب')
-                ->orderable(false),
+                ->title('موجودی حساب'),
             Column::computed('date')
                 ->title('تاریخ')
-                ->searchable(true),
+                ->searchable(true)
+                ->orderable(true),
             Column::computed('status')
                 ->title('وضعیت'),
             $this->dataTable->setActionCol()

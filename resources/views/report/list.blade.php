@@ -4,8 +4,8 @@
 @section('content')
 
   {{-- Header --}}
-  <x-header pageName="گزارشات جزئیات هزینه" pageDescription="گزارشات جزئیات هزینه"
-    buttonValue="گزارش جزئی هزینه">
+  <x-header pageName="هزینه ها" pageDescription="صفحه گزارش هزینه ها"
+    buttonValue="گزارش هزینه">
     <x-slot name="table">
       <x-table :table="$reportTable" />
     </x-slot>
@@ -86,6 +86,25 @@
     // Delete
     window.showConfirmationModal = function showConfirmationModal(url) {
       action.delete(url);
+    }
+
+    // Edit
+    window.showEditModal = function showEditModal(url) {
+      // Edit
+      action.reloadModal();
+
+      $.ajax({
+        url: "{{ url('report/edit') }}",
+        method: 'get',
+        data: { id: url },
+        success: function (data) {  
+          action.editOnSuccess(url);
+          $('#expenses').val(data.expenses);
+          $('#range').val(data.range);
+          $('#type').val(data.type).trigger('change');
+          $('#description').val(data.description);
+        }
+      })
     }
 
   });

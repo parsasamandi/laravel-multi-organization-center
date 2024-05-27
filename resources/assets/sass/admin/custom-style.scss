@@ -358,3 +358,42 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before, table.dataT
     border-color: $datatable_color !important;
 }
 
+/* dataTables Search input box */
+.dataTables_filter {
+    position: relative;
+}
+
+.dataTables_filter input {
+    width: 250px !important;
+    height: 32px !important;
+    background: #fcfcfc !important;
+    border: 1px solid #aaa !important;
+    border-radius: 5px !important;
+    box-shadow: 0 0 3px #ccc, 0 10px 15px #ebebeb inset !important;
+    text-indent: 10px !important;
+}
+
+.dataTables_filter .fa-search {
+    position: absolute;
+    top: 10px;
+    left: auto;
+    right: 10px;
+}
+
+/* paginate button style */
+.paginate_button {
+    background-color: #eee; /* Light gray background */
+    color: #333; /* Dark gray text */
+    border: 1px solid #ccc; /* Light gray border */
+    padding: 5px 10px; /* Add some padding */
+    cursor: pointer; /* Make it look clickable */
+  }
+  
+.paginate_button:hover {
+    background-color: #ddd; /* Slightly darker on hover */
+}
+
+div.dataTables_wrapper div.dataTables_paginate {
+    margin-top: 0.5em;
+}
+

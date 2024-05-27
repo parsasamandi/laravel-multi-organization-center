@@ -15,13 +15,17 @@ class StoreReportRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-        return [
+        $rules = [
             'expenses' => 'required',
             'range' => 'required',
             'receipt' => 'required',
             'description' => 'required',
             'type' => 'required',
         ];
+
+        if(!$this->has('id')) {
+            $rules['id'] = 'required';
+        }
     }
 
     /**

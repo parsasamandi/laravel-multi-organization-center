@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\StoreGeneralInfoRequest;
 use App\Http\Requests\UpdateGeneralInfoRequest;
@@ -14,8 +15,8 @@ use App\DataTables\GeneralInfoDataTable;
 use App\Models\GeneralInfo;
 use App\Providers\Action;
 use App\Models\Status;
+use App\Models\Center;
 use File;
-use Auth;
 use Storage;
 
 class GeneralInfoController extends Controller
@@ -41,66 +42,51 @@ class GeneralInfoController extends Controller
         return $generalInfoTable->render('generalInfo.list');
     }
 
-    // Insert
+    // Insert or Update
     public function store(StoreGeneralInfoRequest $request) {
 
-        // Getting the file
-        $receipt = $request->file('receipt');
-        // File name
-        $file_name = 'receipts/' . $receipt->getClientOriginalName();
-        // Storing file to S3
-        $receipt->storeAs('receipts', $file_name, 's3');
+        // Id
+        $id = $request->get('id');
 
-        // Storing General info
-        $generalInfo = GeneralInfo::create([
+        $data = [
+            'id' => $id,
             'jalaliMonth' => $request->get('jalaliMonth'),
             'jalaliYear' => $request->get('jalaliYear'),
             'bank_balance' => $request->get('bank_balance'),
-            'bank_statement_receipt' => $file_name,
             'center_id' => Auth::id()
-        ]);
+        ];
+
+        if($request->hasFile('receipt')) {
+
+            // Getting the file
+            $receipt = $request->file('receipt');
+            // File name
+            $center = Center::find(Auth::user()->id);
+
+            if($center->type == Center::CENTER) 
+                $file_name = $center->code . $receipt->getClientOriginalName();
+            else
+                $file_name = $receipt->getClientOriginalName();
+
+            // Storing file to S3
+            $receipt->storeAs('receipts', $file_name, 's3');
+
+            $data['bank_statement_receipt'] = $file_name;
+        }
+
+        $generalInfo = GeneralInfo::updateOrCreate(['id' => $id], $data);
 
         // Storing General info's status
-        $generalInfo->statuses()->create(
-            ['status' => Status::NOTCONFIRMED, 'status_type' => GeneralInfo::class]
+        $generalInfo->statuses()->updateOrCreate(
+            ['status_id' => $id, 'status' => Status::NOTCONFIRMED, 'status_type' => GeneralInfo::class]
         );
 
         return $this->getAction($request->get('button_action'));
     }
-
-
+    
     // Edit
-    public function edit($id) {
-        // Fetch the data for the specified ID from the database
-        $generalInfo = GeneralInfo::findOrFail($id); // Replace with your actual model name
-
-        // Return the view with the data
-        return view('generalInfo.edit')->with('generalInfo', $generalInfo);
-    }
-
-    // Update
-    public function update(UpdateGeneralInfoRequest $request) {
-
-        $generalInfo = GeneralInfo::findOrFail($request->get('id'));
-
-        // Initialize $updateData array
-        $updateData = [
-            'bank_balance' => $request->get('bank_balance'),
-            'center_id' => Auth::id(),
-        ];
-
-        // Check if a receipt file is uploaded
-        if ($request->hasFile('receipt')) {
-            $receipt = $request->file('receipt');
-            $file = $receipt->getClientOriginalName();
-            $receipt->move(public_path('receipts'), $file);
-            $updateData['bank_statement_receipt'] = $file; // Include file in update data
-        }
-
-        // Update the GeneralInfo record
-        $generalInfo->update($updateData);
-
-        return $this->getAction("update");
+    public function edit(Request $request) {
+        return $this->action->edit(GeneralInfo::class, $request->get('id'));
     }
 
     // Confirming the General Info status
@@ -125,6 +111,15 @@ class GeneralInfoController extends Controller
         return response()->json(['success' => true], Response::HTTP_CREATED);
     }
 
+    // Details
+    public function details($id) {
+        // Fetch the data for the specified ID from the database
+        $generalInfo = GeneralInfo::where('id', $id)->with('statuses')->first();
+
+        // Return the view with the data
+        return view('generalInfo.details')->with('generalInfo', $generalInfo);
+    }
+
     // Delete
     public function delete($id) {
 
@@ -134,16 +129,6 @@ class GeneralInfoController extends Controller
         Storage::disk('s3')->delete($generalInfo->bank_statement_receipt);
     
         return $this->action->delete(GeneralInfo::class, $id);
-    }
-
-
-    // Details
-    public function details($id) {
-        // Fetch the data for the specified ID from the database
-        $generalInfo = GeneralInfo::where('id', $id)->with('statuses')->first();
-
-        // Return the view with the data
-        return view('generalInfo.details')->with('generalInfo', $generalInfo);
     }
 
 }

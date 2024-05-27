@@ -51,7 +51,7 @@ class ReportDataTable extends DataTable
             })
             ->editColumn('receipt', function(Report $report) {
                 // Get the URL for the file from S3 storage
-                $presignedUrl = Storage::disk('s3')->temporaryUrl($report->receipt, now()->addHours(1));
+                $presignedUrl = Storage::disk('s3')->temporaryUrl('receipts/' . $report->receipt, now()->addHours(1));
 
                 // Return a link to the file
                 return '<a href="' . $presignedUrl . '" target="_blank">بارگیری</a>';
@@ -121,7 +121,7 @@ class ReportDataTable extends DataTable
             Column::make('receipt')
                 ->title('رسید'),
             Column::make('type')
-                ->title('نوع'),
+                ->title('نوع هزینه'),
             Column::computed('date')
                 ->title('تاریخ')
                 ->searchable(true),

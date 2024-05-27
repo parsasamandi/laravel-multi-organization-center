@@ -42,7 +42,7 @@
         </div>
 
         <!-- File -->
-        <h6>ارسال چاپ صورتحساب بانکی</h6>  
+        <h6>پیوست فایل صورتحساب بانکی</h6>  
         <input type="file" id="file" name="receipt" class="mb-3"
             accept=".pdf,.doc,.docx,.csv,application/msword,application/
             vnd.openxmlformats-officedocument.wordprocessingml.document,application/

@@ -5,13 +5,10 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use App\Providers\EnglishConvertion;
-use App\Models\GeneralInfo;
 use Auth;
 
 class StoreGeneralInfoRequest extends FormRequest
 {
-   
     /**
      * Get the validation rules that apply to the request.
      *
@@ -19,19 +16,24 @@ class StoreGeneralInfoRequest extends FormRequest
      */
     public function rules()
     {
-        // Validation rules
-        return [
-            'bank_balance' => 'required | numeric',
-            'receipt' => 'required',
-            'jalaliMonth' => [
+        $rules = [
+            'bank_balance' => 'required|numeric',
+            'jalaliYear' => 'required',
+        ];
+
+        // If 'id' is not present in the request, make 'receipt' required
+        if (!$this->input('id')) {
+            $rules['receipt'] = 'required';
+            $rules['jalaliMonth'] = [
                 'required',
                 Rule::unique('general_infos')->where(function ($query) {
                     return $query->where('jalaliYear', $this->input('jalaliYear'))
                         ->where('center_id', Auth::id());
                 })
-            ],
-            'jalaliYear' => 'required',
-        ];
+            ];
+        }
+
+        return $rules;
     }
 
     /**
@@ -44,7 +46,7 @@ class StoreGeneralInfoRequest extends FormRequest
         return [
             'receipt' => '"رسید صورتحساب بانکی"',
             'bank_balance' => '"موجودی در پایان ماه"',
-            'jalaliMonth' => 'ماه و سال',                  
+            'jalaliMonth' => 'ماه و سال',
         ];
     }
 }

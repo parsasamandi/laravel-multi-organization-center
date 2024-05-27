@@ -33,7 +33,7 @@ class ReportController extends Controller
         $ReportTable = new ReportDataTable;
 
         // Dates
-        if(Auth::user()->type == Center::SUPERADMIN) {
+        if(Auth::user()->type == Center::GOLESTANTEAM) {
             $dates = GeneralInfo::select('id', 'jalaliMonth', 'jalaliYear')->get();
         } else {
             $dates = GeneralInfo::where('center_id', Auth::id())
@@ -62,27 +62,37 @@ class ReportController extends Controller
     }
 
 
-    // Insert
+    // Insert or Update
     public function store(StoreReportRequest $request) {
 
-        // Getting the file
-        $receipt = $request->file('receipt');
-        // File name
-        $file_name = 'receipts/' . $receipt->getClientOriginalName();
-        // Storing file to S3
-        $receipt->storeAs('receipts', $file_name, 's3');
+        $id = $request->get('id');
 
-        $report = Report::create(
-            ['expenses' => $this->action->persianToEnglishNumbers($request->get('expenses')),
+        if($request->hasFile('receipt')) {
+            // Getting the file
+            $receipt = $request->file('receipt');
+            // File name
+            $center = Auth::user();
+
+            if($center->type = Center::CENTER) 
+                $file_name = 'receipts/' . $center->code . $receipt->getClientOriginalName();
+            else
+                $file_name = 'receipts/' . $receipt->getClientOriginalName();
+            // Storing file to S3
+            $receipt->storeAs('receipts', $file_name, 's3');
+        }
+
+        $report = Report::createorUpdate([
+            'id' => $id,
+            'expenses' => $this->action->persianToEnglishNumbers($request->get('expenses')),
             'range' => $this->action->persianToEnglishNumbers($request->get('range')),
             'receipt' => $file_name, 'description' => $request->get('description'),
             'type' => $request->get('type'), 'center_id' => Auth::id(),
             'general_info_id' => $request->get('general_info_id')
         ]);
 
-        // Storing General info's status
-        $report->statuses()->create(
-            ['status' => Status::NOTCONFIRMED, 'status_type' => Report::class]
+        // Storing Report's status
+        $report->statuses()->updateOrCreate(
+            ['status_id' => $id, 'status' => Status::NOTCONFIRMED, 'status_type' => Report::class]
         );
 
         return $this->getAction($request->get('button_action'));
@@ -92,19 +102,22 @@ class ReportController extends Controller
     // Edit
     public function edit($id) {
 
-        $vars['report'] = Report::find($id);
+        // $vars['report'] = Report::find($id);
 
-        if ($vars) {
+        // if ($vars) {
 
-            // Dates
-            if(Auth::user()->type == Center::SUPERADMIN)
-                $vars['dates'] = GeneralInfo::select('id', 'jalaliMonth', 'jalaliYear')->get();
-            else
-                $vars['dates'] = GeneralInfo::where('center_id', Auth::id())->select('id', 'jalaliMonth', 'jalaliYear')->get();
+        //     // Dates
+        //     if(Auth::user()->type == Center::GOLESTANTEAM)
+        //         $vars['dates'] = GeneralInfo::select('id', 'jalaliMonth', 'jalaliYear')->get();
+        //     else
+        //         $vars['dates'] = GeneralInfo::where('center_id', Auth::id())->select('id', 'jalaliMonth', 'jalaliYear')->get();
 
-            // Pass the report data and dates to the view
-            return view('report.edit', $vars);
-        }
+        //     // Pass the report data and dates to the view
+        //     return view('report.edit', $vars);
+        // }
+
+        return $this->action->edit(Report::class, $request->get('id'));
+        
     }
 
     public function confirmStatus(Request $request) {
