@@ -3,9 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use App\Providers\EnglishConvertion;
 use Auth;
 
 class StoreGeneralInfoRequest extends FormRequest
@@ -25,14 +23,18 @@ class StoreGeneralInfoRequest extends FormRequest
         // If 'id' is not present in the request, make 'receipt' required
         if (!$this->input('id')) {
             $rules['receipt'] = 'required';
-            $rules['jalaliMonth'] = [
-                'required',
-                Rule::unique('general_infos')->where(function ($query) {
+        }
+
+        // Unique jalaliMonth validation based on Jalali year and center_id
+        $rules['jalaliMonth'] = [
+            'required',
+            Rule::unique('general_infos')
+                ->where(function ($query) {
                     return $query->where('jalaliYear', $this->input('jalaliYear'))
                         ->where('center_id', Auth::id());
                 })
-            ];
-        }
+                ->ignore($this->input('id'), 'id') // Ignore current record ID during update
+        ];
 
         return $rules;
     }
@@ -45,9 +47,10 @@ class StoreGeneralInfoRequest extends FormRequest
     public function attributes()
     {
         return [
-            'receipt' => '"رسید صورتحساب بانکی"',
-            'bank_balance' => '"موجودی در پایان ماه"',
-            'jalaliMonth' => 'ماه و سال',
+            'receipt' => 'رسید',
+            'bank_balance' => 'مانده بانک',
+            'jalaliYear' => 'سال',
+            'jalaliMonth' => 'ماه',
         ];
     }
 
@@ -58,11 +61,19 @@ class StoreGeneralInfoRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        // English convertion
-        $englishConvertion = new EnglishConvertion();
+        // Custom preparation logic if needed
+    }
 
-        $this->merge([
-            'bank_balance' => $englishConvertion->convert($this->input('bank_balance'))
-        ]);
+    /**
+     * Get the validation messages that apply to the request.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'receipt.required' => 'پیوست فایل رسید الزامی است.',
+            'jalaliMonth.unique' => 'این ماه برای سال انتخاب شده قبلا وارد شده است.',
+        ];
     }
 }

@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'جزئیات گزارش یک ردیف هزینه‌کرد')
+@section('title', 'جزئیات گزارش هزینه')
 
 @section('content')
 
@@ -8,13 +8,14 @@
     $action = new \App\Providers\Action();
 @endphp
 
-<!-- <div class="container-fluid mt-3 right-text"> -->
+
 <div class="container-fluid mt-3 right-text">
     {{-- List --}}
-    <x-details tableId="reportDetailsTable" header="گزارش یک ردیف هزینه‌کرد">
+    <x-details tableId="reportDetailsTable" header="گزارش یک هزینه">
 
         <!-- Table header -->
         <x-slot name="tableHeader">
+            <th>مرکز</th>
             <th>مبلغ هزینه</th>
             <th>ردیف ها در صورتحساب بانکی</th>
             <th>نوع هزینه</th>
@@ -25,6 +26,8 @@
 
         <!-- Table data -->
         <x-slot name="tableData">
+            <!-- Center name -->
+            <td>{{ Auth::user()->name }}</td>
             <!-- Expenses -->
             <td>{{ $action->englishToPersianNumbers($report->expenses) }}</td>
             <!-- Range -->
@@ -52,7 +55,7 @@
             <!-- Receipt -->
             <td>
                 <a href="{{ Storage::disk('s3')->temporaryUrl('receipts/' . 
-                        $generalInfo->receipt, now()->addHours(1)) }}" download>دانلود</a>
+                        $report->receipt, now()->addHours(1)) }}" download>دانلود</a>
             </td>
         </x-slot>
 

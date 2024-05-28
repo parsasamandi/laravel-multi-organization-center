@@ -34,7 +34,7 @@ class ReportDataTable extends DataTable
             ->addColumn('date', function (Report $report) {
                 $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
                 if ($generalInfo) {
-                    return $generalInfo->jalaliMonth . ' ' .
+                    return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) . ' ' .
                         $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
                 }
             })->filterColumn('date', function ($query, $keyword) {
@@ -119,7 +119,8 @@ class ReportDataTable extends DataTable
             Column::make('range')
                 ->title('ردیف هزینه در صورتحساب'),
             Column::make('receipt')
-                ->title('رسید'),
+                ->title('رسید')
+                ->orderable(false),
             Column::make('type')
                 ->title('نوع هزینه'),
             Column::computed('date')

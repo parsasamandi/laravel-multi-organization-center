@@ -32,26 +32,8 @@ class ReportController extends Controller
         // Report Table
         $ReportTable = new ReportDataTable;
 
-        // Dates
-        if(Auth::user()->type == Center::GOLESTANTEAM) {
-            $dates = GeneralInfo::select('id', 'jalaliMonth', 'jalaliYear')->get();
-        } else {
-            $dates = GeneralInfo::where('center_id', Auth::id())
-                ->select('id', 'jalaliMonth', 'jalaliYear')
-                ->get();
-        }
-
-        // Convert jalaliYear to Persian numbers
-        $dates->transform(function ($date) {
-            $date->jalaliYear = $this->action->englishToPersianNumbers($date->jalaliYear);
-            return $date;
-        });
-
         // Prepare other variables
-        $vars = [
-            'reportTable' => $ReportTable->html(),
-            'dates' => $dates,
-        ];
+        $vars['reportTable'] = $ReportTable->html();
 
         return view('report.list', $vars);
     }
@@ -65,59 +47,62 @@ class ReportController extends Controller
     // Insert or Update
     public function store(StoreReportRequest $request) {
 
-        $id = $request->get('id');
-
-        if($request->hasFile('receipt')) {
-            // Getting the file
-            $receipt = $request->file('receipt');
-            // File name
-            $center = Auth::user();
-
-            if($center->type = Center::CENTER) 
-                $file_name = 'receipts/' . $center->code . $receipt->getClientOriginalName();
-            else
-                $file_name = 'receipts/' . $receipt->getClientOriginalName();
-            // Storing file to S3
-            $receipt->storeAs('receipts', $file_name, 's3');
+        $data = [
+            'expenses' => $request->get('expenses'),
+            'range' => $request->get('range'),
+            'type' => $request->get('type'),
+            'description' => $request->get('description'),
+            'center_id' => Auth::user()->id
+        ];
+    
+        // Get center information and Jalali year/month
+        $center = Auth::user();
+        $jalaliYear = $request->get('jalaliYear');
+        $jalaliMonth = $request->get('jalaliMonth');
+    
+        // Check general info existence based on center type
+        $generalInfo = GeneralInfo::where(function ($query) use ($center, $jalaliYear, $jalaliMonth) {
+            if ($center->type == Center::CENTER) {
+                $query->where('center_id', $center->id);
+            }
+            $query->where('jalaliYear', $jalaliYear)->where('jalaliMonth', $jalaliMonth);
+        })->first();
+    
+        if (!$generalInfo) {
+            return response()->json(['success' => false, 'message' => '<div class="alert alert-danger">برای سال و ماه انتخاب شده، گزارش صورتحساب قبلا وارد نشده است. لطفا ابتدا گزارش صورتحساب را برای این تاریخ وارد نمایید.</div>']);
         }
+    
+        $data['general_info_id'] = $generalInfo->id;
+    
+        // Handle receipt upload if present
+        if ($request->hasFile('receipt')) {
+            $receipt = $request->file('receipt');
+            $fileName = ($center->type == Center::CENTER ? $center->code . '_' : '') . $receipt->getClientOriginalName();
+    
+            Storage::disk('s3')->delete($report->receipt ?? null); // Delete existing receipt if updating
+    
+            $receipt->storeAs('receipts', $fileName, 's3');
 
-        $report = Report::createorUpdate([
-            'id' => $id,
-            'expenses' => $this->action->persianToEnglishNumbers($request->get('expenses')),
-            'range' => $this->action->persianToEnglishNumbers($request->get('range')),
-            'receipt' => $file_name, 'description' => $request->get('description'),
-            'type' => $request->get('type'), 'center_id' => Auth::id(),
-            'general_info_id' => $request->get('general_info_id')
-        ]);
-
-        // Storing Report's status
+            $data['receipt'] = $fileName;
+        }
+    
+        $id = $request->get('id');
+    
+        $report = Report::updateOrCreate(['id' => $id], $data);
+    
+        // Update report status
         $report->statuses()->updateOrCreate(
             ['status_id' => $id, 'status' => Status::NOTCONFIRMED, 'status_type' => Report::class]
         );
-
+    
         return $this->getAction($request->get('button_action'));
     }
+    
 
 
     // Edit
-    public function edit($id) {
-
-        // $vars['report'] = Report::find($id);
-
-        // if ($vars) {
-
-        //     // Dates
-        //     if(Auth::user()->type == Center::GOLESTANTEAM)
-        //         $vars['dates'] = GeneralInfo::select('id', 'jalaliMonth', 'jalaliYear')->get();
-        //     else
-        //         $vars['dates'] = GeneralInfo::where('center_id', Auth::id())->select('id', 'jalaliMonth', 'jalaliYear')->get();
-
-        //     // Pass the report data and dates to the view
-        //     return view('report.edit', $vars);
-        // }
-
-        return $this->action->edit(Report::class, $request->get('id'));
-        
+    public function edit(Request $request) {
+        return $this->action->edit(Report::class, $request->get('id')); 
     }
 
     public function confirmStatus(Request $request) {
@@ -139,43 +124,6 @@ class ReportController extends Controller
         }
 
         return response()->json(['success' => true], Response::HTTP_CREATED);
-    }
-
-    // Update
-    public function update(Request $request) {
-
-        // Report table
-        $report = Report::findOrFail($request->get('id'));
-
-        $updateData = [
-            'expenses' => $request->get('expenses'),
-            'range' => $request->get('range'),
-            'description' => $request->get('description'),
-            'type' => $request->get('type'),
-            'center_id' => Auth::id(),
-            'general_info_id' => $request->get('general_info_id')
-        ];
-
-        // Check if a receipt file is uploaded
-        if ($request->hasFile('receipt')) {
-
-            // Deleting from storage
-            Storage::disk('s3')->delete($report->receipt);
-
-            // Getting the file
-            $receipt = $request->file('receipt');
-            // File name
-            $file_name = 'receipts/' . $receipt->getClientOriginalName();
-            // Storing file to S3
-            $receipt->storeAs('receipts', $file_name, 's3');
-            
-            $updateData['receipt'] = $file_name; // Include file in update data
-        }
-
-        $report->update($updateData);
-
-
-        return $this->getAction("update");
     }
 
     // Details

@@ -13,6 +13,7 @@
     <x-details tableId="generalInfoDetailsTable" header="یک ردیف از صورتحساب">
         <!-- Table header -->
         <x-slot name="tableHeader">
+            <th>نام مرکز</th>
             <th>سال</th>
             <th>ماه</th>
             <th>موجودی در پایان ماه</th>
@@ -21,6 +22,7 @@
 
         <!-- Table data -->
         <x-slot name="tableData">
+            <td>{{ Auth::user()->name }}</td>
             <td>{{ $action->englishToPersianNumbers($generalInfo->jalaliYear) }}</td>
              <!-- Jalali months -->
             <td>{{ $action->jalaliMonth($generalInfo->jalaliMonth) }}</td>

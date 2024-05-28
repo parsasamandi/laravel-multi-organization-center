@@ -17,15 +17,12 @@
       {{-- Form --}}
       <div class="row">
         <!-- Date -->
-        <div class="col-md-12 mb-3">
-          <label for="date">تاریخ:</label>
-          <select id="general_info_id" name="general_info_id">
-              @foreach ($dates as $date)
-                <option value="{{ $date->id }}">
-                  {{ $date->jalaliMonth }} {{ $date->jalaliYear }}
-                </option>
-              @endforeach
-          </select>
+        <div class="col-md-6 mb-3">
+          @include('includes.jalaliYearsSelectBox')
+        </div>
+
+        <div class="col-md-6 mb-3">
+          @include('includes.jalaliMonthsSelectBox')
         </div>
 
         <!-- Expenses -->
@@ -46,7 +43,7 @@
       </div>
 
       <!-- File -->
-      <h6>ارسال رسید</h6>
+      <h6>ارسال فایل رسید</h6>
       <input type="file" id="file" name="receipt" class="mb-3"
         accept=".pdf,.doc,.docx,.csv,application/msword,application/
         vnd.openxmlformats-officedocument.wordprocessingml.document,application/
@@ -56,7 +53,7 @@
   </x-admin.insert>
 
   {{-- Delete --}}
-  <x-admin.delete title="گزارش جزئی" />
+  <x-admin.delete title="گزارش هزینه" />
 
 
 @endsection
@@ -78,7 +75,6 @@
     $('#create_record').click(function () {
       action.openInsertionModal();
     });
-
 
     // Insert
     action.insert();

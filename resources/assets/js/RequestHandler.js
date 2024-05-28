@@ -7,7 +7,7 @@ class RequestHandler {
         window.url = url; // Url
     }
 
-    // modal
+    // Modal
     openInsertionModal() {
         $('#formModal').modal('show');
         $('#button_action').val('insert');
@@ -73,33 +73,6 @@ class RequestHandler {
         $('#action').val('ویرایش');
     }
 }
-
-
-// class ajaxInsertion {
-
-//     // Store or Update
-//     $("test").on('submit', function (event) {
-//         event.preventDefault();
-//         // Form Data
-//         var form_data = new FormData(this);
-//         form_data.append('file', form_data);
-
-//         $.ajax({
-//             url: "/" + window.url + "/store",
-//             method: "POST",
-//             contentType: false,
-//             processData: false,
-//             cache: false,
-//             data: form_data,
-//             success: function (data) { 
-//                 success(data);
-//             },
-//             error: function (data) {
-//                 error(data);
-//             }
-//         })
-//     });
-// }
 
 // Success
 function success(data) {
