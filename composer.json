@@ -10,6 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "barryvdh/laravel-debugbar": "^3.7",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
@@ -22,7 +23,6 @@
         "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.5",
         "beyondcode/laravel-dump-server": "^1.0",
         "fakerphp/faker": "^1.9.1",
         "filp/whoops": "^2.0",
