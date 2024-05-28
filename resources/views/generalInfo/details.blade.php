@@ -40,8 +40,8 @@
 
     <!-- Return button -->
     <div class="text-center mt-3">
+        <button type="button" id="print_button" class="btn btn-primary">چاپ</button>
         <button type="button" id="return_button" class="btn btn-secondary">بازگشت</button>
-        <button type="button" id="print_button" class="btn btn-secondary">چاپ</button>
     </div>
 
 </div>

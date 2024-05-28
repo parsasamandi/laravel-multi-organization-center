@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Providers\EnglishConvertion;
 use Auth;
 
 class StoreGeneralInfoRequest extends FormRequest
@@ -48,5 +49,20 @@ class StoreGeneralInfoRequest extends FormRequest
             'bank_balance' => '"موجودی در پایان ماه"',
             'jalaliMonth' => 'ماه و سال',
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        // English convertion
+        $englishConvertion = new EnglishConvertion();
+
+        $this->merge([
+            'bank_balance' => $englishConvertion->convert($this->input('bank_balance'))
+        ]);
     }
 }

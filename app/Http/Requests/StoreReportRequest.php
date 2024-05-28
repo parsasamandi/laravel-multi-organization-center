@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Providers\EnglishConvertion;
 use Illuminate\Http\Request;
+use App\Providers\EnglishConvertion;
 
 class StoreReportRequest extends FormRequest
 {
@@ -18,13 +18,12 @@ class StoreReportRequest extends FormRequest
         $rules = [
             'expenses' => 'required',
             'range' => 'required',
-            'receipt' => 'required',
             'description' => 'required',
             'type' => 'required',
         ];
 
         if(!$this->has('id')) {
-            $rules['id'] = 'required';
+            $rules['receipt'] = 'required';
         }
     }
 
@@ -40,5 +39,21 @@ class StoreReportRequest extends FormRequest
             'expenses' => '"هزینه"',
             'range' => '"ردیف های هزینه در صورتحساب"',                       
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        // English convertion
+        $englishConvertion = new EnglishConvertion();
+
+        $this->merge([
+            'range' => $englishConvertion->convert($this->input('range')),
+            'expenses' => $englishConvertion->convert($this->input('expenses'))
+        ]);
     }
 }

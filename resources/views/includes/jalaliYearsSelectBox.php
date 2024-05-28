@@ -1,9 +1,8 @@
 <!-- HTML select box for Jalali years -->
 <label for="jalaliYear">سال:</label>
-<select name="jalaliYear" id="jalaliYear" required>
-
-    <option value="1">1403</option>
-    <option value="2">1</option>
-    <option value="3">2</option>
-    <option value="4">3</option>
+<select name="jalaliYear" id="jalaliYear">
+    <option value="1403">1403</option>
+    <option value="1404">1404</option>
+    <option value="1405">1405</option>
+    <option value="1406">1406</option>
 </select>

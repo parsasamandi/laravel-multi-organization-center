@@ -48,8 +48,24 @@ class GeneralInfoDataTable extends DataTable
             })
             ->filterColumn('date', function ($query, $keyword) {
 
-                return $query->where('jalaliYear', 'LIKE', "%{$keyword}%")
-                    ->orWhere('jalaliMonth', 'LIKE', "%{$keyword}%");
+                // $jalaliMonths = [
+                //     "فروردین" => 1,
+                //     "اردیبهشت" => 2,
+                //     "خرداد" => 3,
+                //     "تیر" => 4,
+                //     "مرداد" => 5,
+                //     "شهریور" => 6,
+                //     "مهر" => 7,
+                //     "آبان" => 8,
+                //     "آذر" => 9,
+                //     "دی" => 10,
+                //     "بهمن" => 11,
+                //     "اسفند" => 12
+                // ];
+
+                // return $query->where('jalaliYear', 'LIKE', "%{$keyword}%")
+                //     ->orWhere('jalaliMonth', 'LIKE', "%{$jalaliMonths}%");
+                
 
             })
             ->orderColumn('date', function ($query, $direction) {

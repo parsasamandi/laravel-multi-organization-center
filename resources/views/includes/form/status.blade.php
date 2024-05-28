@@ -9,14 +9,14 @@
         <input type="hidden" name="id" id="id" value="{{ $id }}"  />
 
         <div class="row">
-            <div class="col-md-6 mt-2 mb-2">
+            <div class="col-md-4 mt-2 mb-2">
                 <!-- Confirmed or Not confirmed status -->
                 @include('includes.confirmation')
             </div>
         </div>
             
         <!-- Confirm Status -->
-        <button type="button" type="submit" id="confirmStatus" class="btn btn-secondary">ثبت وضعیت</button>
+        <button type="button" type="submit" id="confirmStatus" class="btn btn-primary">ثبت وضعیت</button>
 
     </form>
 @endif

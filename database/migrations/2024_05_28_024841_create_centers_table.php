@@ -16,12 +16,12 @@ class CreateCentersTable extends Migration {
 		Schema::create('centers', function(Blueprint $table)
 		{
 			$table->integer('id', true);
-			$table->string('code')->unique('code_unique');
+			$table->integer('code')->unique('code_unique');
 			$table->string('name')->unique('name_unique');
-			$table->string('phone_number', 20)->unique('phone_number_UNIQUE');
+			$table->string('phone_number', 20)->unique('phone_number_unique');
 			$table->string('email')->nullable();
 			$table->string('password');
-			$table->integer('type')->default(0)->comment('0 = Center; 1 = Super Admin');
+			$table->integer('type')->default(0)->comment('0 = Center; 1 = Golestan Team');
 		});
 	}
 

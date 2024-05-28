@@ -3,10 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Providers\EnglishConvertion;
 use Illuminate\Http\Request;
+use App\Providers\EnglishConvertion;
 
-// تیم گلستان
+
 // برای ماه و سال انتخاب شده، صورتحساب قبلا ثبت شده است
 class StoreCenterRequest extends FormRequest
 {
@@ -17,13 +17,18 @@ class StoreCenterRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-        return [
+        $rules = [
             'name' => 'required',
-            'password' => 'required|min:6|',
-            'password-confirm' => 'same:password',
             'phone_number' => 'required|numeric|digits:11|unique:centers,phone_number,' . $request->get('id'),
             'email' => 'email|max:255|unique:centers,email,' . $request->get('id')
         ];
+
+        if(!$this->has('id')) {
+            $rules['password'] = 'required|min:6|';
+            $rules['password-confirm'] = 'same:password';
+        }
+
+        return $rules;
     }
 
     /**

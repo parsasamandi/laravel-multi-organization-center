@@ -116,8 +116,6 @@
           $('#email').val(data.email);
           $('#phone_number').val(data.phone_number);
           $('#type').val(data.type).trigger('change');
-          $('#password').val('Password');
-          $('#password-confirm').val('Password');
         }
       })
     }

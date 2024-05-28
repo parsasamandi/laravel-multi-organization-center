@@ -15,7 +15,6 @@
     <x-slot name="content">
       {{-- Form --}}
       <div class="row">
-
         <div class="col-md-6 mb-3">
           @include('includes.jalaliYearsSelectBox')
         </div>
@@ -26,7 +25,6 @@
 
         <x-input type="number" key="bank_balance" placeholder="موجودی در پایان ماه (ریال)" 
           class="col-md-12 mb-3"/>
-
       </div>
       <!-- File -->
       <h6>پیوست فایل صورتحساب بانکی</h6>
@@ -34,11 +32,9 @@
         accept=".pdf,.doc,.docx,.csv,application/msword,application/
         vnd.openxmlformats-officedocument.wordprocessingml.document,application/
         vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
-      
 
     </x-slot>
   </x-admin.insert>
-
 
   {{-- Delete --}}
   <x-admin.delete title="'صورتحساب'" />
