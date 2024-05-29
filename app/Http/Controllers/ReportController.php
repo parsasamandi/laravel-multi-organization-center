@@ -102,8 +102,22 @@ class ReportController extends Controller
 
     // Edit
     public function edit(Request $request) {
-        return $this->action->edit(Report::class, $request->get('id')); 
-    }
+        // Fetching the "reports" table
+        $report = Report::find($request->get('id'))->select('id', 'center_id', 'general_info_id', 
+                'expenses', 'range', 'receipt', 'description', 'type')->first();
+    
+        // Fetching the associated GeneralInfo using the general_info_id from the report
+        $generalInfo = GeneralInfo::find($report->general_info_id)->select('jalaliMonth', 'jalaliYear')->first();
+    
+        // Prepare the response data
+        $values = [
+            'report' => $report,
+            'generalInfo' => $generalInfo,
+        ];
+    
+        // Return the response as JSON
+        return response()->json($values);
+    }    
 
     public function confirmStatus(Request $request) {
 

@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Center;
 use Storage;
 
 class ReportDataTable extends DataTable
@@ -30,7 +31,11 @@ class ReportDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->rawColumns(['action', 'receipt', 'date'])
+            ->rawColumns(['action', 'receipt', 'date', 'center_name'])
+            ->addColumn('center_name', function(Report $report) {
+                $center = Center::find($report->center_id);
+                return $center->name;
+            })
             ->addColumn('date', function (Report $report) {
                 $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
                 if ($generalInfo) {
@@ -54,7 +59,7 @@ class ReportDataTable extends DataTable
                 $presignedUrl = Storage::disk('s3')->temporaryUrl('receipts/' . $report->receipt, now()->addHours(1));
 
                 // Return a link to the file
-                return '<a href="' . $presignedUrl . '" target="_blank">بارگیری</a>';
+                return '<a href="' . $presignedUrl . '" target="_blank">دانلود</a>';
             })
             ->editColumn('type', function (Report $report) {
                 switch ($report->type) {
@@ -66,11 +71,13 @@ class ReportDataTable extends DataTable
                         return 'هزینه های سلامت';
                 }
             })->addColumn('status', function(Report $report) {
-                switch($report->statuses->status) {
-                    case 0:
-                        return 'تایید نشده';
-                    case 1:
-                        return 'تایید شده';
+                if($report->statuses->status != null) {
+                    switch($report->statuses->status) {
+                        case 0:
+                            return 'تایید نشده';
+                        case 1:
+                            return 'تایید شده';
+                    }
                 }
             })
             ->addColumn('action', function (Report $report) {
@@ -114,20 +121,33 @@ class ReportDataTable extends DataTable
     {
         return [
             $this->dataTable->getIndexCol(),
+            Column::computed('center_name')
+                ->title('نام مرکز')
+                ->searchable(true)
+                ->orderable(false),
             Column::make('expenses')
-                ->title('مبلغ هزینه'),
+                ->title('مبلغ هزینه')
+                ->orderable(true)
+                ->searchable(true),
             Column::make('range')
-                ->title('ردیف هزینه در صورتحساب'),
+                ->title('ردیف هزینه ها')
+                ->orderable(false)
+                ->searchable(false),
             Column::make('receipt')
                 ->title('رسید')
                 ->orderable(false),
             Column::make('type')
-                ->title('نوع هزینه'),
+                ->title('نوع هزینه')
+                ->orderable(true)
+                ->searchable(true),
             Column::computed('date')
                 ->title('تاریخ')
-                ->searchable(true),
+                ->searchable(true)
+                ->orderable(true),
             Column::computed('status')
-                ->title('وضعیت'),
+                ->title('وضعیت')
+                ->orderable(false)
+                ->searchable(true),
             $this->dataTable->setActionCol()
         ];
     }

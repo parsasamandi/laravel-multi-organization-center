@@ -117,8 +117,8 @@ class Action {
         return $englishNumber;
     }
 
-    // Returning Jalali months
-    public function jalaliMonth($column) {
+    // Jalali months convertor
+    public function jalaliMonthConvertor($column) {
         switch ($column) {
             case 1:
                 return 'فروردین';

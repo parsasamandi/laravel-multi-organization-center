@@ -43,46 +43,109 @@ class GeneralInfoController extends Controller
     }
 
     // Insert or Update
+    // public function store(StoreGeneralInfoRequest $request) {
+
+    //     // Id
+    //     $id = $request->get('id');
+
+    //     $data = [
+    //         'jalaliMonth' => $request->get('jalaliMonth'),
+    //         'jalaliYear' => $request->get('jalaliYear'),
+    //         'bank_balance' => $request->get('bank_balance'),
+    //         'center_id' => Auth::id()
+    //     ];
+
+    //     $generalInfo = GeneralInfo::updateOrCreate(['id' => $id], $data);
+
+    //     if($request->get('id')) {
+    //         if($request->hasFile('receipt')) {
+
+    //             Storage::disk('s3')->delete($generalInfo->bank_statement_receipt);
+
+    //             // Getting the file
+    //             $receipt = $request->file('receipt');
+    //             // File name
+    //             $center = Center::find(Auth::user()->id);
+    
+    //             if($center->type == Center::CENTER) 
+    //                 $file_name = $center->code . '_' .$receipt->getClientOriginalName();
+    //             else
+    //                 $file_name = $receipt->getClientOriginalName();
+    
+    //             // Storing file to S3
+    //             $receipt->storeAs('receipts', $file_name, 's3');
+    
+    //             $data['bank_statement_receipt'] = $file_name;
+    //         }
+
+    //     }
+
+    //     if($request->hasFile('receipt')) {
+
+    //         // Getting the file
+    //         $receipt = $request->file('receipt');
+    //         // File name
+    //         $center = Center::find(Auth::user()->id);
+
+    //         if($center->type == Center::CENTER) 
+    //             $file_name = $center->code . $receipt->getClientOriginalName();
+    //         else
+    //             $file_name = $receipt->getClientOriginalName();
+
+    //         // Storing file to S3
+    //         $receipt->storeAs('receipts', $file_name, 's3');
+
+    //         $data['bank_statement_receipt'] = $file_name;
+    //     }
+
+    //     // Storing General info's status
+    //     $generalInfo->statuses()->updateOrCreate(
+    //         ['status_id' => $id, 'status' => Status::NOTCONFIRMED, 'status_type' => GeneralInfo::class]
+    //     );
+
+    //     return $this->getAction($request->get('button_action'));
+    // }
+
     public function store(StoreGeneralInfoRequest $request) {
 
-        // Id
-        $id = $request->get('id');
-
         $data = [
-            'id' => $id,
             'jalaliMonth' => $request->get('jalaliMonth'),
             'jalaliYear' => $request->get('jalaliYear'),
             'bank_balance' => $request->get('bank_balance'),
-            'center_id' => Auth::id()
+            'center_id' => Auth::id(),
         ];
-
-        if($request->hasFile('receipt')) {
-
-            // Getting the file
-            $receipt = $request->file('receipt');
-            // File name
-            $center = Center::find(Auth::user()->id);
-
-            if($center->type == Center::CENTER) 
-                $file_name = $center->code . $receipt->getClientOriginalName();
-            else
-                $file_name = $receipt->getClientOriginalName();
-
-            // Storing file to S3
-            $receipt->storeAs('receipts', $file_name, 's3');
-
-            $data['bank_statement_receipt'] = $file_name;
-        }
-
-        $generalInfo = GeneralInfo::updateOrCreate(['id' => $id], $data);
-
-        // Storing General info's status
+    
+        // Combine logic for handling receipt upload
+        $this->handleReceiptUpload($request, $data);
+    
+        $generalInfo = GeneralInfo::updateOrCreate(['id' => $request->get('id')], $data);
+    
+        // Update General info's status (can be optimized further)
         $generalInfo->statuses()->updateOrCreate(
-            ['status_id' => $id, 'status' => Status::NOTCONFIRMED, 'status_type' => GeneralInfo::class]
+            ['status_id' => $generalInfo->id, 'status' => Status::NOTCONFIRMED, 'status_type' => GeneralInfo::class]
         );
-
+    
         return $this->getAction($request->get('button_action'));
     }
+    
+    private function handleReceiptUpload(StoreGeneralInfoRequest $request, &$data) {
+        if ($request->hasFile('receipt')) {
+            $receipt = $request->file('receipt');
+            $center = Center::find(Auth::user()->id);
+    
+            $fileName = $center->type === Center::CENTER ?
+                $center->code . '_' . $receipt->getClientOriginalName() :
+                $receipt->getClientOriginalName();
+    
+            if ($request->get('id')) {
+                Storage::disk('s3')->delete($generalInfo->bank_statement_receipt);
+            }
+    
+            $receipt->storeAs('receipts', $fileName, 's3');
+            $data['bank_statement_receipt'] = $fileName;
+        }
+    }
+    
     
     // Edit
     public function edit(Request $request) {

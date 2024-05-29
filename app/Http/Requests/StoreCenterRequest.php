@@ -4,10 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
-use App\Providers\EnglishConvertion;
+use App\Providers\Convertor;
 
 
-// برای ماه و سال انتخاب شده، صورتحساب قبلا ثبت شده است
 class StoreCenterRequest extends FormRequest
 {
     /**
@@ -52,10 +51,10 @@ class StoreCenterRequest extends FormRequest
     protected function prepareForValidation()
     {
         // English convertion
-        $englishConvertion = new EnglishConvertion();
+        $convertor = new Convertor();
 
         $this->merge([
-            'phone_number' => $englishConvertion->convert($this->input('phone_number'))
+            'phone_number' => $convertor->englishToPersianNumbers($this->input('phone_number'))
         ]);
     }
 }

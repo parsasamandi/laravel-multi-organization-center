@@ -14,6 +14,7 @@ class RequestHandler {
         $('#action').val('تایید');
         $('#form_output').html('');
         $(window.formId)[0].reset();
+        window.dt.clear().draw();
     }
 
     // Insertion

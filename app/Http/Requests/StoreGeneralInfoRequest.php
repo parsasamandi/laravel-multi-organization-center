@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Providers\Convertor;
 use Auth;
 
 class StoreGeneralInfoRequest extends FormRequest
@@ -59,9 +60,14 @@ class StoreGeneralInfoRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
+    public function prepareForValidation()
     {
-        // Custom preparation logic if needed
+        // English convertion
+        $convertor = new Convertor();
+
+        $this->merge([
+            'bank_balance' => $convertor->persianToEnglishDecimal($this->input('bank_balance'))
+        ]);
     }
 
     /**

@@ -12,7 +12,7 @@
   </x-header>
 
   {{-- Insertion --}}
-  <x-admin.insert size="modal-l" formId="reportForm">
+  <x-admin.insert size="modal-lg" formId="reportForm">
     <x-slot name="content">
       {{-- Form --}}
       <div class="row">
@@ -30,11 +30,11 @@
           class="col-md-6 mb-3" />
 
         <!-- Range -->
-        <x-input key="range" placeholder="ردیف های هزینه"
+        <x-input key="range" placeholder="ردیف های هزینه (لطفا با ویرگول جدا گردد)"
           class="col-md-6 mb-3" />
 
         <!-- Type -->
-        <div class="col-md-12 mb-3">
+        <div class="col-md-6 mb-3">
           @include('includes.report.type')
         </div>
 
@@ -94,11 +94,14 @@
         method: 'get',
         data: { id: url },
         success: function (data) {  
+          console.log(data);
           action.editOnSuccess(url);
-          $('#expenses').val(data.expenses);
-          $('#range').val(data.range);
-          $('#type').val(data.type).trigger('change');
-          $('#description').val(data.description);
+          $('#jalaliMonth').val(data.generalInfo.jalaliMonth).trigger('change');
+          $('#jalaliYear').val(data.generalInfo.jalaliYear).trigger('change');
+          $('#type').val(data.report.type).trigger('change');
+          $('#expenses').val(data.report.expenses);
+          $('#range').val(data.report.range);
+          $('#description').val(data.report.description);
         }
       })
     }

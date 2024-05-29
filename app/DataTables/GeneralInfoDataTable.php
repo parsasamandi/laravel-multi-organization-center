@@ -8,6 +8,7 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\Auth;
+use App\Providers\Action;
 use App\Models\Center;
 use Storage;
 
@@ -37,8 +38,8 @@ class GeneralInfoDataTable extends DataTable
                 return $center->name;
             })
             ->filterColumn('center_name', function ($query, $keyword) {
-                return $query->whereHas('center', function ($q) use ($keyword) {
-                    $q->where('name', 'like', "%{$keyword}%");
+                $query->whereHas('center', function ($q) use ($keyword) {
+                    $q->where('name', 'like', '%' . $keyword . '%');
                 });
             })
             ->addColumn('date', function(GeneralInfo $generalInfo) {
@@ -47,27 +48,25 @@ class GeneralInfoDataTable extends DataTable
                     $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
             })
             ->filterColumn('date', function ($query, $keyword) {
-
-                // $jalaliMonths = [
-                //     "فروردین" => 1,
-                //     "اردیبهشت" => 2,
-                //     "خرداد" => 3,
-                //     "تیر" => 4,
-                //     "مرداد" => 5,
-                //     "شهریور" => 6,
-                //     "مهر" => 7,
-                //     "آبان" => 8,
-                //     "آذر" => 9,
-                //     "دی" => 10,
-                //     "بهمن" => 11,
-                //     "اسفند" => 12
-                // ];
-
-                // return $query->where('jalaliYear', 'LIKE', "%{$keyword}%")
-                //     ->orWhere('jalaliMonth', 'LIKE', "%{$jalaliMonths}%");
-                
-
-            })
+                // Split the keyword into year and month
+                $parts = explode(' ', $keyword);
+            
+                // Check if $parts has at least two elements
+                if (count($parts) >= 2) {
+                    $jalaliYear = $parts[0];
+                    $jalaliMonthString = $parts[1]; // Assuming the month is provided as a string like "فروردین", "اردیبهشت", etc.
+            
+                    $action = new Action();
+                    // Map Jalali month name to its corresponding number
+                    $jalaliMonth = $action->jalaliMonthConvertor($jalaliMonthString);
+                    
+                    // Query for records matching the provided year and month
+                    $query->whereHas('generalInfo', function ($query) use ($jalaliYear, $jalaliMonth) {
+                        $query->where('jalaliYear', $jalaliYear)
+                              ->where('jalaliMonth', $jalaliMonth);
+                    });
+                } 
+            })            
             ->orderColumn('date', function ($query, $direction) {
                 $query->orderBy('jalaliYear', $direction)
                       ->orderBy('jalaliMonth', $direction);
@@ -83,7 +82,7 @@ class GeneralInfoDataTable extends DataTable
                 $presignedUrl = Storage::disk('s3')->temporaryUrl('receipts/' . $generalInfo->bank_statement_receipt, now()->addHours(1));
                 
                 // Return a link to the file
-                return '<a href="' . $presignedUrl . '" target="_blank">بارگیری</a>';
+                return '<a href="' . $presignedUrl . '" target="_blank">دانلود</a>';
 
             })->addColumn('status', function(GeneralInfo $generalInfo) {
 

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use App\Providers\EnglishConvertion;
+use App\Providers\Convertor;
 
 class StoreReportRequest extends FormRequest
 {
@@ -65,14 +65,14 @@ class StoreReportRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
+    public function prepareForValidation()
     {
         // English convertion
-        $englishConvertion = new EnglishConvertion();
+        $convertor = new Convertor();
 
         $this->merge([
-            'range' => $englishConvertion->convert($this->input('range')),
-            'expenses' => $englishConvertion->convert($this->input('expenses'))
+            'range' => $convertor->persianToEnglishDecimal($this->input('range')),
+            'expenses' => $convertor->persianToEnglishDecimal($this->input('expenses'))
         ]);
     }
 

@@ -5,7 +5,7 @@
 
 @php
     // $action is an instance of the Action class
-    $action = new \App\Providers\Action();
+    $convertor = new \App\Providers\Convertor();
 @endphp
 
 <div class="container-fluid mt-3 right-text">
@@ -23,10 +23,10 @@
         <!-- Table data -->
         <x-slot name="tableData">
             <td>{{ Auth::user()->name }}</td>
-            <td>{{ $action->englishToPersianNumbers($generalInfo->jalaliYear) }}</td>
+            <td>{{ $convertor->englishToPersianDecimal($generalInfo->jalaliYear) }}</td>
              <!-- Jalali months -->
-            <td>{{ $action->jalaliMonth($generalInfo->jalaliMonth) }}</td>
-            <td>{{ $action->englishToPersianNumbers($generalInfo->bank_balance) }}</td>
+            <td>{{ $convertor->numberTojalaliMonth($generalInfo->jalaliMonth) }}</td>
+            <td>{{ $convertor->englishToPersianDecimal($generalInfo->bank_balance) }}</td>
             <td>
                 <a href="{{ Storage::disk('s3')->temporaryUrl('receipts/' . 
                         $generalInfo->bank_statement_receipt, now()->addHours(1)) }}" download>دانلود</a>

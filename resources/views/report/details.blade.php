@@ -5,7 +5,7 @@
 
 @php
     // $action is an instance of the Action class
-    $action = new \App\Providers\Action();
+    $convertor = new \App\Providers\Convertor();
 @endphp
 
 
@@ -29,9 +29,9 @@
             <!-- Center name -->
             <td>{{ Auth::user()->name }}</td>
             <!-- Expenses -->
-            <td>{{ $action->englishToPersianNumbers($report->expenses) }}</td>
+            <td>{{ $convertor->englishToPersianDecimal($report->expenses) }}</td>
             <!-- Range -->
-            <td>{{ $action->englishToPersianNumbers($report->range) }}</td>
+            <td>{{ $convertor->englishToPersianDecimal($report->range) }}</td>
 
             <!-- Type -->
             @switch($report->type)
@@ -47,10 +47,10 @@
             @endswitch
 
             <!-- Jalali months -->
-            <td>{{ $report->generalInfo->jalaliMonth }}</td>
+            <td>{{ $action->numberTojalaliMonth($report->generalInfo->jalaliMonth) }}</td>
 
             <!-- Jalali Year -->
-            <td>{{ $action->englishToPersianNumbers($report->generalInfo->jalaliYear) }}</td>
+            <td>{{ $action->englishToPersianDecimal($report->generalInfo->jalaliYear) }}</td>
 
             <!-- Receipt -->
             <td>

@@ -37,7 +37,7 @@
   </x-admin.insert>
 
   {{-- Delete --}}
-  <x-admin.delete title="'صورتحساب'" />
+  <x-admin.delete title="صورتحساب" />
 
 @endsection
 
