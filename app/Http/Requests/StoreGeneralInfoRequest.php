@@ -78,7 +78,7 @@ class StoreGeneralInfoRequest extends FormRequest
     public function messages()
     {
         return [
-            'receipt.required' => 'پیوست فایل رسید الزامی است.',
+            'receipt.required' => 'پیوست فایل صورتحساب بانکی الزامی است.',
             'jalaliMonth.unique' => 'این ماه برای سال انتخاب شده قبلا وارد شده است.',
         ];
     }

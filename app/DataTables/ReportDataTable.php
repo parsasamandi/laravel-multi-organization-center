@@ -71,13 +71,11 @@ class ReportDataTable extends DataTable
                         return 'هزینه های سلامت';
                 }
             })->addColumn('status', function(Report $report) {
-                if($report->statuses->status != null) {
-                    switch($report->statuses->status) {
-                        case 0:
-                            return 'تایید نشده';
-                        case 1:
-                            return 'تایید شده';
-                    }
+                switch($report->statuses->status) {
+                    case 0:
+                        return 'تایید نشده';
+                    case 1:
+                        return 'تایید شده';
                 }
             })
             ->addColumn('action', function (Report $report) {

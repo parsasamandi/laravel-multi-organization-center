@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use App\Providers\Convertor;
 
-
 class StoreCenterRequest extends FormRequest
 {
     /**
@@ -48,13 +47,13 @@ class StoreCenterRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
+    public function prepareForValidation()
     {
         // English convertion
         $convertor = new Convertor();
 
         $this->merge([
-            'phone_number' => $convertor->englishToPersianNumbers($this->input('phone_number'))
+            'phone_number' => $convertor->persianToEnglishDecimal($this->input('phone_number'))
         ]);
     }
 }

@@ -30,7 +30,7 @@
           class="col-md-6 mb-3" />
 
         <!-- Range -->
-        <x-input key="range" placeholder="ردیف های هزینه (لطفا با ویرگول جدا گردد)"
+        <x-input key="range" placeholder="ردیف های هزینه در صورتحساب بانکی (لطفا با ویرگول جدا گردد)"
           class="col-md-6 mb-3" />
 
         <!-- Type -->

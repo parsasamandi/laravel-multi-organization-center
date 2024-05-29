@@ -19,7 +19,6 @@ class StoreReportRequest extends FormRequest
         $rules = [
             'expenses' => 'required|numeric',
             'range' => 'required',
-            'description' => 'required',
             'type' => [
                 'required',
                 Rule::unique('reports')

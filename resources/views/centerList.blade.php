@@ -32,7 +32,14 @@
       <div class="row">
         <!-- Center name -->
         <x-input key="name" placeholder="نام مرکز" 
-          class="col-md-12 mb-3" />
+          class="col-md-6 mb-3" />
+
+        <!-- Center code -->
+        <x-input key="name" placeholder="کد مرکز" 
+          class="col-md-6 mb-3" />
+
+        <x-input key="name" placeholder="نام مرکز" 
+          class="col-md-6 mb-3" />
 
         <!-- Email -->
         <x-input key="email" placeholder="ایمیل مرکز"
@@ -44,10 +51,10 @@
 
         <!-- Type -->
         <div class="col-md-12 mb-2">
-          <label for="type">نوع ادمین:</label>
+          <label for="type">نوع کاربر:</label>
           <select id="type" name="type">
             <option value="0">مرکز</option>
-            <option value="1">تیم گلستان</option>
+            <option value="1">ادمین (گلستان)</option>
           </select>
         </div>
 

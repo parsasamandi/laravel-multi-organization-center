@@ -58,7 +58,7 @@ class GeneralInfoDataTable extends DataTable
             
                     $action = new Action();
                     // Map Jalali month name to its corresponding number
-                    $jalaliMonth = $action->jalaliMonthConvertor($jalaliMonthString);
+                    $jalaliMonth = $action->numberTojalaliMonth($jalaliMonthString);
                     
                     // Query for records matching the provided year and month
                     $query->whereHas('generalInfo', function ($query) use ($jalaliYear, $jalaliMonth) {
