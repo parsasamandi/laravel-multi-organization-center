@@ -7,9 +7,6 @@
   <div class="container-fluid mt-3 right-text">
     {{-- List --}}
     <h2 class="mt-4">فهرست مرکز</h2>
-    <ol class="breadcrumb mb-4 right-text">
-        <li class="breadcrumb-item">صفحه مرکز</li>
-    </ol>
 
     {{-- Conditional rendering based on user type --}}
     @if(Auth::user()->type == 1)
@@ -26,7 +23,7 @@
 
 
   {{-- Insertion --}}
-  <x-admin.insert size="modal-l" formId="centerForm">
+  <x-admin.insert size="modal-lg" formId="centerForm">
     <x-slot name="content">
       {{-- Form --}}
       <div class="row">
@@ -43,14 +40,14 @@
 
         <!-- Email -->
         <x-input key="email" placeholder="ایمیل مرکز"
-          class="col-md-12 mb-3" />
+          class="col-md-6 mb-3" />
 
         <!-- Phone number -->
         <x-input key="phone_number" placeholder="شماره تلفن"
-          class="col-md-12 mb-3" />
+          class="col-md-6 mb-3" />
 
         <!-- Type -->
-        <div class="col-md-12 mb-2">
+        <div class="col-md-6 mb-2">
           <label for="type">نوع کاربر:</label>
           <select id="type" name="type">
             <option value="0">مرکز</option>
@@ -59,13 +56,13 @@
         </div>
 
         {{-- Passwords --}}
-        <div class="col-md-12 mb-3">
+        <div class="col-md-6 mb-3">
           <label for="password">رمز جدید:</label>
           <input type="password" name="password" id="password" class="form-control" 
             placeholder="رمز جدید" autocomplete="new-password">
         </div>
 
-        <div class="col-md-12">
+        <div class="col-md-6">
           <label for="password-confirm">تکرار رمز جدید:</label>
           <input type="password" name="password-confirm" id="password-confirm" class="form-control"  
             placeholder="تکرار رمز جدید" autocomplete="new-password">

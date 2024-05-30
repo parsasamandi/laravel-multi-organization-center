@@ -44,6 +44,7 @@ class CenterController extends Controller
 
         $data = [
             'name' => $request->get('name'),
+            'code' => $request->get('code'),
             'phone_number' => $request->get('phone_number'), 
             'email' => $request->get('email'), 
             'password' => Hash::make($request->get('password'))

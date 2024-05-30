@@ -77,7 +77,8 @@ class RequestHandler {
 
 // Success
 function success(data) {
-    $('#form_output').html(data.message);
+    $('#formModal').modal('hide');
+    $('#successModal').modal('show');
     $(window.formId)[0].reset();
     if(window.dt != null) {
         window.dt.draw(false);

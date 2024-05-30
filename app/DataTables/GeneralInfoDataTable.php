@@ -74,9 +74,6 @@ class GeneralInfoDataTable extends DataTable
             ->editColumn('bank_balance', function(GeneralInfo $generalInfo) {
                 return $this->dataTable->englishToPersianNumbers($generalInfo->bank_balance);
             })
-            ->editColumn('bank_balance', function(GeneralInfo $generalInfo) {
-                return $this->dataTable->englishToPersianNumbers($generalInfo->bank_balance);
-            })
             ->editColumn('bank_statement_receipt', function(GeneralInfo $generalInfo) {
                 // Get the URL for the file from S3 storage
                 $presignedUrl = Storage::disk('s3')->temporaryUrl('receipts/' . $generalInfo->bank_statement_receipt, now()->addHours(1));

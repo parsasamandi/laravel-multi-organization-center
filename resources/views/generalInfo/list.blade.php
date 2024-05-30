@@ -3,8 +3,10 @@
 
 @section('content')
 
+  @include('includes.successModal')
+
   {{-- Header --}}
-  <x-header pageName="صورتحساب" pageDescription="صورتحساب" buttonValue="صورتحساب جدید">
+  <x-header pageName="صورتحساب" buttonValue="صورتحساب جدید">
     <x-slot name="table">
       <x-table :table="$generalInfoTable" />
     </x-slot>
@@ -80,7 +82,7 @@
           action.editOnSuccess(url);
           $('#bank_balance').val(data.bank_balance);
           $('#jalaliMonth').val(data.jalaliMonth).trigger('change');
-          $('#jalaliYear').val(data.jalaliYear).trigeer('change');
+          $('#jalaliYear').val(data.jalaliYear).trigger('change');
         }
       })
     }

@@ -48,6 +48,12 @@ class ReportDataTable extends DataTable
                           ->orWhere('jalaliMonth', 'LIKE', "%{$keyword}%");
                 });
             })
+            ->orderColumn('date', function ($query, $direction) {
+                $query->join('general_infos', 'reports.general_info_id', '=', 'general_infos.id')
+                      ->orderBy('general_infos.jalaliYear', $direction)
+                      ->orderBy('general_infos.jalaliMonth', $direction)
+                      ->select('reports.*'); // Ensure only columns from the reports table are selected
+            })
             ->editColumn('expenses', function(Report $report) {
                 return $this->dataTable->englishToPersianNumbers($report->expenses);
             })
@@ -123,25 +129,25 @@ class ReportDataTable extends DataTable
                 ->title('نام مرکز')
                 ->searchable(true)
                 ->orderable(false),
+            Column::computed('date')
+                ->title('تاریخ')
+                ->searchable(true)
+                ->orderable(true),
+            Column::make('type')
+                ->title('نوع هزینه')
+                ->orderable(true)
+                ->searchable(true),
             Column::make('expenses')
                 ->title('مبلغ هزینه')
                 ->orderable(true)
                 ->searchable(true),
             Column::make('range')
-                ->title('ردیف هزینه ها')
+                ->title('ردیف درصورتحساب')
                 ->orderable(false)
                 ->searchable(false),
             Column::make('receipt')
-                ->title('رسید')
+                ->title('فاکتور')
                 ->orderable(false),
-            Column::make('type')
-                ->title('نوع هزینه')
-                ->orderable(true)
-                ->searchable(true),
-            Column::computed('date')
-                ->title('تاریخ')
-                ->searchable(true)
-                ->orderable(true),
             Column::computed('status')
                 ->title('وضعیت')
                 ->orderable(false)

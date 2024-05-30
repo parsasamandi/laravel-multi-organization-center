@@ -106,6 +106,7 @@ class GeneralInfoController extends Controller
     //     return $this->getAction($request->get('button_action'));
     // }
 
+    // Insert or Update
     public function store(StoreGeneralInfoRequest $request) {
 
         $data = [
@@ -128,7 +129,8 @@ class GeneralInfoController extends Controller
         return $this->getAction($request->get('button_action'));
     }
     
-    private function handleReceiptUpload(StoreGeneralInfoRequest $request, &$data) {
+    public function handleReceiptUpload(StoreGeneralInfoRequest $request, &$data) {
+        
         if ($request->hasFile('receipt')) {
             $receipt = $request->file('receipt');
             $center = Center::find(Auth::user()->id);
@@ -145,7 +147,6 @@ class GeneralInfoController extends Controller
             $data['bank_statement_receipt'] = $fileName;
         }
     }
-    
     
     // Edit
     public function edit(Request $request) {

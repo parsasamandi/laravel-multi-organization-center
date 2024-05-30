@@ -33,6 +33,6 @@ class Controller extends BaseController
 
     // Get update message
     public function getUpdateMessage() {
-        return '<div class="alert alert-success">اطلاعات با موفقیت ویرایش شد</div>';
+        return '<div class="alert alert-success">اطلاعات جدید با موفقیت ثبت شد</div>';
     }
 }
