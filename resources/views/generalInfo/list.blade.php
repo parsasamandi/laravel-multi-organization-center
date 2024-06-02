@@ -6,7 +6,7 @@
   @include('includes.successModal')
 
   {{-- Header --}}
-  <x-header pageName="صورتحساب" buttonValue="صورتحساب جدید">
+  <x-header pageName="صورتحساب بانکی" buttonValue="صورتحساب جدید">
     <x-slot name="table">
       <x-table :table="$generalInfoTable" />
     </x-slot>
@@ -26,10 +26,10 @@
         </div>
 
         <x-input type="number" key="bank_balance" placeholder="موجودی در پایان ماه (ریال)" 
-          class="col-md-12 mb-3"/>
+          class="col-md-12 mb-3" required="true"/>
       </div>
       <!-- File -->
-      <h6>پیوست فایل صورتحساب بانکی</h6>
+      <h6 class="required-heading">پیوست فایل صورتحساب بانکی <span class="input-required">*</span></h6>
       <input type="file" id="file" name="receipt" class="mb-3" 
         accept=".pdf,.doc,.docx,.csv,application/msword,application/
         vnd.openxmlformats-officedocument.wordprocessingml.document,application/

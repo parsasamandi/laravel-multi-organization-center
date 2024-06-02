@@ -47,10 +47,10 @@
             @endswitch
 
             <!-- Jalali months -->
-            <td>{{ $action->numberTojalaliMonth($report->generalInfo->jalaliMonth) }}</td>
+            <td>{{ $convertor->numberTojalaliMonth($report->generalInfo->jalaliMonth) }}</td>
 
             <!-- Jalali Year -->
-            <td>{{ $action->englishToPersianDecimal($report->generalInfo->jalaliYear) }}</td>
+            <td>{{ $convertor->englishToPersianDecimal($report->generalInfo->jalaliYear) }}</td>
 
             <!-- Receipt -->
             <td>

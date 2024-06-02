@@ -76,11 +76,14 @@ class CenterDataTable extends DataTable
             Column::make('code')
                 ->title('کد مرکز'),
             Column::make('name')
-                ->title('نام مرکز'),
+                ->title('نام مرکز')
+                ->orderable(false),
             Column::make('email')
-                ->title('ایمیل'),
+                ->title('ایمیل')
+                ->orderable(false),
             Column::make('phone_number')
-                ->title('شماره تلفن'),
+                ->title('شماره تلفن')
+                ->orderable(false),
             $this->dataTable->setActionCol()
         ];
     }

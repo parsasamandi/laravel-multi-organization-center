@@ -60,17 +60,16 @@ class ReportController extends Controller
         $jalaliYear = $request->get('jalaliYear');
         $jalaliMonth = $request->get('jalaliMonth');
     
-        // Check general info existence based on center type
+        // Getting general_info_id
         $generalInfo = GeneralInfo::where(function ($query) use ($center, $jalaliYear, $jalaliMonth) {
             if ($center->type == Center::CENTER) {
-                $query->where('center_id', $center->id);
-            }
-            $query->where('jalaliYear', $jalaliYear)->where('jalaliMonth', $jalaliMonth);
+                $query->where('center_id', $center->id)
+                    ->where('jalaliMonth', $jalaliMonth)
+                    ->where('jalaliYear', $jalaliYear);
+            } 
+            $query->where('jalaliMonth', $jalaliMonth)
+                ->where('jalaliYear', $jalaliYear);
         })->first();
-    
-        if (!$generalInfo) {
-            return response()->json(['success' => false, 'message' => '<div class="alert alert-danger">برای سال و ماه انتخاب شده، گزارش صورتحساب قبلا وارد نشده است. لطفا ابتدا گزارش صورتحساب را برای این تاریخ وارد نمایید.</div>']);
-        }
     
         $data['general_info_id'] = $generalInfo->id;
     

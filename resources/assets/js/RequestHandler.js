@@ -13,6 +13,7 @@ class RequestHandler {
         $('#button_action').val('insert');
         $('#action').val('تایید');
         $('#form_output').html('');
+        $('.required-heading .input-required').show();
         $(window.formId)[0].reset();
         window.dt.clear().draw();
     }
@@ -72,6 +73,8 @@ class RequestHandler {
         $('#id').val(id);
         $('#button_action').val('update');
         $('#action').val('ویرایش');
+        // Remove "required field" from heading
+        $('.required-heading .input-required').hide();
     }
 }
 
@@ -79,6 +82,7 @@ class RequestHandler {
 function success(data) {
     $('#formModal').modal('hide');
     $('#successModal').modal('show');
+    // $('#form_output').html(data.message);
     $(window.formId)[0].reset();
     if(window.dt != null) {
         window.dt.draw(false);

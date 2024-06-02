@@ -75,7 +75,17 @@ class ReportDataTable extends DataTable
                         return 'هزینه آموزش';
                     case 2:
                         return 'هزینه های سلامت';
+                    case 3: 
+                        return 'هزینه های غذا';
+                    case 4: 
+                        return 'هزینه های پوشاک';
+                    case 5:
+                        return 'هزینه های دیگر یک';
+                    case 6:
+                        return 'هزینه های دیگر دو';
                 }
+            })->orderColumn('type', function ($query, $direction) {
+                $query->orderBy('type', $direction);
             })->addColumn('status', function(Report $report) {
                 switch($report->statuses->status) {
                     case 0:

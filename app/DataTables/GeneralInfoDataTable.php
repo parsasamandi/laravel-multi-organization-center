@@ -141,7 +141,8 @@ class GeneralInfoDataTable extends DataTable
                 ->searchable(true)
                 ->orderable(false),
             Column::make('bank_statement_receipt')
-                ->title('صورتحساب بانکی'),
+                ->title('صورتحساب بانکی')
+                ->orderable(false),
             Column::make('bank_balance')
                 ->title('موجودی حساب'),
             Column::computed('date')

@@ -11,6 +11,7 @@ class input extends Component
     public $placeholder;
     public $value;
     public $class;
+    public $required;
 
     /**
      * Create a new component instance.
@@ -18,13 +19,14 @@ class input extends Component
      * @return void
      */
     public function __construct($key, $placeholder = null, $type = 'text', 
-                                $value = null, $class = null)
+                                $value = null, $class = null, $required = null)
     {
         $this->type = $type;
         $this->key = $key;
         $this->placeholder = $placeholder;
         $this->value = $value;
         $this->class = $class;
+        $this->required = $required;
     }
 
     /**

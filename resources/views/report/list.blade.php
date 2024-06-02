@@ -6,7 +6,7 @@
   @include('includes.successModal')
 
   {{-- Header --}}
-  <x-header pageName="هزینه ها" 
+  <x-header pageName="هزینه‌ها" 
     buttonValue="گزارش هزینه">
     <x-slot name="table">
       <x-table :table="$reportTable" />
@@ -18,6 +18,7 @@
     <x-slot name="content">
       {{-- Form --}}
       <div class="row">
+        {{-- Conditional rendering based on the user type --}}
         <!-- Date -->
         <div class="col-md-6 mb-3">
           @include('includes.jalaliYearsSelectBox')
@@ -29,22 +30,26 @@
 
         <!-- Expenses -->
         <x-input key="expenses" placeholder="مبلغ هزینه (ریال)"
-          class="col-md-6 mb-3" />
+          class="col-md-6 mb-3" required="true" />
 
         <!-- Type -->
         <div class="col-md-6 mb-3">
           <!-- Type -->
-          <label for="type">نوع هزینه:</label>
+          <label for="type">نوع هزینه: <span class="input-required">*</span> </label>
           <select id="type" name="type">
               <option value="0">هزینه حقوق کارمندان</option>
               <option value="1">هزینه آموزش</option>
               <option value="2">هزینه های سلامت</option>
+              <option value="3">هزینه های غذا</option>
+              <option value="4">هزینه های پوشاک</option>
+              <option value="5">هزینه های دیگر یک</option>
+              <option value="6">هزینه های دیگر دو</option>
           </select>
         </div>
 
         <!-- Range -->
         <x-input key="range" placeholder="ردیف های هزینه در صورتحساب بانکی (لطفا با ویرگول جدا گردد)"
-          class="col-md-12 mb-3" />
+          class="col-md-12 mb-3" required="true" />
 
 
         {{-- Description --}}
@@ -52,7 +57,7 @@
       </div>
 
       <!-- File -->
-      <h6>پیوست نمودن فایل فاکتور</h6>
+      <h6 class="required-heading">پیوست نمودن فایل فاکتور <span class="input-required">*</span></h6>
       <input type="file" id="file" name="receipt" class="mb-3"
         accept=".pdf,.doc,.docx,.csv,application/msword,application/
         vnd.openxmlformats-officedocument.wordprocessingml.document,application/
@@ -103,7 +108,6 @@
         method: 'get',
         data: { id: url },
         success: function (data) {  
-          console.log(data);
           action.editOnSuccess(url);
           $('#jalaliMonth').val(data.generalInfo.jalaliMonth).trigger('change');
           $('#jalaliYear').val(data.generalInfo.jalaliYear).trigger('change');

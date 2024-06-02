@@ -3,70 +3,60 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Providers\Convertor;
+use App\Http\Requests\Rules\GeneralInfoExists;
+use App\Http\Requests\Rules\CommaSeparatedNumbers;
 
 class StoreReportRequest extends FormRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules(Request $request)
+    public function rules()
     {
         $rules = [
             'expenses' => 'required|numeric',
-            'range' => 'required',
+            'range' => [
+                'required',
+                'numeric', // Ensures all characters are numbers
+            ],
+            'jalaliMonth' => ['required', new GeneralInfoExists($this->get('jalaliYear'), $this->get('jalaliMonth'))],
+            'jalaliYear' => ['required'],
             'type' => [
                 'required',
                 Rule::unique('reports')
-                    ->where(function ($query) use ($request) {
-                        $jalaliYear = $request->get('jalaliYear');
-                        $jalaliMonth = $request->get('jalaliMonth');
+                    ->where(function ($query) {
+                        $jalaliYear = $this->input('jalaliYear');
+                        $jalaliMonth = $this->input('jalaliMonth');
 
                         $query->where('general_info_id', function ($subQuery) use ($jalaliYear, $jalaliMonth) {
                             $subQuery->select('id')
-                                ->from('general_infos')
-                                ->where('jalaliYear', $jalaliYear)
-                                ->where('jalaliMonth', $jalaliMonth);
+                                     ->from('general_infos')
+                                     ->where('jalaliYear', $jalaliYear)
+                                     ->where('jalaliMonth', $jalaliMonth);
                         })
-                        ->where('type', $request->get('type'));
+                        ->where('type', $this->input('type'));
                     })
-                    ->ignore($request->get('id'), 'id')  // Ignore current record ID during update
+                    ->ignore($this->input('id'), 'id')  // Ignore current record ID during update
             ],
         ];
 
-        if (!$request->get('id')) {
+        if (!$this->input('id')) {
             $rules['receipt'] = 'required';
         }
 
         return $rules;
     }
 
-    /**
-     * Get custom attributes for validator errors.
-     *
-     * @return array
-     */
     public function attributes()
     {
         return [
             'receipt' => 'رسید',
             'expenses' => 'هزینه مبلغ',
-            'range' => 'ردیف های هزینه در صورتحساب',                       
+            'range' => 'ردیف های هزینه در صورتحساب',   
         ];
     }
 
-    /**
-     * Prepare the data for validation.
-     *
-     * @return void
-     */
-    public function prepareForValidation()
+    protected function prepareForValidation()
     {
-        // English convertion
         $convertor = new Convertor();
 
         $this->merge([
@@ -75,11 +65,6 @@ class StoreReportRequest extends FormRequest
         ]);
     }
 
-    /**
-     * Get the validation messages that apply to the request.
-     *
-     * @return array
-     */
     public function messages()
     {
         return [
@@ -88,4 +73,3 @@ class StoreReportRequest extends FormRequest
         ];
     }
 }
-
