@@ -1,12 +1,12 @@
 @extends('layouts.admin')
-@section('title', 'فهرست اطلاعات مرکز')
+@section('title', 'لیست اطلاعات مرکز')
 
 @section('content')
 
   {{-- Header --}}
   <div class="container-fluid mt-3 right-text">
     {{-- List --}}
-    <h2 class="mt-4">فهرست مرکز</h2>
+    <h2 class="mt-4">لیست مرکز</h2>
 
     {{-- Conditional rendering based on user type --}}
     @if(Auth::user()->type == 1)

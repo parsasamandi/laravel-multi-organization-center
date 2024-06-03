@@ -62,12 +62,8 @@ class ReportController extends Controller
     
         // Getting general_info_id
         $generalInfo = GeneralInfo::where(function ($query) use ($center, $jalaliYear, $jalaliMonth) {
-            if ($center->type == Center::CENTER) {
-                $query->where('center_id', $center->id)
-                    ->where('jalaliMonth', $jalaliMonth)
-                    ->where('jalaliYear', $jalaliYear);
-            } 
-            $query->where('jalaliMonth', $jalaliMonth)
+            $query->where('center_id', $center->id)
+                ->where('jalaliMonth', $jalaliMonth)
                 ->where('jalaliYear', $jalaliYear);
         })->first();
     

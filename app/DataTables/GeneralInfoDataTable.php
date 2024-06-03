@@ -8,7 +8,7 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\Auth;
-use App\Providers\Action;
+use App\Providers\Convertor;
 use App\Models\Center;
 use Storage;
 
@@ -48,24 +48,16 @@ class GeneralInfoDataTable extends DataTable
                     $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
             })
             ->filterColumn('date', function ($query, $keyword) {
-                // Split the keyword into year and month
-                $parts = explode(' ', $keyword);
-            
-                // Check if $parts has at least two elements
-                if (count($parts) >= 2) {
-                    $jalaliYear = $parts[0];
-                    $jalaliMonthString = $parts[1]; // Assuming the month is provided as a string like "فروردین", "اردیبهشت", etc.
-            
-                    $action = new Action();
-                    // Map Jalali month name to its corresponding number
-                    $jalaliMonth = $action->numberTojalaliMonth($jalaliMonthString);
-                    
-                    // Query for records matching the provided year and month
-                    $query->whereHas('generalInfo', function ($query) use ($jalaliYear, $jalaliMonth) {
-                        $query->where('jalaliYear', $jalaliYear)
-                              ->where('jalaliMonth', $jalaliMonth);
-                    });
-                } 
+                // Ensure Convertor class is available
+                $convertor = new Convertor();
+                // Map Jalali month name to its corresponding number
+                $jalaliMonth = $convertor->numberTojalaliMonth($keyword);
+                // Converting Persian numbers to English numbers
+                $jalaliYear = $convertor->persianToEnglishDecimal($keyword);
+                
+                // Query for records matching the provided year and month
+                $query->where('jalaliMonth', 'LIKE', "%{$jalaliMonth}%")
+                    ->orWhere('jalaliYear', 'LIKE', "%{$jalaliYear}%");
             })            
             ->orderColumn('date', function ($query, $direction) {
                 $query->orderBy('jalaliYear', $direction)
@@ -82,7 +74,6 @@ class GeneralInfoDataTable extends DataTable
                 return '<a href="' . $presignedUrl . '" target="_blank">دانلود</a>';
 
             })->addColumn('status', function(GeneralInfo $generalInfo) {
-
                 switch($generalInfo->statuses->status) {
                     case 0:
                         return 'تایید نشده';
@@ -91,7 +82,6 @@ class GeneralInfoDataTable extends DataTable
                         return 'تایید شده';
                         break;
                 }
-
             })
             ->addColumn('action', function(GeneralInfo $generalInfo) {
                 return $this->dataTable->setAction($generalInfo->id, 'generalInfo');

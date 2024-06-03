@@ -10,6 +10,7 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Center;
+use App\Providers\Convertor;
 use Storage;
 
 class ReportDataTable extends DataTable
@@ -43,9 +44,15 @@ class ReportDataTable extends DataTable
                         $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
                 }
             })->filterColumn('date', function ($query, $keyword) {
-                $query->whereHas('generalInfo', function ($query) use ($keyword) {
-                    $query->where('jalaliYear', 'LIKE', "%{$keyword}%")
-                          ->orWhere('jalaliMonth', 'LIKE', "%{$keyword}%");
+                // Convertor class
+                $convertor = new Convertor();
+
+                $query->whereHas('generalInfo', function ($query) use ($keyword, $convertor) {
+                    $jalaliMonth = $convertor->numberTojalaliMonth($keyword);
+                    $jalaliYear = $convertor->persianToEnglishDecimal($keyword);
+
+                    $query->where('jalaliMonth', 'LIKE', "%{$jalaliMonth}%")
+                        ->orWhere('jalaliYear', 'LIKE', "%{$jalaliYear}%");
                 });
             })
             ->orderColumn('date', function ($query, $direction) {

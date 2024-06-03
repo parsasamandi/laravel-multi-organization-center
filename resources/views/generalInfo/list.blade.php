@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'فهرست گزارشات موجودی و صورتحساب')
+@section('title', 'لیست گزارشات موجودی و صورتحساب')
 
 @section('content')
 

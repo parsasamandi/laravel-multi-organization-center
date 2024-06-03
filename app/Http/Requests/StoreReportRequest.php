@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 use App\Providers\Convertor;
 use App\Http\Requests\Rules\GeneralInfoExists;
 use App\Http\Requests\Rules\CommaSeparatedNumbers;
+use Auth;
 
 class StoreReportRequest extends FormRequest
 {
@@ -16,7 +17,6 @@ class StoreReportRequest extends FormRequest
             'expenses' => 'required|numeric',
             'range' => [
                 'required',
-                'numeric', // Ensures all characters are numbers
             ],
             'jalaliMonth' => ['required', new GeneralInfoExists($this->get('jalaliYear'), $this->get('jalaliMonth'))],
             'jalaliYear' => ['required'],
@@ -30,6 +30,7 @@ class StoreReportRequest extends FormRequest
                         $query->where('general_info_id', function ($subQuery) use ($jalaliYear, $jalaliMonth) {
                             $subQuery->select('id')
                                      ->from('general_infos')
+                                     ->where('center_id', Auth::user()->id)
                                      ->where('jalaliYear', $jalaliYear)
                                      ->where('jalaliMonth', $jalaliMonth);
                         })
@@ -70,6 +71,7 @@ class StoreReportRequest extends FormRequest
         return [
             'receipt.required' => 'پیوست فایل رسید الزامی است.',
             'type.unique' => 'نوع هزینه قبلا برای سال و ماه انتخاب شده وارد شده است.',
+            'range.regex' => 'نوع هزینه قبلا برای سال و ماه انتخاب شده وارد شده است.',
         ];
     }
 }
