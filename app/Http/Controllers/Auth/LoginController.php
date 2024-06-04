@@ -35,10 +35,10 @@ class LoginController extends Controller
             return redirect()->intended('/');
         }
             
-        return Redirect::back()->withErrors('رمز عبور یا شماره تلفن شما نادرست است');
+        return Redirect::back()->withErrors('رمز یا شماره تلفن شما نادرست است');
     }
     
-    //logout
+    // Logout
     public function logout(Request $request) {
         Auth::logout();
         return redirect('login');

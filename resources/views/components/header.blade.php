@@ -1,4 +1,4 @@
-<div class="container-fluid mt-3 right-text">
+<div class="container-fluid mt-3">
     {{-- List --}}
     <h2 class="mt-4">لیست {{ $pageName }}</h2>
 

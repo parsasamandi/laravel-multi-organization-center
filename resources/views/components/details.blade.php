@@ -1,8 +1,8 @@
+<!-- Details -->
+
 <div class="table-responsive">
-    {{-- List --}}
-    <ol class="breadcrumb mb-4 right-text">
-        <h5>جزئیات {{ $header ?? null }}</h5>
-    </ol>
+    <!-- Header -->
+    <h2 class="mt-2 mb-3">جزئیات {{ $header ?? null }}</h2>
 
     <div class="row">
         <div class="col-md-12">

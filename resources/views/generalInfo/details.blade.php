@@ -6,11 +6,15 @@
 @php
     // $action is an instance of the Action class
     $convertor = new \App\Providers\Convertor();
+
+    $jalaliMonth = $convertor->numberTojalaliMonthBlade($generalInfo->jalaliMonth);
+    $jalaliYear = $convertor->englishToPersianDecimal($generalInfo->jalaliYear);
+    $bankBalance = $convertor->englishToPersianDecimal($generalInfo->bank_balance);
 @endphp
 
-<div class="container-fluid mt-3 right-text">
+<div class="container-fluid mt-3">
 
-    <x-details tableId="generalInfoDetailsTable" header="یک ردیف از صورتحساب">
+    <x-details tableId="generalInfoDetailsTable" header="صورتحساب {{ $jalaliMonth }} {{ $jalaliYear }}">
         <!-- Table header -->
         <x-slot name="tableHeader">
             <th>نام مرکز</th>
@@ -23,10 +27,10 @@
         <!-- Table data -->
         <x-slot name="tableData">
             <td>{{ Auth::user()->name }}</td>
-            <td>{{ $convertor->englishToPersianDecimal($generalInfo->jalaliYear) }}</td>
+            <td>{{ $jalaliYear }}</td>
              <!-- Jalali months -->
-            <td>{{ $convertor->numberTojalaliMonth($generalInfo->jalaliMonth) }}</td>
-            <td>{{ $convertor->englishToPersianDecimal($generalInfo->bank_balance) }}</td>
+            <td>{{ $jalaliMonth }}</td>
+            <td>{{ $bankBalance }}</td>
             <td>
                 <a href="{{ Storage::disk('s3')->temporaryUrl('receipts/' . 
                         $generalInfo->bank_statement_receipt, now()->addHours(1)) }}" download>دانلود</a>

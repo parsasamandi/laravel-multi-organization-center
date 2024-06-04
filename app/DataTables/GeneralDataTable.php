@@ -77,7 +77,7 @@ class GeneralDataTable
                 ->searchable(false)
                 ->printable(false)
                 ->orderable(false)
-                ->title("حذف | ویرایش | جزئیات");
+                ->title("#");
     }
 
 

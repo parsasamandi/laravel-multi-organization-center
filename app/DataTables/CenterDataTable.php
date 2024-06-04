@@ -28,6 +28,9 @@ class CenterDataTable extends DataTable
             ->eloquent($query)
             ->addIndexColumn()
             ->rawColumns(['action'])
+            ->editColumn('name', function (Center $center) {
+                return ($center->type == Center::GOLESTANTEAM) ? $center->name . ' ' . 'تیم گلستان' : $center->name;
+            })
             ->addColumn('action', function (Center $center){
                 return $this->dataTable->setAction($center->id);
             })->editColumn('phone_number', function (Center $center) {

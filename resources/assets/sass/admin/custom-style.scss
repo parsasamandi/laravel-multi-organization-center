@@ -16,6 +16,15 @@ body {
     padding-right: 0px !important;
 }
 
+.btn-primary {
+    background-color: #1B9A57;
+    border-color: #1B9A57;
+
+    &:hover {
+        background-color: #17804A; /* Adjust the hover color as desired */
+    }
+}
+
 hr {
     margin-top: 0.5rem;
     margin-bottom: 1rem;
@@ -80,14 +89,6 @@ select {
     padding-bottom: 2em;
 }
 
-.btn-opaque {
-    background-color: #e9ecef;
-}
-
-.btn-opaque:hover {
-    background-color: #E2E6EA;
-}
-
 /* Background style  */
 .tableBackground {
     background-color: #e9ecef;
@@ -101,25 +102,6 @@ select {
     height: auto;
     width: 50%;
 }
-// Primary button
-// .btn-primary {
-//     background-color: #2DC997 !important;
-
-// }
-
-
-  
-/*------------------------------------ contacts-list ------------------------------------*/
-
-.contacts-list-img {
-    float: right;
-}
-
-.contacts-list-info {
-    margin-right: 45px;
-    margin-left: 0;
-}
-
 
 /* sidebar */
 
@@ -212,50 +194,6 @@ select {
     right:0;
 }
 
-/* Cards */
-
-.card-header>.card-tools {
-    right:auto;
-    left:1rem;
-}
-
-.user-block img {
-     float: right;
-}
-
-.attachment-block .attachment-img {
-    float: right;
-}
-
-.attachment-block .attachment-pushed {
-    margin-left: 0px;
-    margin-right: 110px;
-}
-
-.card-comments .card-comment img, .img-lg, .img-md, .img-sm, .user-block.user-block-sm img {
-    float: right;
-}
-
-.card-comments .comment-text {
-    margin-right: 40px;
-    margin-left: 0;
-}
-
-.card-comments .card-comment img+.img-push, .img-sm+.img-push, .user-block.user-block-sm img+.img-push {
-    margin-left: 0px;
-    margin-right: 40px;
-}
-
-.user-block .comment, .user-block .description, .user-block .username {
-    margin-right: 50px;
-    margin-left: 0px;
-}
-
-.btn-group-vertical {
-    align-items: center;
-}
-
-
 /*------------------------- Form ----------------------------*/
 .select2-container .select2-search--inline {
     float: right;
@@ -285,34 +223,35 @@ select {
 }
 
 /*----------------------- Extra Page ---------------------------*/
-.error-page>.headline {
-    float: right;
-}
+// .error-page>.headline {
+//     float: right;
+// }
 
-.error-page>.error-content {
-    margin-right: 190px;
-    margin-left: 0;
-}
+// .error-page>.error-content {
+//     margin-right: 190px;
+//     margin-left: 0;
+// }
 
-.lockscreen-image {
-    left: auto;
-    right:-10px;
-}
+// .lockscreen-image {
+//     left: auto;
+//     right:-10px;
+// }
 
-.lockscreen-credentials {
-    margin-left: 0px;
-    margin-right: 70px;
-}
+// .lockscreen-credentials {
+//     margin-left: 0px;
+//     margin-right: 70px;
+// }
 
-.nav {
-    padding-inline-start: 0px !important;
-}
+// .nav {
+//     padding-inline-start: 0px !important;
+// }
 
 /* ---------------------------------- Admin and DataTable ---------------------------------- */
 
-$datatable_color: #2DC997;
+$datatable_color: #1B9A57;
 
 .admin_panel {
+    background-color: #1B9A57 !important;
     text-align: center;
     padding: 10px;
     border-radius: 5px;
@@ -412,7 +351,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before,
     color: #FFFFFF;
     content: 'نمایش کامل سطر';
     border-radius: 100px;
-    background-color: #2DC997 !important;
+    background-color: #1B9A57 !important;
 }
 
 table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td.dtr-control:before, 

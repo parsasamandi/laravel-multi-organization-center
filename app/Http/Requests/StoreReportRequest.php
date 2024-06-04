@@ -29,10 +29,10 @@ class StoreReportRequest extends FormRequest
 
                         $query->where('general_info_id', function ($subQuery) use ($jalaliYear, $jalaliMonth) {
                             $subQuery->select('id')
-                                     ->from('general_infos')
-                                     ->where('center_id', Auth::user()->id)
-                                     ->where('jalaliYear', $jalaliYear)
-                                     ->where('jalaliMonth', $jalaliMonth);
+                                    ->from('general_infos')
+                                    ->where('center_id', Auth::user()->id)
+                                    ->where('jalaliYear', $jalaliYear)
+                                    ->where('jalaliMonth', $jalaliMonth);
                         })
                         ->where('type', $this->input('type'));
                     })

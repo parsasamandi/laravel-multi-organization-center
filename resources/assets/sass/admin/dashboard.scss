@@ -15,6 +15,10 @@ body,
   position: relative;
 }
 
+.content-wrapper {
+  min-height: 645px !important;
+}
+
 .layout-boxed .wrapper {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
