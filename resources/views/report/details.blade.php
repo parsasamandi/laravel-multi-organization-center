@@ -6,18 +6,12 @@
 @php
     // $action is an instance of the Action class
     $convertor = new \App\Providers\Convertor();
-
-    $jalaliMonth = $convertor->numberTojalaliMonthBlade($report->generalInfo->jalaliMonth);
-    $jalaliYear = $convertor->englishToPersianDecimal($report->generalInfo->jalaliYear);
-    $expenses = $convertor->englishToPersianDecimal($report->expenses);
-    $range = $convertor->englishToPersianDecimal($report->range);
-
 @endphp
 
 
-<div class="container-fluid mt-3">
+<div class="container-fluid mt-3 right-text">
     {{-- List --}}
-    <x-details tableId="reportDetailsTable" header="گزارش هزینه {{ $jalaliMonth }} {{ $jalaliYear }}">
+    <x-details tableId="reportDetailsTable" header="گزارش یک هزینه">
 
         <!-- Table header -->
         <x-slot name="tableHeader">
@@ -35,9 +29,9 @@
             <!-- Center name -->
             <td>{{ Auth::user()->name }}</td>
             <!-- Expenses -->
-            <td>{{ $expenses }}</td>
+            <td>{{ $convertor->englishToPersianDecimal($report->expenses) }}</td>
             <!-- Range -->
-            <td>{{ $range }}</td>
+            <td>{{ $convertor->englishToPersianDecimal($report->range) }}</td>
 
             <!-- Type -->
             @switch($report->type)
@@ -53,10 +47,10 @@
             @endswitch
 
             <!-- Jalali months -->
-            <td>{{ $jalaliMonth }}</td>
+            <td>{{ $action->numberTojalaliMonth($report->generalInfo->jalaliMonth) }}</td>
 
             <!-- Jalali Year -->
-            <td>{{ $jalaliYear }}</td>
+            <td>{{ $action->englishToPersianDecimal($report->generalInfo->jalaliYear) }}</td>
 
             <!-- Receipt -->
             <td>
@@ -135,6 +129,43 @@
             $printWindow.print(); // Print the window
             $printWindow.close(); // Close the window after printing
         });
+
+        // Export button
+        // $('#exportExcelButton').click(function() {
+        //     // Get the table data as a worksheet
+        //     var worksheet = XLSX.utils.table_to_sheet(document.getElementById('reportDetailsTable'));
+
+        //     // Create a workbook and add the worksheet to it
+        //     var workbook = XLSX.utils.book_new();
+        //     XLSX.utils.book_append_sheet(workbook, worksheet, 'جزئیات یک ردیف هزینه‌کرد');
+
+        //     // Convert the workbook to an Excel file (binary string)
+        //     var excelBinaryString = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+
+        //     // Convert the binary string to a Blob
+        //     var blob = new Blob([s2ab(excelBinaryString)], { type: 'application/octet-stream' });
+
+        //     // Create a temporary anchor element
+        //     var a = document.createElement('a');
+        //     a.href = URL.createObjectURL(blob);
+        //     a.download = 'جزئیات-هزینه‌کرد.xlsx'; // Set the filename for the downloaded file
+
+        //     // Append the anchor element to the document body and trigger a click event to start the download
+        //     document.body.appendChild(a);
+        //     a.click();
+
+        //     // Remove the anchor element from the document body
+        //     document.body.removeChild(a);
+        // });
+
+        // // Function to convert string to ArrayBuffer
+        // function s2ab(s) {
+        //     var buf = new ArrayBuffer(s.length);
+        //     var view = new Uint8Array(buf);
+        //     for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+        //     return buf;
+        // }
+
     </script>
 
 @endsection

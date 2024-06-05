@@ -13,5 +13,3 @@
         {{ $table ?? null }}
     </div>
 </div>
-
-

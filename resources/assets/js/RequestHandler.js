@@ -100,4 +100,3 @@ function error(data) {
     }
     $('#form_output').html(error_html);
 }
-

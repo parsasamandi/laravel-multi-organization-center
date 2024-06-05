@@ -51,8 +51,8 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
              <!-- Brand Logo -->
-            <a href="/" class="brand-link" style="text-align: center">
-                <img src="/images/GolestanFoundation.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <a href="/" class="brand-link text-center">
+                <object data="/images/golestan-logo-light.svg" class="brand-image img-circle elevation-3" type="image/svg+xml"></object>
 
                 @auth
                     <span class="brand-text font-weight-light">{{ Auth::user()->name }}</span>
@@ -61,16 +61,6 @@
             <!-- Sidebar -->
             <div class="sidebar">
                 <div>
-                    <!-- Sidebar user panel (optional) -->
-                    <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                        <div class="image">
-                            <img src="https://en.gravatar.com/userimage/48085813/ad6132c82562d3561ed0400e28b066c3.jpg" class="img-circle elevation-2" alt="User Image">
-
-                        </div>
-                        <div class="info">
-                            <a href="#" class="d-block">بدران عوض</a>
-                        </div>
-                    </div> -->
                     <!-- Sidebar Menu -->
                     <nav class="mt-2">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -100,14 +90,19 @@
         </div>
 
         <!-- Main Footer -->
+     
+
+        <!-- Main Footer -->
         <footer class="main-footer">
             <!-- To the right -->
             <div class="float-right d-none d-sm-inline">
-                <p>
-                    تمامی حقوق معنوی این وبسایت متعلق به خیریه گلستان می باشد.
-                </p>
+                <!-- Anything you want -->
+                تمامی حقوق معنوی این وبسایت متعلق به خیریه گلستان می باشد.
             </div>
+            <!-- Footer logo -->
+            <object data="/images/golestan-logo-dark-wide.svg" class="brand-image img-circle elevation-3" type="image/svg+xml"></object>
         </footer>
+
     </div>
 
     <!-- SCRIPTS -->

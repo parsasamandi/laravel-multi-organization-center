@@ -1,4 +1,4 @@
-<li class="nav-item has-treeview">
+<li class="nav-item has-treeview menu-open">
     {{-- Has sub menus --}}
     <a class="nav-link">
         <i class="{{ $fontAwesome }}"></i>

@@ -1,5 +1,5 @@
 <!-- HTML select box for Jalali years -->
-<label for="jalaliYear">سال: <span class="input-required">*</span></label>
+<label for="jalaliYear">سال:</label>
 <select name="jalaliYear" id="jalaliYear">
     <option value="1403">1403</option>
     <option value="1404">1404</option>
