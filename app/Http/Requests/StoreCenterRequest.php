@@ -21,7 +21,9 @@ class StoreCenterRequest extends FormRequest
             'email' => 'email|max:255|unique:centers,email,' . $request->get('id')
         ];
 
-        if(!$this->has('id')) {
+        if(!$this->get('id')) {
+            $rules['code'] = 'required|numeric';
+            $rules['type'] = 'required';
             $rules['password'] = 'required|min:6|';
             $rules['password-confirm'] = 'same:password';
         }

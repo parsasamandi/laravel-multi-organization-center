@@ -10,8 +10,13 @@
     <body>
         <div class="wrapper">
 
-            {{-- Errors --}}
-            <div class="mt-2">
+            {{-- Form --}}
+            <form action="{{ route('login', [], false)}} " method="POST" class="login">
+                @csrf
+                <!-- Title -->
+                <p class="title">ورود به اتوماسیون گزارش هزینه های ماهانه</p>
+
+                {{-- Errors --}}
                 @if($errors->any())
                     @foreach ($errors->all() as $error)
                         <div class="alert alert-danger">
@@ -19,17 +24,12 @@
                         </div>
                     @endforeach
                 @endif
-            </div>
-
-            {{-- Form --}}
-            <form action="{{ route('login', [], false)}} " method="POST" class="login">
-                @csrf
-                <!-- Title -->
-                <p class="title">ورود</p>
                 <!-- Form -->
                 <div class="form-group">
-                    <input class="text-right" type="number" name="phone_number" placeholder="شماره تلفن" required>
+                    <input class="text-right" name="phone_number" placeholder="شماره تلفن">
                     <i class="fa fa-user"></i>
+
+                    
                 </div>
                 <div class="form-group">
                     <input class="text-right" type="password" name="password" placeholder="رمز عبور" required/>

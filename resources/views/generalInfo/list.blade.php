@@ -25,7 +25,7 @@
           @include('includes.jalaliMonthsSelectBox')
         </div>
 
-        <x-input type="number" key="bank_balance" placeholder="موجودی در پایان ماه (ریال)" 
+        <x-input key="bank_balance" placeholder="موجودی در پایان ماه (ریال)" 
           class="col-md-12 mb-3" required="true"/>
       </div>
       <!-- File -->

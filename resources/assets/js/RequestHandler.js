@@ -72,7 +72,7 @@ class RequestHandler {
     editOnSuccess(id) {
         $('#id').val(id);
         $('#button_action').val('update');
-        $('#action').val('ویرایش');
+        $('#action').val('ثبت تغییرات');
         // Remove "required field" from heading
         $('.required-heading .input-required').hide();
     }

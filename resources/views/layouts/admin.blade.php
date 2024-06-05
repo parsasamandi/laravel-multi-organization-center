@@ -5,8 +5,8 @@
 @section('head')
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="اتوماسیون ادمین، کنترل ادمین">
-    <meta name="keywords" content="ادمین، داشبورد، پنل">
+    <meta name="description" content="اتوماسیون مالی، اطلاعات مالی">
+    <meta name="keywords" content="گلستان، داشبورد، پنل">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>@yield('title')</title>
     {{-- App --}}
@@ -65,14 +65,14 @@
                     <nav class="mt-2">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                             {{-- Admin --}}
-                            <x-admin.urlAddress text="اطلاعات مرکز" fontAwesome="fa fa-user" route="{{ url('center/list') }}" />
+                            <x-admin.urlAddress text="اطلاعات مراکز" fontAwesome="fa fa-user" route="{{ url('center/list') }}" />
                             {{-- Monthly Expense Report --}}
                             <x-admin.urlAddressParent text="گزارش مالی ماهانه" fontAwesome="fa fa-file">
                                 <x-slot name="content">
                                     {{-- General Info --}}
                                     <x-admin.urlAddress text="صورتحساب بانکی" fontAwesome="null" route="{{ url('generalInfo/list') }}" />
                                     {{-- Reports --}}
-                                    <x-admin.urlAddress text="هزینه‌ها " fontAwesome="null" route="{{ url('report/list') }}"  />
+                                    <x-admin.urlAddress text="گزارش هزینه‌ها" fontAwesome="null" route="{{ url('report/list') }}"  />
                                 </x-slot>
                             </x-admin.urlAddressParent>
                         </ul>

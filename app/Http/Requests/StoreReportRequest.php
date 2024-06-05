@@ -51,7 +51,7 @@ class StoreReportRequest extends FormRequest
     {
         return [
             'receipt' => 'رسید',
-            'expenses' => 'هزینه مبلغ',
+            'expenses' => 'مبلغ هزینه',
             'range' => 'ردیف های هزینه در صورتحساب',   
         ];
     }
