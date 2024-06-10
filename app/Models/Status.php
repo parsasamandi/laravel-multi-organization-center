@@ -30,16 +30,6 @@ class Status extends Model
      */
     protected $fillable = ['status', 'status_id', 'status_type'];
 
-     /**
-     * Scope a query to only include active statuse.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeConfirmed($query) {
-        return $query->where('status', Status::CONFIRMED);
-    }
-
     /**
      * Get The parent status model
      */

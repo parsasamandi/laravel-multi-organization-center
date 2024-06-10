@@ -35,6 +35,9 @@ class ReportDataTable extends DataTable
             ->rawColumns(['action', 'receipt', 'date', 'center_name'])
             ->addColumn('center_name', function(Report $report) {
                 $center = Center::find($report->center_id);
+                if(!$center) {
+                    return 'مرکز وجود ندارد';
+                }
                 return $center->name;
             })
             ->addColumn('date', function (Report $report) {

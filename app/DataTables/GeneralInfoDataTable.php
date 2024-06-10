@@ -35,6 +35,9 @@ class GeneralInfoDataTable extends DataTable
             ->rawColumns(['action', 'bank_statement_receipt', 'data', 'status', 'center_name'])
             ->addColumn('center_name', function(GeneralInfo $generalInfo) {
                 $center = Center::find($generalInfo->center_id);
+                if(!$center) {
+                    return 'مرکز وجود ندارد';
+                }
                 return $center->name;
             })
             ->filterColumn('center_name', function ($query, $keyword) {
@@ -98,7 +101,7 @@ class GeneralInfoDataTable extends DataTable
     {
         $center = Auth::user();
 
-        if ($center && $center->type === Center::GOLESTANTEAM) {
+        if ($center && $center->type == Center::GOLESTANTEAM) {
             return $model->newQuery();
         }
 

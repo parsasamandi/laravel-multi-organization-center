@@ -29,7 +29,7 @@ class GolestanTeamDataTable extends DataTable
             ->addIndexColumn()
             ->rawColumns(['action'])
             ->editColumn('code', function (Center $center) {
-                return 'GOL' . $center->code;
+                return 'GOLTEAM' . $center->code;
             })
             ->addColumn('action', function (Center $center){
                 return $this->dataTable->setAction($center->id);
@@ -62,7 +62,7 @@ class GolestanTeamDataTable extends DataTable
     public function html()
     {
         return $this->dataTable->html($this->builder(),
-                $this->getColumns(), 'center');
+                $this->getColumns(), 'golestanTeam');
     }
 
     /**

@@ -28,8 +28,6 @@
                 <div class="form-group">
                     <input class="text-right" name="phone_number" placeholder="شماره تلفن">
                     <i class="fa fa-user"></i>
-
-                    
                 </div>
                 <div class="form-group">
                     <input class="text-right" type="password" name="password" placeholder="رمز عبور" required/>
@@ -49,4 +47,5 @@
 
         </div>
     </body>
+
 </html>

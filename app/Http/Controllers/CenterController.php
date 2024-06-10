@@ -9,7 +9,6 @@ use App\Http\Requests\StoreCenterRequest;
 use App\Providers\Action;
 use App\Models\Center;
 
-
 class CenterController extends Controller
 {
     public $action;
@@ -18,7 +17,7 @@ class CenterController extends Controller
         $this->action = new Action();
     }
 
-    // DataTable to blade
+    // The home page
     public function center() {
         return view('home');
     }
@@ -47,14 +46,9 @@ class CenterController extends Controller
             'code' => $request->get('code'),
             'phone_number' => $request->get('phone_number'), 
             'email' => $request->get('email'), 
+            'type' => Center::CENTER,
             'password' => Hash::make($request->get('password'))
         ];
-
-        if($request->get('type') == Center::GOLESTANTEAM) {
-            $data['type'] = Center::GOLESTANTEAM;
-        } else {
-            $data['type'] = Center::CENTER;
-        }
 
         // Insert or update
         Center::updateOrCreate(['id' => $request->get('id')], $data);
@@ -68,37 +62,6 @@ class CenterController extends Controller
         return $this->action->edit(Center::class, $request->get('id'));
     }
 
-    // Update
-    public function update(UpdateGeneralInfoRequest $request) {
-
-        $generalInfo = GeneralInfo::findOrFail($request->get('id'));
-
-        // Initialize $updateData array
-        $updateData = [
-            'bank_balance' => $request->get('bank_balance'),
-            'center_id' => Auth::id(),
-        ];
-
-        // Check if a receipt file is uploaded
-        if ($request->hasFile('receipt')) {
-            // Deleting from storage
-            Storage::disk('s3')->delete($generalInfo->bank_statement_receipt);
-
-            // Getting the file
-            $receipt = $request->file('receipt');
-            // File name
-            $file_name = 'receipts/' . $receipt->getClientOriginalName();
-            // Storing file to S3
-            $receipt->storeAs('receipts', $file_name, 's3');
-            
-            $updateData['bank_statement_receipt'] = $file_name; // Include file in update dataa
-        }
-
-        // Update the GeneralInfo record
-        $generalInfo->update($updateData);
-
-        return $this->getAction("update");
-    }
 
     // Delete
     public function delete($id) {

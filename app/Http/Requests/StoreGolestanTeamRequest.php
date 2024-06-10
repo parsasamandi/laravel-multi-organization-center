@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use App\Providers\Convertor;
 
-class StoreCenterRequest extends FormRequest
+class StoreGolestanTeamRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -17,7 +17,7 @@ class StoreCenterRequest extends FormRequest
     {
         $rules = [
             'name' => 'required',
-            'code' => 'required|numeric|digits:2',
+            'code' => 'required|numeric|digits:2|unique:centers,code,' . $request->get('id'),
             'phone_number' => 'required|numeric|digits:11|unique:centers,phone_number,' . $request->get('id'),
             'email' => 'email|max:255|unique:centers,email,' . $request->get('id')
         ];
@@ -40,7 +40,7 @@ class StoreCenterRequest extends FormRequest
         return [
             'password-confirm' => "تاییدیه رمز عبور",
             'phone_number' => 'تلفن همراه',
-            'code' => 'کد مرکز'
+            'code' => 'کد عضو گلستان'
         ];
     }
 

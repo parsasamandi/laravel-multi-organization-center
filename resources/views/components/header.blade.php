@@ -1,6 +1,6 @@
 <div class="container-fluid mt-3">
     {{-- List --}}
-    <h2 class="mt-4">گزارشات {{ $pageName }}</h2>
+    <h2 class="mt-4">{{ $pageName }}</h2>
 
     {{-- Button --}}
     <button type="button" id="create_record"

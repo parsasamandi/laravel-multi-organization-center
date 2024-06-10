@@ -49,7 +49,7 @@ class Center extends Model implements Authenticatable
      */
     public function report()
     {
-        return $this->hasOne('App\Report', 'center_id');
+        return $this->hasOne('App\Models\Report', 'center_id');
     }
 
     /*

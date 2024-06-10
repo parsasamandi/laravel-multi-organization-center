@@ -9,7 +9,6 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\StoreGeneralInfoRequest;
-use App\Http\Requests\UpdateGeneralInfoRequest;
 use App\Providers\SuccessMessages;
 use App\DataTables\GeneralInfoDataTable;
 use App\Models\GeneralInfo;

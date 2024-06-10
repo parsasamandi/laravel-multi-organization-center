@@ -26,6 +26,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('delete/{id}','CenterController@delete');
     });
 
+    Route::group(['prefix' => 'golestanTeam','as' => 'golestanTeam.'], function() {
+        Route::get('list', 'golestanTeamController@list');
+        Route::get('table/list', 'golestanTeamController@golestanTeamTable')->name('list.table');
+        Route::post('store', 'golestanTeamController@store');
+        Route::get('edit', 'golestanTeamController@edit');
+        Route::get('delete/{id}','golestanTeamController@delete');
+    });
+
     // General info
     Route::group(['prefix' => 'generalInfo','as' => 'generalInfo.'], function() {
         Route::get('list', 'GeneralInfoController@list');

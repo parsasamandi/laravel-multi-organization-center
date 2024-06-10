@@ -47,18 +47,7 @@
           <input name="password-confirm" id="password-confirm" class="form-control"  
             placeholder="تکرار رمز" autocomplete="new-password">
         </div>
-
-        <!-- Type -->
-        <div class="col-md-6 mb-2">
-          <label for="type">نوع کاربر <span class="input-required">*</span></label>
-          <select id="type" name="type">
-            <option value="0">مرکز</option>
-            <option value="1">تیم گلستان</option>
-          </select>
-        </div>
       </div>
-
-          
     </x-slot>
   </x-admin.insert>
 
