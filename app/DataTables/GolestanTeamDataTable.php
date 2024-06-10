@@ -8,7 +8,7 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use Auth;
 
-class CenterDataTable extends DataTable
+class GolestanTeamDataTable extends DataTable
 {
     public $dataTable;
 
@@ -49,7 +49,7 @@ class CenterDataTable extends DataTable
         $center = Auth::user();
 
         if ($center && $center->type == Center::GOLESTANTEAM) {
-            return $model->where('type', Center::CENTER);
+            return $model->where('type', Center::GOLESTANTEAM);
         }
 
     }   
@@ -75,9 +75,9 @@ class CenterDataTable extends DataTable
         return [
             $this->dataTable->getIndexCol(),
             Column::make('code')
-                ->title('کد مرکز'),
+                ->title('کد عضو گلستان'),
             Column::make('name')
-                ->title('نام مرکز')
+                ->title('نام شخص')
                 ->orderable(false),
             Column::make('email')
                 ->title('ایمیل')

@@ -4,7 +4,7 @@
 @section('content')
 
 @php
-    // $action is an instance of the Action class
+    // $convertor is an instance of the Convertor class
     $convertor = new \App\Providers\Convertor();
 @endphp
 

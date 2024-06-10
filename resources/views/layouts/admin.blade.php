@@ -64,8 +64,17 @@
                     <!-- Sidebar Menu -->
                     <nav class="mt-2">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                            {{-- Admin --}}
-                            <x-admin.urlAddress text="اطلاعات مراکز" fontAwesome="fa fa-user" route="{{ url('center/list') }}" />
+                        {{-- Access management --}}
+                        @if(Auth::user()->type == 1)
+                            <x-admin.urlAddressParent text="مدیریت دسترسی" fontAwesome="fa fa-user">
+                                <x-slot name="content">
+                                    {{-- General Info --}}
+                                    <x-admin.urlAddress text="مراکز" fontAwesome="null" route="{{ url('center/list') }}" />
+                                    {{-- Reports --}}
+                                    <x-admin.urlAddress text="تیم گلستان" fontAwesome="null" route="{{ url('report/list') }}"  />
+                                </x-slot>
+                            </x-admin.urlAddressParent>
+                        @endif
                             {{-- Monthly Expense Report --}}
                             <x-admin.urlAddressParent text="گزارش مالی ماهانه" fontAwesome="fa fa-file">
                                 <x-slot name="content">

@@ -4,7 +4,7 @@
 @section('content')
 
 @php
-    // $action is an instance of the Action class
+    // $convertor is an instance of the Action class
     $convertor = new \App\Providers\Convertor();
 @endphp
 
@@ -47,10 +47,10 @@
             @endswitch
 
             <!-- Jalali months -->
-            <td>{{ $action->numberTojalaliMonth($report->generalInfo->jalaliMonth) }}</td>
+            <td>{{ $convertor->numberTojalaliMonth($report->generalInfo->jalaliMonth) }}</td>
 
             <!-- Jalali Year -->
-            <td>{{ $action->englishToPersianDecimal($report->generalInfo->jalaliYear) }}</td>
+            <td>{{ $convertor->englishToPersianDecimal($report->generalInfo->jalaliYear) }}</td>
 
             <!-- Receipt -->
             <td>

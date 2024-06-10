@@ -7,7 +7,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body text-center">
         <h5 class="alert alert-success mb-0">اطلاعات با موفقیت ثبت شد</h5>
       </div>
       <div class="modal-footer">

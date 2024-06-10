@@ -17,12 +17,12 @@ class StoreCenterRequest extends FormRequest
     {
         $rules = [
             'name' => 'required',
+            'code' => 'required|numeric|digits:2',
             'phone_number' => 'required|numeric|digits:11|unique:centers,phone_number,' . $request->get('id'),
             'email' => 'email|max:255|unique:centers,email,' . $request->get('id')
         ];
 
         if(!$this->get('id')) {
-            $rules['code'] = 'required|numeric';
             $rules['type'] = 'required';
             $rules['password'] = 'required|min:6|';
             $rules['password-confirm'] = 'same:password';
@@ -40,7 +40,8 @@ class StoreCenterRequest extends FormRequest
     {
         return [
             'password-confirm' => "تاییدیه رمز عبور",
-            'phone_number' => 'تلفن همراه'
+            'phone_number' => 'تلفن همراه',
+            'code' => 'کد مرکز'
         ];
     }
 
@@ -55,7 +56,20 @@ class StoreCenterRequest extends FormRequest
         $convertor = new Convertor();
 
         $this->merge([
-            'phone_number' => $convertor->persianToEnglishDecimal($this->input('phone_number'))
+            'phone_number' => $convertor->persianToEnglishDecimal($this->input('phone_number')),
+            'code' => $convertor->persianToEnglishDecimal($this->input('code')),
         ]);
+    }
+
+     /**
+     * Get the validation messages that apply to the request.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'code.digits' => 'کد مرکز باید دو رقم باشد.',
+        ];
     }
 }
