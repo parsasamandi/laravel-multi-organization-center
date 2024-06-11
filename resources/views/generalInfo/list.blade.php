@@ -6,7 +6,7 @@
   @include('includes.successModal')
 
   {{-- Header --}}
-  <x-header pageName="صورتحساب بانکی" buttonValue="صورتحساب جدید">
+  <x-header pageName="صورتحساب بانکی" buttonValue="صورتحساب جدید" :type="0">
     <x-slot name="table">
       <x-table :table="$generalInfoTable" />
     </x-slot>

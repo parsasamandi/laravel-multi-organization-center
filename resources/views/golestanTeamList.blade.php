@@ -6,7 +6,7 @@
   @include('includes.successModal')
 
   {{-- Header --}}
-  <x-header pageName="تیم گلستان" buttonValue="عضو گلستان" type="1">
+  <x-header pageName="تیم گلستان" buttonValue="عضو گلستان" :type="1">
     <x-slot name="table">
       <x-table :table="$golestanTeamTable" />
     </x-slot>
