@@ -40,7 +40,10 @@ class CenterController extends Controller
 
     // Store
     public function store(StoreCenterRequest $request) {
-
+        // Ensure 'id' is an integer or null
+        $id = $request->get('id');
+        $id = is_numeric($id) ? (int)$id : null;
+    
         $data = [
             'name' => $request->get('name'),
             'code' => $request->get('code'),
@@ -50,13 +53,11 @@ class CenterController extends Controller
             'password' => Hash::make($request->get('password'))
         ];
     
-        $id = $request->get('id') ? $request->get('id') : null; // Set id to null if empty
-    
         // Insert or update
         Center::updateOrCreate(['id' => $id], $data);
     
         return $this->getAction($request->get('button_action'));
-    }    
+    } 
     
 
     // Edit
