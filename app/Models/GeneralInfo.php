@@ -29,7 +29,7 @@ class GeneralInfo extends Model
      * Cascade On Delete.
      */
     use CascadesDeletes;
-    protected $cascadeDeletes = ['statuses'];
+    protected $cascadeDeletes = ['statuses', 'reports'];
 
     /**
      * @var array

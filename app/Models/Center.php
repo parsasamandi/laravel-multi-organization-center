@@ -16,6 +16,7 @@ use ShiftOneLabs\LaravelCascadeDeletes\CascadesDeletes;
 class Center extends Model implements Authenticatable
 {
     use AuthenticatableTrait;
+    use CascadesDeletes;
 
     public $timestamps = false;
 
@@ -30,10 +31,15 @@ class Center extends Model implements Authenticatable
     protected $table = 'centers';
 
     /**
+     * Cascade On Delete.
+     */
+    protected $cascadeDeletes = ['generalInfo', 'reports', 'statuses'];
+
+    /**
      * @var array
      */
     protected $fillable = [
-        'code','name','phone_number','email','type','password',
+        'code', 'name', 'phone_number', 'email', 'type', 'password',
     ];
 
     /**
@@ -45,17 +51,18 @@ class Center extends Model implements Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function report()
+    public function reports()
     {
-        return $this->hasOne('App\Models\Report', 'center_id');
+        return $this->hasMany('App\Models\Report', 'center_id');
     }
 
     /*
-     * Get all of the course's status.
+     * Get all of the center's statuses.
      */
-    public function statuses() {
+    public function statuses()
+    {
         return $this->morphOne('App\Models\Status', 'status');
     }
 }

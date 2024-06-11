@@ -15,15 +15,17 @@ class StoreCenterRequest extends FormRequest
      */
     public function rules(Request $request)
     {
+        $id = $request->get('id') ? $request->get('id') : 'NULL'; // Use 'NULL' if id is not set
+
         $rules = [
             'name' => 'required',
-            'code' => 'nullable|numeric|unique:centers,code,' . $request->get('id'),
+            'code' => 'numeric|unique:centers,code,' . $id,
             'password' => 'nullable|min:7|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/',
-            'phone_number' => 'required|numeric|digits:11|unique:centers,phone_number,' . $request->get('id'),
-            'email' => 'email|max:255|unique:centers,email,' . $request->get('id')
+            'phone_number' => 'required|numeric|digits:11|unique:centers,phone_number,' . $id,
+            'email' => 'email|max:255|unique:centers,email,' . $id
         ];
 
-        if(!$this->get('id')) {
+        if (!$this->get('id')) {
             $rules['code'] = 'required|numeric|digits:2|unique:centers';
             $rules['password'] = 'required|min:7|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/';
             $rules['password-confirm'] = 'same:password';
@@ -42,7 +44,7 @@ class StoreCenterRequest extends FormRequest
         return [
             'password-confirm' => "تاییدیه رمز عبور",
             'phone_number' => 'تلفن همراه',
-            'code' => 'کد یکتا'
+            'code' => 'کد مرکز'
         ];
     }
 
@@ -53,7 +55,7 @@ class StoreCenterRequest extends FormRequest
      */
     public function prepareForValidation()
     {
-        // English convertion
+        // English conversion
         $convertor = new Convertor();
 
         $this->merge([
