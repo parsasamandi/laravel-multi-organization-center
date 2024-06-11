@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\DataTables\GolestanTeamDataTable;
-use App\Http\Requests\StoreGolestanTeamRequest;
+use App\Http\Requests\StoreCenterRequest;
 use App\Providers\Action;
 use App\Models\Center;
 
@@ -35,7 +35,7 @@ class GolestanTeamController extends Controller
     }
 
     // Store
-    public function store(StoreGolestanTeamRequest $request) {
+    public function store(StoreCenterRequest $request) {
 
         $data = [
             'name' => $request->get('name'),

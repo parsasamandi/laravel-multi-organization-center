@@ -105,7 +105,8 @@ class GeneralInfoDataTable extends DataTable
             return $model->newQuery();
         }
 
-        return $model->where('center_id', $center->id);
+        return $model->newQuery()->where('general_infos.center_id', Auth::id());
+
     }
 
 
@@ -127,12 +128,8 @@ class GeneralInfoDataTable extends DataTable
      */
     protected function getColumns()
     {
-        return [
+        $columns = [
             $this->dataTable->getIndexCol(),
-            Column::computed('center_name')
-                ->title('نام مرکز')
-                ->searchable(true)
-                ->orderable(false),
             Column::make('bank_statement_receipt')
                 ->title('صورتحساب بانکی')
                 ->orderable(false),
@@ -146,5 +143,16 @@ class GeneralInfoDataTable extends DataTable
                 ->title('وضعیت'),
             $this->dataTable->setActionCol()
         ];
+
+        if(Auth::user()->type == Center::GOLESTANTEAM)
+            // Insert the 'code' column as the second column
+            array_splice($columns, 1, 0, [
+                Column::computed('center_name')
+                ->title('نام مرکز')
+                ->searchable(true)
+                ->orderable(false),
+            ]);
+
+        return $columns;
     }
 }

@@ -8,17 +8,17 @@ class header extends Component
 {
     public $pageName;
     public $buttonValue;
-    public $pageDescription;
+    public $type;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($pageName, $buttonValue, $pageDescription = null)
+    public function __construct($pageName, $buttonValue, $type = 0)
     {
         $this->pageName = $pageName;
         $this->buttonValue = $buttonValue;
-        $this->pageDescription = $pageDescription;
+        $this->type = $type;
     }
 
     /**

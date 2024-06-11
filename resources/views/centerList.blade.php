@@ -6,7 +6,7 @@
   @include('includes.successModal')
 
   {{-- Header --}}
-  <x-header pageName="مراکز" buttonValue="مرکز">
+  <x-header pageName="مراکز" buttonValue="مرکز" type="1">
     <x-slot name="table">
       <x-table :table="$centerTable" />
     </x-slot>
@@ -61,7 +61,6 @@
 
 <!-- DataTable data -->
 {!! $centerTable->scripts() !!}
-
 
 
 <script>

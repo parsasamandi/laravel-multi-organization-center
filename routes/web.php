@@ -13,9 +13,10 @@
 */
 
 
-Route::group(['middleware' => 'auth'], function () {
+// Route::group(['middleware' => 'auth'], function () {
     // Logout
     Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+
     // Center
     Route::get('/','CenterController@center');
     Route::group(['prefix' => 'center','as' => 'center.'], function() {
@@ -26,12 +27,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('delete/{id}','CenterController@delete');
     });
 
+    // Golestan Team
     Route::group(['prefix' => 'golestanTeam','as' => 'golestanTeam.'], function() {
-        Route::get('list', 'golestanTeamController@list');
-        Route::get('table/list', 'golestanTeamController@golestanTeamTable')->name('list.table');
-        Route::post('store', 'golestanTeamController@store');
-        Route::get('edit', 'golestanTeamController@edit');
-        Route::get('delete/{id}','golestanTeamController@delete');
+        Route::get('list', 'GolestanTeamController@list');
+        Route::get('table/list', 'GolestanTeamController@golestanTeamTable')->name('list.table');
+        Route::post('store', 'GolestanTeamController@store');
+        Route::get('edit', 'GolestanTeamController@edit');
+        Route::get('delete/{id}','GolestanTeamController@delete');
     });
 
     // General info
@@ -58,7 +60,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('delete/{id}','ReportController@delete');
     });
 
-});
+// });
 
 // Login page
 Route::get('login','Auth\LoginController@index')->name('login');

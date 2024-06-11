@@ -35,34 +35,36 @@ class ReportDataTable extends DataTable
             ->rawColumns(['action', 'receipt', 'date', 'center_name'])
             ->addColumn('center_name', function(Report $report) {
                 $center = Center::find($report->center_id);
-                if(!$center) {
-                    return 'مرکز وجود ندارد';
-                }
-                return $center->name;
+                return $center ? $center->name : 'مرکز وجود ندارد';
             })
             ->addColumn('date', function (Report $report) {
-                $generalInfo = GeneralInfo::where('id', $report->general_info_id)->first();
+                $generalInfo = GeneralInfo::find($report->general_info_id);
                 if ($generalInfo) {
                     return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) . ' ' .
                         $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
                 }
-            })->filterColumn('date', function ($query, $keyword) {
-                // Convertor class
+            })
+            ->filterColumn('date', function ($query, $keyword) {
                 $convertor = new Convertor();
-
                 $query->whereHas('generalInfo', function ($query) use ($keyword, $convertor) {
                     $jalaliMonth = $convertor->numberTojalaliMonth($keyword);
                     $jalaliYear = $convertor->persianToEnglishDecimal($keyword);
-
                     $query->where('jalaliMonth', 'LIKE', "%{$jalaliMonth}%")
-                        ->orWhere('jalaliYear', 'LIKE', "%{$jalaliYear}%");
+                          ->orWhere('jalaliYear', 'LIKE', "%{$jalaliYear}%");
                 });
             })
             ->orderColumn('date', function ($query, $direction) {
-                $query->join('general_infos', 'reports.general_info_id', '=', 'general_infos.id')
-                      ->orderBy('general_infos.jalaliYear', $direction)
-                      ->orderBy('general_infos.jalaliMonth', $direction)
-                      ->select('reports.*'); // Ensure only columns from the reports table are selected
+                $generalInfosExists = GeneralInfo::exists();
+                if ($generalInfosExists) {
+                    $query->join('general_infos', 'reports.general_info_id', '=', 'general_infos.id')
+                        ->orderBy('general_infos.jalaliYear', $direction)
+                        ->orderBy('general_infos.jalaliMonth', $direction)
+                        ->select('reports.*')
+                        ->where('reports.center_id', Auth::id()); // Explicitly specify the table name
+                } else {
+                    $query->orderBy('reports.date', $direction)
+                        ->where('reports.center_id', Auth::id()); // Explicitly specify the table name
+                }
             })
             ->editColumn('expenses', function(Report $report) {
                 return $this->dataTable->englishToPersianNumbers($report->expenses);
@@ -71,38 +73,25 @@ class ReportDataTable extends DataTable
                 return $this->dataTable->englishToPersianNumbers($report->range);
             })
             ->editColumn('receipt', function(Report $report) {
-                // Get the URL for the file from S3 storage
                 $presignedUrl = Storage::disk('s3')->temporaryUrl('receipts/' . $report->receipt, now()->addHours(1));
-
-                // Return a link to the file
                 return '<a href="' . $presignedUrl . '" target="_blank">دانلود</a>';
             })
             ->editColumn('type', function (Report $report) {
                 switch ($report->type) {
-                    case 0:
-                        return 'هزینه حقوق کارمندان';
-                    case 1:
-                        return 'هزینه آموزش';
-                    case 2:
-                        return 'هزینه های سلامت';
-                    case 3: 
-                        return 'هزینه های غذا';
-                    case 4: 
-                        return 'هزینه های پوشاک';
-                    case 5:
-                        return 'هزینه های دیگر یک';
-                    case 6:
-                        return 'هزینه های دیگر دو';
+                    case 0: return 'هزینه حقوق کارمندان';
+                    case 1: return 'هزینه آموزش';
+                    case 2: return 'هزینه های سلامت';
+                    case 3: return 'هزینه های غذا';
+                    case 4: return 'هزینه های پوشاک';
+                    case 5: return 'هزینه های دیگر یک';
+                    case 6: return 'هزینه های دیگر دو';
                 }
-            })->orderColumn('type', function ($query, $direction) {
+            })
+            ->orderColumn('type', function ($query, $direction) {
                 $query->orderBy('type', $direction);
-            })->addColumn('status', function(Report $report) {
-                switch($report->statuses->status) {
-                    case 0:
-                        return 'تایید نشده';
-                    case 1:
-                        return 'تایید شده';
-                }
+            })
+            ->addColumn('status', function(Report $report) {
+                return $report->statuses->status == 1 ? 'تایید شده' : 'تایید نشده';
             })
             ->addColumn('action', function (Report $report) {
                 return $this->dataTable->setAction($report->id, 'report');
@@ -118,11 +107,11 @@ class ReportDataTable extends DataTable
     public function query(Report $model) {
         $user = Auth::user();
 
-        if ($user && $user->type === 1) {
+        if ($user && $user->type == Center::GOLESTANTEAM) {
             return $model->newQuery();
         }
 
-        return $model->where('center_id', Auth::id());
+        return $model->newQuery()->where('reports.center_id', Auth::id());
     }
 
     /**
@@ -132,8 +121,7 @@ class ReportDataTable extends DataTable
      */
     public function html()
     {
-        return $this->dataTable->html($this->builder(),
-                $this->getColumns(), 'report');
+        return $this->dataTable->html($this->builder(), $this->getColumns(), 'report');
     }
 
     /**
@@ -143,12 +131,8 @@ class ReportDataTable extends DataTable
      */
     protected function getColumns()
     {
-        return [
+        $columns = [
             $this->dataTable->getIndexCol(),
-            Column::computed('center_name')
-                ->title('نام مرکز')
-                ->searchable(true)
-                ->orderable(false),
             Column::computed('date')
                 ->title('تاریخ')
                 ->searchable(true)
@@ -174,5 +158,16 @@ class ReportDataTable extends DataTable
                 ->searchable(true),
             $this->dataTable->setActionCol()
         ];
+
+        if (Auth::user()->type == Center::GOLESTANTEAM) {
+            array_splice($columns, 1, 0, [
+                Column::computed('center_name')
+                    ->title('نام مرکز')
+                    ->searchable(true)
+                    ->orderable(false),
+            ]);
+        }
+
+        return $columns;
     }
 }

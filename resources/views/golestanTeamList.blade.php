@@ -6,7 +6,7 @@
   @include('includes.successModal')
 
   {{-- Header --}}
-  <x-header pageName="تیم گلستان" buttonValue="عضو گلستان">
+  <x-header pageName="تیم گلستان" buttonValue="عضو گلستان" type="1">
     <x-slot name="table">
       <x-table :table="$golestanTeamTable" />
     </x-slot>
@@ -27,7 +27,7 @@
         <x-input key="phone_number" placeholder="شماره تلفن"
           class="col-md-6 mb-3" required="true"/>
 
-        <!-- Golestan Team name -->
+        <!-- Golestan team name -->
         <x-input key="name" placeholder="نام عضو گلستان" 
           class="col-md-12 mb-3" required="true"/>
 

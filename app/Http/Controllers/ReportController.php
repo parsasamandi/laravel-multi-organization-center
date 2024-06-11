@@ -72,7 +72,7 @@ class ReportController extends Controller
         // Handle receipt upload if present
         if ($request->hasFile('receipt')) {
             $receipt = $request->file('receipt');
-            $fileName = ($center->type == Center::CENTER ? $center->code . '_' : '') . $receipt->getClientOriginalName();
+            $fileName = ($center->type == Center::CENTER ? 'GOL' . $center->code . '_' : '') . $receipt->getClientOriginalName();
     
             Storage::disk('s3')->delete($report->receipt ?? null); // Delete existing receipt if updating
     

@@ -17,13 +17,15 @@ class StoreCenterRequest extends FormRequest
     {
         $rules = [
             'name' => 'required',
-            'code' => 'required|numeric|digits:2',
+            'code' => 'numeric|unique:centers,code,' . $request->get('id'),
+            'password' => 'nullable|min:7|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/',
             'phone_number' => 'required|numeric|digits:11|unique:centers,phone_number,' . $request->get('id'),
             'email' => 'email|max:255|unique:centers,email,' . $request->get('id')
         ];
 
         if(!$this->get('id')) {
-            $rules['password'] = 'required|min:6|';
+            $rules['code'] = 'required|numeric|digits:2|unique:centers';
+            $rules['password'] = 'required|min:7|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/';
             $rules['password-confirm'] = 'same:password';
         }
 
@@ -40,7 +42,7 @@ class StoreCenterRequest extends FormRequest
         return [
             'password-confirm' => "تاییدیه رمز عبور",
             'phone_number' => 'تلفن همراه',
-            'code' => 'کد مرکز'
+            'code' => 'کد یکتا'
         ];
     }
 
@@ -69,6 +71,8 @@ class StoreCenterRequest extends FormRequest
     {
         return [
             'code.digits' => 'کد مرکز باید دو رقم باشد.',
+            'phone_number.digits' => 'تلفن همراه باید یازده رقم باشد.',
+            'password.regex' => 'رمز عبور باید حداقل یک حرف کوچک، یک حرف بزرگ و یک عدد داشته باشد.'
         ];
     }
 }

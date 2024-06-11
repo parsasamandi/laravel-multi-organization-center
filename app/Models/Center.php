@@ -33,7 +33,7 @@ class Center extends Model implements Authenticatable
      * @var array
      */
     protected $fillable = [
-        'code', 'name', 'phone_number', 'email', 'type', 'password',
+        'code','name','phone_number','email','type','password',
     ];
 
     /**
