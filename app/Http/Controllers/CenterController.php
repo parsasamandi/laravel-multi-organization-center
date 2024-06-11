@@ -49,12 +49,14 @@ class CenterController extends Controller
             'type' => Center::CENTER,
             'password' => Hash::make($request->get('password'))
         ];
-
+    
+        $id = $request->get('id') ? $request->get('id') : null; // Set id to null if empty
+    
         // Insert or update
-        Center::updateOrCreate(['id' => $request->get('id')], $data);
-
+        Center::updateOrCreate(['id' => $id], $data);
+    
         return $this->getAction($request->get('button_action'));
-    }
+    }    
     
 
     // Edit
