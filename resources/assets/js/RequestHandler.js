@@ -24,8 +24,7 @@ class RequestHandler {
         $(window.formId).on('submit', function (event) {
             event.preventDefault();
             // Form Data
-            var form_data = new FormData(this);
-            form_data.append('file', form_data);
+            var form_data = new FormData(this); // Include all form data
 
             $.ajax({
                 url: "/" + window.url + "/store",

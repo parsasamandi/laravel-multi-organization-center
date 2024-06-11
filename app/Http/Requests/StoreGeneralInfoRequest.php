@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use App\Providers\Convertor;
+use DB;
 use Auth;
 
 class StoreGeneralInfoRequest extends FormRequest
@@ -19,23 +20,32 @@ class StoreGeneralInfoRequest extends FormRequest
         $rules = [
             'bank_balance' => 'required|numeric',
             'jalaliYear' => 'required',
+            'receipt' => 'nullable|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096',
         ];
 
         // If 'id' is not present in the request, make 'receipt' required
         if (!$this->input('id')) {
-            $rules['receipt'] = 'required';
+            $data['receipt'] = 'required|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096';
         }
 
-        // Unique jalaliMonth validation based on Jalali year and center_id
         $rules['jalaliMonth'] = [
             'required',
             Rule::unique('general_infos')
                 ->where(function ($query) {
+                    $userId = Auth::id();
                     return $query->where('jalaliYear', $this->input('jalaliYear'))
-                        ->where('center_id', Auth::id());
+                                 ->where('center_id', $userId)
+                                 ->whereExists(function ($query) use ($userId) {
+                                     $query->select(DB::raw(1))
+                                           ->from('centers')
+                                           ->whereColumn('centers.id', 'general_infos.center_id')
+                                           ->where('centers.type', 0)
+                                           ->where('centers.id', $userId);
+                                 });
                 })
                 ->ignore($this->input('id'), 'id') // Ignore current record ID during update
         ];
+
 
         return $rules;
     }
@@ -49,7 +59,7 @@ class StoreGeneralInfoRequest extends FormRequest
     {
         return [
             'receipt' => 'رسید',
-            'bank_balance' => 'مانده بانک',
+            'bank_balance' => 'موجودی پایان ماه',
             'jalaliYear' => 'سال',
             'jalaliMonth' => 'ماه',
         ];

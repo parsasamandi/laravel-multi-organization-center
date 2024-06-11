@@ -13,9 +13,9 @@
                     <div class="card-body">
                         <p class="card-text">
                             @if(Auth::user()->type == 1)
-                                مرکز محترم، 
+                                عضو محترم گلستان، 
 
-                            @elseif(Auth::user11s()->type == 0)
+                            @elseif(Auth::user()->type == 0)
                                 مرکز محترم، 
                             @endif
                              شما در حال حاضر در صفحه اصلی هستید.

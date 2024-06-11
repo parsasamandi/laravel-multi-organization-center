@@ -43,45 +43,59 @@ class GeneralInfoController extends Controller
 
     // Insert or Update
     public function store(StoreGeneralInfoRequest $request) {
-
         $data = [
             'jalaliMonth' => $request->get('jalaliMonth'),
             'jalaliYear' => $request->get('jalaliYear'),
-            'bank_balance' => $request->get('bank_balance'),
-            'center_id' => Auth::id(),
+            'bank_balance' => $request->get('bank_balance')
         ];
     
-        // Combine logic for handling receipt upload
-        $this->handleReceiptUpload($request, $data);
+        if (Auth::user()->type == Center::CENTER) {
+            $data['center_id'] = Auth::id();
+        }
     
-        $generalInfo = GeneralInfo::updateOrCreate(['id' => $request->get('id')], $data);
+        // Handle receipt upload
+        $generalInfoId = $request->get('id');
+        if ($generalInfoId) {
+            $generalInfo = GeneralInfo::find($generalInfoId);
+        } else {
+            $generalInfo = new GeneralInfo();
+        }
+        
+        $this->handleReceiptUpload($request, $generalInfo, $data);
     
-        // Update General info's status (can be optimized further)
+        // Create or update the GeneralInfo record
+        $generalInfo = GeneralInfo::updateOrCreate(['id' => $generalInfoId], $data);
+    
+        // Update General info's status
         $generalInfo->statuses()->updateOrCreate(
             ['status_id' => $generalInfo->id, 'status' => Status::NOTCONFIRMED, 'status_type' => GeneralInfo::class]
         );
     
         return $this->getAction($request->get('button_action'));
     }
-    
-    public function handleReceiptUpload(StoreGeneralInfoRequest $request, &$data) {
-        
+
+    // Handleing the receipt upload
+    public function handleReceiptUpload(StoreGeneralInfoRequest $request, $generalInfo, &$data) {
+
         if ($request->hasFile('receipt')) {
             $receipt = $request->file('receipt');
             $center = Center::find(Auth::user()->id);
     
             $fileName = $center->type === Center::CENTER ?
-                'GOL' . $center->code . '_' . $receipt->getClientOriginalName() :
-                $receipt->getClientOriginalName();
+                "GOL{$center->code}/{$request->get('jalaliMonth')}_{$request->get('jalaliYear')}/{$receipt->getClientOriginalName()}" :
+                "GOLTEAM{$center->code}/{$request->get('jalaliMonth')}_{$request->get('jalaliYear')}/{$receipt->getClientOriginalName()}";
     
-            if ($request->get('id')) {
-                Storage::disk('s3')->delete($generalInfo->bank_statement_receipt);
+            // Delete old receipt if it exists
+            if ($generalInfo && $generalInfo->bank_statement_receipt) {
+                Storage::disk('s3')->delete('receipts/' . $generalInfo->bank_statement_receipt);
             }
     
+            // Store new receipt
             $receipt->storeAs('receipts', $fileName, 's3');
-            $data['bank_statement_receipt'] = $fileName;
+            $data['bank_statement_receipt'] = $fileName; // Ensure this line correctly updates the $data array
         }
     }
+    
     
     // Edit
     public function edit(Request $request) {

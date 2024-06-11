@@ -13,7 +13,7 @@
 */
 
 
-// Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth'], function () {
     // Logout
     Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
@@ -60,7 +60,7 @@
         Route::get('delete/{id}','ReportController@delete');
     });
 
-// });
+});
 
 // Login page
 Route::get('login','Auth\LoginController@index')->name('login');

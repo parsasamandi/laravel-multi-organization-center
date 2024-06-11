@@ -47,6 +47,8 @@ class ReportController extends Controller
     // Insert or Update
     public function store(StoreReportRequest $request) {
 
+        $id = $request->get('id');
+
         $data = [
             'expenses' => $request->get('expenses'),
             'range' => $request->get('range'),
@@ -72,16 +74,22 @@ class ReportController extends Controller
         // Handle receipt upload if present
         if ($request->hasFile('receipt')) {
             $receipt = $request->file('receipt');
-            $fileName = ($center->type == Center::CENTER ? 'GOL' . $center->code . '_' : '') . $receipt->getClientOriginalName();
-    
-            Storage::disk('s3')->delete($report->receipt ?? null); // Delete existing receipt if updating
+
+            $fileName = $center->type === Center::CENTER ?
+                "GOL{$center->code}/{$request->get('jalaliMonth')}_{$request->get('jalaliYear')}/{$receipt->getClientOriginalName()}" :
+                "GOLTEAM{$center->code}/{$request->get('jalaliMonth')}_{$request->get('jalaliYear')}/{$receipt->getClientOriginalName()}";
+
+            
+            if($id){
+                $report = Report::find($id);
+                Storage::disk('s3')->delete('receipts/' . $report->receipt ?? null); // Delete existing receipt if updating
+            }
     
             $receipt->storeAs('receipts', $fileName, 's3');
 
             $data['receipt'] = $fileName;
         }
     
-        $id = $request->get('id');
     
         $report = Report::updateOrCreate(['id' => $id], $data);
     

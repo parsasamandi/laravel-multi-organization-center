@@ -17,7 +17,7 @@ class StoreCenterRequest extends FormRequest
     {
         $rules = [
             'name' => 'required',
-            'code' => 'numeric|unique:centers,code,' . $request->get('id'),
+            'code' => 'nullable|numeric|unique:centers,code,' . $request->get('id'),
             'password' => 'nullable|min:7|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/',
             'phone_number' => 'required|numeric|digits:11|unique:centers,phone_number,' . $request->get('id'),
             'email' => 'email|max:255|unique:centers,email,' . $request->get('id')

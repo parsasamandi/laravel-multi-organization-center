@@ -42,9 +42,12 @@ class GolestanTeamController extends Controller
             'code' => $request->get('code'),
             'phone_number' => $request->get('phone_number'), 
             'email' => $request->get('email'), 
-            'password' => Hash::make($request->get('password')),
             'type' => Center::GOLESTANTEAM
         ];
+
+        if($request->get('password'))
+            $data['password'] = Hash::make($request->get('password'));
+
 
         // Insert or update
         Center::updateOrCreate(['id' => $request->get('id')], $data);

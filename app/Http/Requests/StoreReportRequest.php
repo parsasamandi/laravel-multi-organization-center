@@ -15,9 +15,8 @@ class StoreReportRequest extends FormRequest
     {
         $rules = [
             'expenses' => 'required|numeric',
-            'range' => [
-                'required',
-            ],
+            'range' => ['required'],
+            'receipt' => 'nullable|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096',
             'jalaliMonth' => ['required', new GeneralInfoExists($this->get('jalaliYear'), $this->get('jalaliMonth'))],
             'jalaliYear' => ['required'],
             'type' => [
@@ -41,7 +40,7 @@ class StoreReportRequest extends FormRequest
         ];
 
         if (!$this->input('id')) {
-            $rules['receipt'] = 'required';
+            $rules['receipt'] = 'required|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096';
         }
 
         return $rules;

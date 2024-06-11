@@ -7,7 +7,6 @@
             </div>
             <div class="modal-body text-center">
                 <h5 class="alert alert-danger mb-0">آیا مایل به حذف {{ $title }} هستید؟</h5>
-                <!-- <div class="alert alert-danger">اطلاعات با موفقیت ثبت شد</div> -->
             </div>
 
             <div class="modal-footer">

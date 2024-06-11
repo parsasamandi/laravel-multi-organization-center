@@ -12,12 +12,6 @@ require('bootstrap');
 // Jquery
 global.$ = global.jQuery = global.jquery = require('jquery');
 require('jquery.easing');
-// Superfish
-require('superfish');
-// Owl Carousel
-require('owl.carousel');
-// Venobox
-require('venobox');
 // Select 2
 require('select2/dist/js/select2');
 // DataTables
@@ -25,7 +19,7 @@ window.datatables = require('datatables.net-bs4');
 window.dt = require('datatables.net');
 require('datatables.net-responsive');
 // Filepond
-window.FilePond = require('filepond/dist/filepond.min');
+// window.FilePond = require('filepond/dist/filepond.min');
 // Admin
 require('./admin');
 

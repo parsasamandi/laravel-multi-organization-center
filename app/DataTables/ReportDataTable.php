@@ -146,7 +146,7 @@ class ReportDataTable extends DataTable
                 ->orderable(true)
                 ->searchable(true),
             Column::make('range')
-                ->title('ردیف درصورتحساب')
+                ->title('ردیف در صورتحساب')
                 ->orderable(false)
                 ->searchable(false),
             Column::make('receipt')
