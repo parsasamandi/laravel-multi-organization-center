@@ -312,6 +312,7 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before, table.dataT
   
 .paginate_button:hover {
     background-color: rgba(0, 0, 0, 0.05); /* Slightly darker on hover */
+    text-decoration: none;
 }
 
 div.dataTables_wrapper div.dataTables_paginate {

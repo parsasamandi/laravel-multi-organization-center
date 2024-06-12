@@ -1,4 +1,3 @@
-
 <div class="container-fluid mt-3">
     {{-- List --}}
     <h2 class="mt-4">{{ $pageName }}</h2>
@@ -11,7 +10,7 @@
     @endif
     
     {{-- Responsive Table --}}
-    <div class="table-responsive">
+    <div>
         {{ $table ?? null }}
     </div>
 </div>

@@ -22,5 +22,3 @@ require('datatables.net-responsive');
 // window.FilePond = require('filepond/dist/filepond.min');
 // Admin
 require('./admin');
-
-

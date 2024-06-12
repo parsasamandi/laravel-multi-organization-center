@@ -47,7 +47,7 @@ class GeneralInfo extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function report()
+    public function reports()
     {
         return $this->hasMany('App\Models\Report', 'general_info_id');
     }

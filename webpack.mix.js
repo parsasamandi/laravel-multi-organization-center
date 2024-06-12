@@ -28,4 +28,3 @@ mix.sourceMaps();
 mix.version();
 mix.extract();
 mix.disableNotifications();
-
