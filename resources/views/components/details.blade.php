@@ -1,8 +1,6 @@
 <div class="table-responsive">
     {{-- List --}}
-    <ol class="breadcrumb mb-4 right-text">
-        <h5>جزئیات {{ $header ?? null }}</h5>
-    </ol>
+    <h4 class="mb-3">جزئیات {{ $header ?? null }}</h4>
 
     <div class="row">
         <div class="col-md-12">

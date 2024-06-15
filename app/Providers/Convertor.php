@@ -31,7 +31,7 @@ class Convertor {
 
 
 
-    // Jalali months convertor
+    // Jalali months convertor in dataTable
     public function numberTojalaliMonth($jalaliMonthString) {
         $months = [
             'فروردین' => 1,
@@ -51,6 +51,7 @@ class Convertor {
         return $months[$jalaliMonthString] ?? null;
     }
 
+    // Jalali months convertor in Blade
     public function numberTojalaliMonthBlade($column) {
         switch ($column) {
             case 1:

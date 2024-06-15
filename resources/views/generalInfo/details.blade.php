@@ -4,13 +4,18 @@
 @section('content')
 
 @php
-    // $convertor is an instance of the Convertor class
+    // $convertor is an instance of the Action class
     $convertor = new \App\Providers\Convertor();
+    
+    // Jalali month
+    $jalaliMonth = $convertor->numberToJalaliMonthBlade($generalInfo->jalaliMonth);
+    // Jalali year
+    $jalaliYear = $convertor->englishToPersianDecimal($generalInfo->jalaliYear);
 @endphp
 
 <div class="container-fluid mt-3 right-text">
 
-    <x-details tableId="generalInfoDetailsTable" header="یک ردیف از صورتحساب">
+    <x-details tableId="generalInfoDetailsTable" header="صورتحساب {{ $jalaliMonth }} {{ $jalaliYear }}">
         <!-- Table header -->
         <x-slot name="tableHeader">
             <th>نام مرکز</th>
@@ -25,7 +30,7 @@
             <td>{{ Auth::user()->name }}</td>
             <td>{{ $convertor->englishToPersianDecimal($generalInfo->jalaliYear) }}</td>
              <!-- Jalali months -->
-            <td>{{ $convertor->numberTojalaliMonth($generalInfo->jalaliMonth) }}</td>
+            <td>{{ $convertor->numberTojalaliMonthBlade($generalInfo->jalaliMonth) }}</td>
             <td>{{ $convertor->englishToPersianDecimal($generalInfo->bank_balance) }}</td>
             <td>
                 <a href="{{ Storage::disk('s3')->temporaryUrl('receipts/' . 
@@ -100,14 +105,7 @@
 
         // Print button
         $('#print_button').click(function() {
-            var $tableToPrint = $('#generalInfoDetailsTable').clone(); // Clone the table
-            $tableToPrint.find('button').remove(); // Remove any buttons in the cloned table
-            
-            var $printWindow = window.open('', '_blank'); // Open a new window
-            $printWindow.document.body.innerHTML = '<table class="table table-bordered">' + $tableToPrint.html() + '</table>'; // Append the table to the new window
-            
-            $printWindow.print(); // Print the window
-            $printWindow.close(); // Close the window after printing
+            window.print();
         });
 
     </script>

@@ -102,13 +102,16 @@ select {
     margin-bottom: 2em;
 }
 
-//  Datatable image
-.dataTableImage {
-    height: auto;
-    width: 50%;
+/* Hide footer when printing */
+@media print {
+    footer, .btn{
+        display: none;
+    }
 }
 
-/* sidebar */
+
+
+/*------------------------- Sidebar ----------------------------*/
 
 .sidebar {
     direction: ltr;
@@ -143,6 +146,7 @@ select {
     margin-right: 0;
     margin-left: .2rem;
 }
+
 
 @media (min-width: 992px) {
     .sidebar-mini.sidebar-collapse .content-wrapper, .sidebar-mini.sidebar-collapse .main-footer, .sidebar-mini.sidebar-collapse .main-header {
