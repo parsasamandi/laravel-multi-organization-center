@@ -29,6 +29,7 @@ class StoreGeneralInfoRequest extends FormRequest
         } else {
             // Get the authenticated user's center ID
             $centerId = Auth::user()->id;
+            $decryptedId = null;
         }
 
         $rules = [
@@ -40,18 +41,17 @@ class StoreGeneralInfoRequest extends FormRequest
         $rules['jalaliMonth'] = [
             'required',
             Rule::unique('general_infos')
-                ->where(function ($query) {
+                ->where(function ($query) use ($centerId) {
                     return $query->where('jalaliYear', $this->input('jalaliYear'))
-                                 ->where('center_id', $userId)
+                                 ->where('center_id', $centerId)
                                  ->whereExists(function ($query) use ($centerId) {
                                      $query->select(DB::raw(1))
                                            ->from('centers')
                                            ->whereColumn('centers.id', 'general_infos.center_id')
-                                           ->where('centers.type', 0)
-                                           ->where('centers.id', $centerId);
+                                           ->where('centers.type', 0);
                                  });
                 })
-                ->ignore(Crypt::decryptString($decryptedId), 'id') // Ignore current record ID during update
+                ->ignore($decryptedId, 'id') // Ignore current record ID during update
         ];
 
 
