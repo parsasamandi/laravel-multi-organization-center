@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use App\Providers\Convertor;
 
 class StoreCenterRequest extends FormRequest

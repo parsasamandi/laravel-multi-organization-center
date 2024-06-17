@@ -9,13 +9,13 @@ use Auth;
 
 class GeneralInfoExists implements Rule
 {
-    protected $center;
+    protected $center_id;
     protected $jalaliYear;
     protected $jalaliMonth;
 
-    public function __construct($jalaliYear, $jalaliMonth)
+    public function __construct($jalaliYear, $jalaliMonth, $center_id)
     {
-        $this->user = Auth::user();
+        $this->center_id = $center_id;
         $this->jalaliYear = $jalaliYear;
         $this->jalaliMonth = $jalaliMonth;
     }
@@ -23,7 +23,7 @@ class GeneralInfoExists implements Rule
     public function passes($attribute, $value)
     {
         $generalInfo = GeneralInfo::where(function ($query) {
-            $query->where('center_id', $this->user->id)
+            $query->where('center_id', $this->center_id)
                 ->where('jalaliMonth', $this->jalaliMonth)
                 ->where('jalaliYear', $this->jalaliYear);
         })->first();
@@ -33,11 +33,6 @@ class GeneralInfoExists implements Rule
 
     public function message()
     {
-        if ($this->user->type == Center::CENTER) {
-            return 'برای سال و ماه انتخاب شده، قبلا گزارش صورتحساب وارد نشده است. لطفا ابتدا گزارش صورتحساب را برای این تاریخ وارد نمایید.';
-
-        } else {
-            return 'عضو عزیز گلستان، این مرکز برای این گزارش در گذشته صورتحساب بانکی را وارد نکرده است. لطفا ابتدا گزارش صورتحساب را برای این تاریخ وارد نمایید.';
-        }
+        return 'برای سال و ماه انتخاب شده، قبلا گزارش صورتحساب وارد نشده است. لطفا ابتدا گزارش صورتحساب را برای این تاریخ وارد نمایید.';
     }
 }

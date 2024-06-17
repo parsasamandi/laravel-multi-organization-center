@@ -4,7 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Crypt;
 use App\Providers\Convertor;
+use App\Models\GeneralInfo;
 use DB;
 use Auth;
 
@@ -17,33 +19,39 @@ class StoreGeneralInfoRequest extends FormRequest
      */
     public function rules()
     {
+        // Decrypt the ID if it's present, or set to null if decryption fails
+        $decryptedId = null;
+        if ($this->input('id')) {
+            $decryptedId = Crypt::decryptString($this->input('id'));
+
+            $generalInfo = GeneralInfo::find($decryptedId);
+            $centerId = $generalInfo->center_id;
+        } else {
+            // Get the authenticated user's center ID
+            $centerId = Auth::user()->id;
+        }
+
         $rules = [
             'bank_balance' => 'required|numeric',
             'jalaliYear' => 'required',
-            'receipt' => 'nullable|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096',
+            'receipt' => $this->input('id') ? 'nullable|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096' : 'required|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096',
         ];
-
-        // If 'id' is not present in the request, make 'receipt' required
-        if (!$this->input('id')) {
-            $data['receipt'] = 'required|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096';
-        }
 
         $rules['jalaliMonth'] = [
             'required',
             Rule::unique('general_infos')
                 ->where(function ($query) {
-                    $userId = Auth::id();
                     return $query->where('jalaliYear', $this->input('jalaliYear'))
                                  ->where('center_id', $userId)
-                                 ->whereExists(function ($query) use ($userId) {
+                                 ->whereExists(function ($query) use ($centerId) {
                                      $query->select(DB::raw(1))
                                            ->from('centers')
                                            ->whereColumn('centers.id', 'general_infos.center_id')
                                            ->where('centers.type', 0)
-                                           ->where('centers.id', $userId);
+                                           ->where('centers.id', $centerId);
                                  });
                 })
-                ->ignore(Crypt::decryptString($this->input('id')), 'id') // Ignore current record ID during update
+                ->ignore(Crypt::decryptString($decryptedId), 'id') // Ignore current record ID during update
         ];
 
 

@@ -48,26 +48,30 @@ class ReportController extends Controller
     // Insert or Update
     public function store(StoreReportRequest $request) {
 
-        $id = $request->get('id');
-        if($id)
-            $id = Crypt::decryptString($request->get('id'));
+         $decryptedId = null;
+         if ($request->get('id')) {
+            $decryptedId = Crypt::decryptString($request->get('id'));
+            $report = Report::find($decryptedId);
+            $centerId = $report->center_id;
+         } else {
+            // Get the authenticated user's center ID
+            $centerId = Auth::user()->id;
+        }
 
         $data = [
             'expenses' => $request->get('expenses'),
             'range' => $request->get('range'),
             'type' => $request->get('type'),
             'description' => $request->get('description'),
-            'center_id' => Auth::user()->id
+            'center_id' => $centerId
         ];
     
-        // Get center information and Jalali year/month
-        $center = Auth::user();
         $jalaliYear = $request->get('jalaliYear');
         $jalaliMonth = $request->get('jalaliMonth');
     
         // Getting general_info_id
-        $generalInfo = GeneralInfo::where(function ($query) use ($center, $jalaliYear, $jalaliMonth) {
-            $query->where('center_id', $center->id)
+        $generalInfo = GeneralInfo::where(function ($query) use ($centerId, $jalaliYear, $jalaliMonth) {
+            $query->where('center_id', $centerId)
                 ->where('jalaliMonth', $jalaliMonth)
                 ->where('jalaliYear', $jalaliYear);
         })->first();
@@ -83,8 +87,9 @@ class ReportController extends Controller
                 "GOLTEAM{$center->code}/{$request->get('jalaliMonth')}_{$request->get('jalaliYear')}/{$receipt->getClientOriginalName()}";
 
             
-            if($id){
-                $report = Report::find($id);
+            if($decryptedId != null) {
+                $report = Report::find($decryptedId);
+
                 Storage::disk('s3')->delete('receipts/' . $report->receipt ?? null); // Delete existing receipt if updating
             }
     
@@ -94,11 +99,11 @@ class ReportController extends Controller
         }
     
     
-        $report = Report::updateOrCreate(['id' => $id], $data);
+        $report = Report::updateOrCreate(['id' => $decryptedId], $data);
     
         // Update report status
         $report->statuses()->updateOrCreate(
-            ['status_id' => $id, 'status' => Status::NOTCONFIRMED, 'status_type' => Report::class]
+            ['status_id' => $report->id, 'status' => Status::NOTCONFIRMED, 'status_type' => Report::class]
         );
     
         return $this->getAction($request->get('button_action'));

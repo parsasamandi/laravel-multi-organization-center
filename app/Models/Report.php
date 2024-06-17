@@ -51,7 +51,7 @@ class Report extends Model
      */
     public function center()
     {
-        return $this->belongsTo('App\Models\Center');
+        return $this->belongsTo('App\Models\Center', 'center_id');
     }
 
     /**
