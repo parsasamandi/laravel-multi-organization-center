@@ -3,6 +3,8 @@
 namespace App\DataTables;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Illuminate\Support\Facades\Crypt;
+
 
 class GeneralDataTable
 {
@@ -33,27 +35,29 @@ class GeneralDataTable
             ->language(asset('js/persian.json'));
     }
 
-    // Computed column in datatables for delete,update,insertion
+    // Computed column in datatables for delete, update, insertion
     public function setAction($id, $model = null)
     {
+        $encryptedId = Crypt::encryptString($id); // Encrypt the ID
+    
         $baseHtml = <<<HTML
-            <a onclick="showConfirmationModal('{$id}')">
+            <a onclick="showConfirmationModal('{$encryptedId}')">
                 <i class="fa fa-trash text-primary" aria-hidden="true"></i>
             </a>
             &nbsp;
-            <a onclick="showEditModal('{$id}')">
+            <a onclick="showEditModal('{$encryptedId}')">
                 <i class="fa fa-edit text-primary" aria-hidden="true"></i>
             </a>
         HTML;
-
+    
         if ($model) {
-            $detailsUrl = url($model . '/details/' . $id);
+            $detailsUrl = url($model . '/details') . '?id=' . $encryptedId; // Use encrypted ID
             return $baseHtml . "&nbsp;" . "<a href='$detailsUrl'><i class='fa fa-info-circle text-primary' aria-hidden='true'></i></a>";
         }
-
+    
         return $baseHtml;
     }
-
+    
 
 
     /**

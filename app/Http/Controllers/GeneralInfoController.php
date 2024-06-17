@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\StoreGeneralInfoRequest;
 use App\Providers\SuccessMessages;
@@ -54,7 +55,7 @@ class GeneralInfoController extends Controller
         }
     
         // Handle receipt upload
-        $generalInfoId = $request->get('id');
+        $generalInfoId = Crypt::decryptString($request->get('id'));
         if ($generalInfoId) {
             $generalInfo = GeneralInfo::find($generalInfoId);
         } else {
@@ -99,13 +100,18 @@ class GeneralInfoController extends Controller
     
     // Edit
     public function edit(Request $request) {
-        return $this->action->edit(GeneralInfo::class, $request->get('id'));
+       // Encrypting the ID
+        $id = Crypt::decryptString($request->get('id'));
+
+        return $this->action->edit(GeneralInfo::class, $id);
     }
 
     // Confirming the General Info status
     public function confirmStatus(Request $request) {
 
-        $generalInfo = GeneralInfo::findOrFail($request->get('id'));
+        $id = Crypt::decryptString($request->get('id'));
+
+        $generalInfo = GeneralInfo::findOrFail($id);
 
         // Checking if it was confirmed
         if($request->get('status') == Status::CONFIRMED) {
@@ -125,7 +131,10 @@ class GeneralInfoController extends Controller
     }
 
     // Details
-    public function details($id) {
+    public function details(Request $request) {
+
+        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
+
         // Fetch the data for the specified ID from the database
         $generalInfo = GeneralInfo::where('id', $id)->with('statuses')->first();
 
@@ -133,8 +142,11 @@ class GeneralInfoController extends Controller
         return view('generalInfo.details')->with('generalInfo', $generalInfo);
     }
 
+
     // Delete
-    public function delete($id) {
+    public function delete(Request $request) {
+
+        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
 
         $generalInfo = GeneralInfo::find($id);
         

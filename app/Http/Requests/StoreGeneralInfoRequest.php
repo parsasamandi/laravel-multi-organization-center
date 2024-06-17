@@ -43,7 +43,7 @@ class StoreGeneralInfoRequest extends FormRequest
                                            ->where('centers.id', $userId);
                                  });
                 })
-                ->ignore($this->input('id'), 'id') // Ignore current record ID during update
+                ->ignore(Crypt::decryptString($this->input('id')), 'id') // Ignore current record ID during update
         ];
 
 

@@ -15,6 +15,7 @@ use App\Models\Status;
 use App\Models\Center;
 use Yajra\DataTables\Html\Builder;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Crypt;
 use Auth;
 use Storage;
 
@@ -48,6 +49,8 @@ class ReportController extends Controller
     public function store(StoreReportRequest $request) {
 
         $id = $request->get('id');
+        if($id)
+            $id = Crypt::decryptString($request->get('id'));
 
         $data = [
             'expenses' => $request->get('expenses'),
@@ -105,8 +108,11 @@ class ReportController extends Controller
 
     // Edit
     public function edit(Request $request) {
+
+        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
+        
         // Fetching the "reports" table
-        $report = Report::find($request->get('id'))->select('id', 'center_id', 'general_info_id', 
+        $report = Report::find($id)->select('id', 'center_id', 'general_info_id', 
                 'expenses', 'range', 'receipt', 'description', 'type')->first();
     
         // Fetching the associated GeneralInfo using the general_info_id from the report
@@ -124,7 +130,9 @@ class ReportController extends Controller
 
     public function confirmStatus(Request $request) {
 
-        $report = Report::findOrFail($request->get('id'));
+        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
+
+        $report = Report::findOrFail($id);
 
         // Checking if it was confirmed
         if($request->get('status') == Status::CONFIRMED) {
@@ -144,12 +152,17 @@ class ReportController extends Controller
     }
 
     // Details
-    public function details($id) {
+    public function details(Request $request) {
+
+        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
+
         return view('report.details', ['report' => Report::with('generalInfo')->findOrFail($id)]);
     }
 
     // Delete
-    public function delete($id) {
+    public function delete(Request $request) {
+
+        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
         
         $report = Report::find($id);
         

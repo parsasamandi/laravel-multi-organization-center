@@ -15,7 +15,7 @@ class StoreCenterRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-        $id = $request->get('id') ? $request->get('id') : 'NULL'; // Use 'NULL' if id is not set
+        $id = $request->get('id') ? Crypt::decryptString($request->get('id')) : 'NULL'; // Use 'NULL' if id is not set
 
         $rules = [
             'name' => 'required',

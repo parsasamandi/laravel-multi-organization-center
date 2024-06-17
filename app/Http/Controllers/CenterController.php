@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use App\DataTables\CenterDataTable;
 use App\Http\Requests\StoreCenterRequest;
 use App\Providers\Action;
@@ -40,10 +41,9 @@ class CenterController extends Controller
 
     // Store
     public function store(StoreCenterRequest $request) {
-        // Ensure 'id' is an integer or null
-        $id = $request->get('id');
-        $id = is_numeric($id) ? (int)$id : null;
-    
+
+        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
+
         $data = [
             'name' => $request->get('name'),
             'code' => $request->get('code'),
@@ -60,14 +60,19 @@ class CenterController extends Controller
     } 
     
 
-    // Edit
+     // Edit
     public function edit(Request $request) {
-        return $this->action->edit(Center::class, $request->get('id'));
+
+        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
+
+        return $this->action->edit(Center::class, $id);
     }
 
-
     // Delete
-    public function delete($id) {
+    public function delete(Request $request) {
+        
+        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
+
         return $this->action->delete(Center::class, $id);
     }
 }

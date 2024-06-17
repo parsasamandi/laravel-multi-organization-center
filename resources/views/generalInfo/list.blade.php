@@ -64,12 +64,15 @@
     action.insert();
 
     // Delete
-    window.showConfirmationModal = function showConfirmationModal(url) {
-      action.delete(url);
+    window.showConfirmationModal = function showConfirmationModal(id) {
+      action.delete(id);
     }
 
     // Edit Modal
-    window.showEditModal = function showEditModal(url) {
+    window.showEditModal = function showEditModal(id) {
+
+      console.log(id);
+
 
       // Edit
       action.reloadModal();
@@ -77,9 +80,9 @@
       $.ajax({
         url: "{{ url('generalInfo/edit') }}",
         method: 'get',
-        data: { id: url },
+        data: { id: id },
         success: function (data) {  
-          action.editOnSuccess(url);
+          action.editOnSuccess(id);
           $('#bank_balance').val(data.bank_balance);
           $('#jalaliMonth').val(data.jalaliMonth).trigger('change');
           $('#jalaliYear').val(data.jalaliYear).trigger('change');

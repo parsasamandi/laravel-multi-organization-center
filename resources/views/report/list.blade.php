@@ -93,21 +93,22 @@
     action.insert();
 
     // Delete
-    window.showConfirmationModal = function showConfirmationModal(url) {
-      action.delete(url);
+    window.showConfirmationModal = function showConfirmationModal(id) {
+      console.log(id);
+      action.delete(id);
     }
 
     // Edit
-    window.showEditModal = function showEditModal(url) {
+    window.showEditModal = function showEditModal(id) {
       // Edit
       action.reloadModal();
 
       $.ajax({
         url: "{{ url('report/edit') }}",
         method: 'get',
-        data: { id: url },
+        data: { id: id },
         success: function (data) {  
-          action.editOnSuccess(url);
+          action.editOnSuccess(id);
           $('#jalaliMonth').val(data.generalInfo.jalaliMonth).trigger('change');
           $('#jalaliYear').val(data.generalInfo.jalaliYear).trigger('change');
           $('#type').val(data.report.type).trigger('change');

@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 use App\Providers\Convertor;
 use App\Http\Requests\Rules\GeneralInfoExists;
 use App\Http\Requests\Rules\CommaSeparatedNumbers;
+use Illuminate\Support\Facades\Crypt;
 use Auth;
 
 class StoreReportRequest extends FormRequest
@@ -15,7 +16,7 @@ class StoreReportRequest extends FormRequest
     {
         $rules = [
             'expenses' => 'required|numeric',
-            'range' => ['required'],
+            'range' => 'required|regex:/.*\d+.*$/',
             'receipt' => 'nullable|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096',
             'jalaliMonth' => ['required', new GeneralInfoExists($this->get('jalaliYear'), $this->get('jalaliMonth'))],
             'jalaliYear' => ['required'],
@@ -35,7 +36,7 @@ class StoreReportRequest extends FormRequest
                         })
                         ->where('type', $this->input('type'));
                     })
-                    ->ignore($this->input('id'), 'id')  // Ignore current record ID during update
+                    ->ignore(Crypt::decryptString($this->input('id')), 'id')  // Ignore current record ID during update
             ],
         ];
 
@@ -70,7 +71,7 @@ class StoreReportRequest extends FormRequest
         return [
             'receipt.required' => 'پیوست فایل رسید الزامی است.',
             'type.unique' => 'نوع هزینه قبلا برای سال و ماه انتخاب شده وارد شده است.',
-            'range.regex' => 'نوع هزینه قبلا برای سال و ماه انتخاب شده وارد شده است.',
+            'range.regex' => 'لطفا در ردیف های هزینه صورتحساب بانکی، عدد وارد کنید.',
         ];
     }
 }

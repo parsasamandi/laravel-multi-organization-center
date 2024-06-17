@@ -24,7 +24,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('table/list', 'CenterController@centerTable')->name('list.table');
         Route::post('store', 'CenterController@store');
         Route::get('edit', 'CenterController@edit');
-        Route::get('delete/{id}','CenterController@delete');
+        Route::get('delete','CenterController@delete');
     });
 
     // Golestan Team
@@ -33,7 +33,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('table/list', 'GolestanTeamController@golestanTeamTable')->name('list.table');
         Route::post('store', 'GolestanTeamController@store');
         Route::get('edit', 'GolestanTeamController@edit');
-        Route::get('delete/{id}','GolestanTeamController@delete');
+        Route::get('delete','GolestanTeamController@delete');
     });
 
     // General info
@@ -42,10 +42,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/table/list', 'GeneralInfoController@generalInfoTable')->name('list.table');
         Route::post('store', 'GeneralInfoController@store');
         Route::get('/edit', 'GeneralInfoController@edit');
-        Route::get('/details/{id}', 'GeneralInfoController@details');
+        Route::get('/details', 'GeneralInfoController@details');
         Route::post('/update', 'GeneralInfoController@update');
         Route::post('/confirmStatus', 'GeneralInfoController@confirmStatus');
-        Route::get('delete/{id}','GeneralInfoController@delete');
+        Route::get('delete','GeneralInfoController@delete');
     });
 
     // Report
@@ -56,8 +56,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/edit', 'ReportController@edit');
         Route::post('/update', 'ReportController@update');
         Route::post('/confirmStatus', 'ReportController@confirmStatus');
-        Route::get('/details/{id}', 'ReportController@details');
-        Route::get('delete/{id}','ReportController@delete');
+        Route::get('/details', 'ReportController@details');
+        Route::get('delete','ReportController@delete');
     });
 
 });

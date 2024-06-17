@@ -50,8 +50,9 @@ class RequestHandler {
         $('#ok_button').click(function () {
 
             $.ajax({
-                url: "/" + window.url + "/delete/" + id,
+                url: "/" + window.url + "/delete",
                 method: "get",
+                data: { id: id },
                 success: function(data) {
 
                     $('#confirmationModal').modal('hide');
