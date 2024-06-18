@@ -48,14 +48,18 @@ class ReportController extends Controller
     // Insert or Update
     public function store(StoreReportRequest $request) {
 
-         $decryptedId = null;
-         if ($request->get('id')) {
+        $decryptedId = null;
+        $report = null;
+
+        if ($request->get('id')) {
             $decryptedId = Crypt::decryptString($request->get('id'));
             $report = Report::find($decryptedId);
             $centerId = $report->center_id;
+            $center = Center::find($centerId);
          } else {
             // Get the authenticated user's center ID
             $centerId = Auth::user()->id;
+            $center = Center::find($centerId);
         }
 
         $data = [
@@ -86,18 +90,12 @@ class ReportController extends Controller
                 "GOL{$center->code}/{$request->get('jalaliMonth')}_{$request->get('jalaliYear')}/{$receipt->getClientOriginalName()}" :
                 "GOLTEAM{$center->code}/{$request->get('jalaliMonth')}_{$request->get('jalaliYear')}/{$receipt->getClientOriginalName()}";
 
-            
-            if($decryptedId != null) {
-                $report = Report::find($decryptedId);
-
-                Storage::disk('s3')->delete('receipts/' . $report->receipt ?? null); // Delete existing receipt if updating
-            }
+            // Delete existing receipt if updating            
+            $report != null ? Storage::disk('s3')->delete('receipts/' . $report->receipt) : null; 
     
             $receipt->storeAs('receipts', $fileName, 's3');
-
             $data['receipt'] = $fileName;
         }
-    
     
         $report = Report::updateOrCreate(['id' => $decryptedId], $data);
     
@@ -108,34 +106,26 @@ class ReportController extends Controller
     
         return $this->getAction($request->get('button_action'));
     }
-    
-
 
     // Edit
     public function edit(Request $request) {
 
         $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
         
-        // Fetching the "reports" table
-        $report = Report::find($id)->select('id', 'center_id', 'general_info_id', 
-                'expenses', 'range', 'receipt', 'description', 'type')->first();
-    
-        // Fetching the associated GeneralInfo using the general_info_id from the report
-        $generalInfo = GeneralInfo::find($report->general_info_id)->select('jalaliMonth', 'jalaliYear')->first();
-    
-        // Prepare the response data
-        $values = [
-            'report' => $report,
-            'generalInfo' => $generalInfo,
-        ];
+        // Fetch the report along with only specific columns from the related generalInfo
+        $report = Report::with(['generalInfo' => function($query) {
+            $query->select('id', 'jalaliMonth', 'jalaliYear');
+        }])
+        ->select('id', 'center_id', 'general_info_id', 'expenses', 'range', 'receipt', 'description', 'type')
+        ->find($id);
     
         // Return the response as JSON
-        return response()->json($values);
+        return response()->json($report);
     }    
 
     public function confirmStatus(Request $request) {
 
-        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
+        $id = $request->get('id'); // Decrypt the ID
 
         $report = Report::findOrFail($id);
 
@@ -172,7 +162,7 @@ class ReportController extends Controller
         $report = Report::find($id);
         
         // Deleting from storage
-        Storage::disk('s3')->delete($report->receipt);
+        Storage::disk('s3')->delete('receipts/' . $report->receipt);
     
         return $this->action->delete(Report::class, $id);
     }

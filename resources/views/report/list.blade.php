@@ -109,12 +109,12 @@
         data: { id: id },
         success: function (data) {  
           action.editOnSuccess(id);
-          $('#jalaliMonth').val(data.generalInfo.jalaliMonth).trigger('change');
-          $('#jalaliYear').val(data.generalInfo.jalaliYear).trigger('change');
-          $('#type').val(data.report.type).trigger('change');
-          $('#expenses').val(data.report.expenses);
-          $('#range').val(data.report.range);
-          $('#description').val(data.report.description);
+          $('#jalaliMonth').val(data.general_info.jalaliMonth).trigger('change');
+          $('#jalaliYear').val(data.general_info.jalaliYear).trigger('change');
+          $('#type').val(data.type).trigger('change');
+          $('#expenses').val(data.expenses);
+          $('#range').val(data.range);
+          $('#description').val(data.description);
         }
       })
     }

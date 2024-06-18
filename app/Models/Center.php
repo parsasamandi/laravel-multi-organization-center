@@ -47,7 +47,7 @@ class Center extends Model implements Authenticatable
      */
     public function generalInfo()
     {
-        return $this->hasOne('App\Models\GeneralInfo', 'center_id');
+        return $this->hasMany('App\Models\GeneralInfo', 'center_id');
     }
 
     /**

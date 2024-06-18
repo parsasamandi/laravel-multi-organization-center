@@ -42,16 +42,19 @@ class CenterController extends Controller
     // Store
     public function store(StoreCenterRequest $request) {
 
-        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
+        $id = $request->get('id') ? 
+            Crypt::decryptString($request->get('id')) : null; // Decrypt the ID
 
         $data = [
             'name' => $request->get('name'),
             'code' => $request->get('code'),
             'phone_number' => $request->get('phone_number'), 
             'email' => $request->get('email'), 
-            'type' => Center::CENTER,
-            'password' => Hash::make($request->get('password'))
+            'type' => Center::CENTER
         ];
+
+        if($request->get('password'))
+            $data['password'] = Hash::make($request->get('password'));
     
         // Insert or update
         Center::updateOrCreate(['id' => $id], $data);

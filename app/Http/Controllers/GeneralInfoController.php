@@ -55,7 +55,7 @@ class GeneralInfoController extends Controller
         }
     
         // Handle receipt upload
-        $generalInfoId = Crypt::decryptString($request->get('id'));
+        $generalInfoId = $request->get('id') ? Crypt::decryptString($request->get('id')) : null;
         if ($generalInfoId) {
             $generalInfo = GeneralInfo::find($generalInfoId);
         } else {
@@ -109,7 +109,7 @@ class GeneralInfoController extends Controller
     // Confirming the General Info status
     public function confirmStatus(Request $request) {
 
-        $id = Crypt::decryptString($request->get('id'));
+        $id = $request->get('id');
 
         $generalInfo = GeneralInfo::findOrFail($id);
 
@@ -151,7 +151,7 @@ class GeneralInfoController extends Controller
         $generalInfo = GeneralInfo::find($id);
         
         // Deleting from storage
-        Storage::disk('s3')->delete($generalInfo->bank_statement_receipt);
+        Storage::disk('s3')->delete('receipts/' . $generalInfo->bank_statement_receipt);
     
         return $this->action->delete(GeneralInfo::class, $id);
     }
