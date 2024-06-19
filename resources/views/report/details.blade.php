@@ -32,7 +32,7 @@
         <!-- Table data -->
         <x-slot name="tableData">
             <!-- Center name -->
-            <td>{{ Auth::user()->name }}</td>
+            <td>{{ $report->center->name }}</td>
             <!-- Expenses -->
             <td>{{ $convertor->englishToPersianDecimal($report->expenses) }}</td>
             <!-- Range -->

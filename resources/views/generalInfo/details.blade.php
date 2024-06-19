@@ -27,7 +27,7 @@
 
         <!-- Table data -->
         <x-slot name="tableData">
-            <td>{{ Auth::user()->name }}</td>
+            <td>{{ $generalInfo->center->name }}</td>
             <td>{{ $convertor->englishToPersianDecimal($generalInfo->jalaliYear) }}</td>
              <!-- Jalali months -->
             <td>{{ $convertor->numberTojalaliMonthBlade($generalInfo->jalaliMonth) }}</td>

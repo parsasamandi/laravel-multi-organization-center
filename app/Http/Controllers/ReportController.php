@@ -115,8 +115,7 @@ class ReportController extends Controller
         // Fetch the report along with only specific columns from the related generalInfo
         $report = Report::with(['generalInfo' => function($query) {
             $query->select('id', 'jalaliMonth', 'jalaliYear');
-        }])
-        ->select('id', 'center_id', 'general_info_id', 'expenses', 'range', 'receipt', 'description', 'type')
+        }])->select('id', 'center_id', 'general_info_id', 'expenses', 'range', 'receipt', 'description', 'type')
         ->find($id);
     
         // Return the response as JSON
