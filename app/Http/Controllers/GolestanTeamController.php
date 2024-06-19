@@ -38,7 +38,8 @@ class GolestanTeamController extends Controller
     // Store
     public function store(StoreCenterRequest $request) {
 
-        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
+        $id = $request->get('id') ? 
+            Crypt::decryptString($request->get('id')) : null; // Decrypt the ID
 
         $data = [
             'name' => $request->get('name'),
