@@ -28,9 +28,6 @@ class CenterDataTable extends DataTable
             ->eloquent($query)
             ->addIndexColumn()
             ->rawColumns(['action'])
-            ->editColumn('code', function (Center $center) {
-                return 'GOL' . $center->code;
-            })
             ->addColumn('action', function (Center $center){
                 return $this->dataTable->setAction($center->id);
             })->editColumn('phone_number', function (Center $center) {

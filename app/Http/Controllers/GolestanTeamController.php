@@ -43,7 +43,6 @@ class GolestanTeamController extends Controller
 
         $data = [
             'name' => $request->get('name'),
-            'code' => $request->get('code'),
             'phone_number' => $request->get('phone_number'), 
             'email' => $request->get('email'), 
             'type' => Center::GOLESTANTEAM

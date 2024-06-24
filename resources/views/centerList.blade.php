@@ -21,7 +21,7 @@
 
         <!-- Center code -->
         <x-input key="code" placeholder="کد مرکز" 
-              class="col-md-6 mb-3" required="true"/>
+          class="col-md-6 mb-3" required="true"/>
 
         <!-- Phone number -->
         <x-input key="phone_number" placeholder="شماره تلفن"

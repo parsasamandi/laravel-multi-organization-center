@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreLoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use App\Http\Requests\StoreCenterRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Center;
 use Redirect;
@@ -25,7 +25,7 @@ class LoginController extends Controller
     }
 
     // Store Login
-    public function store(Request $request)
+    public function store(StoreLoginRequest $request)
     {
         $credentials = $request->only('phone_number', 'password');
         $remember_me = $request->has('remember_me');
@@ -40,7 +40,9 @@ class LoginController extends Controller
     
     // Logout
     public function logout(Request $request) {
+        
         Auth::logout();
+
         return redirect('login');
     }
 }

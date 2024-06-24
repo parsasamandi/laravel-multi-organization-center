@@ -66,6 +66,7 @@ class StoreReportRequest extends FormRequest
         ];
     }
 
+    // Prepare for validation (Mostly used to convert Persian to English decimals)
     protected function prepareForValidation()
     {
         $convertor = new Convertor();

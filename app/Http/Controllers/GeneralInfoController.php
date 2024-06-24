@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\StoreGeneralInfoRequest;
 use App\Providers\SuccessMessages;
 use App\DataTables\GeneralInfoDataTable;

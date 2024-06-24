@@ -19,17 +19,13 @@
       {{-- Form --}}
       <div class="row">
 
-        <!-- Golestan Team code -->
-        <x-input key="code" placeholder="کد عضو گلستان" 
-              class="col-md-6 mb-3" required="true"/>
-
         <!-- Phone number -->
         <x-input key="phone_number" placeholder="شماره تلفن"
           class="col-md-6 mb-3" required="true"/>
 
         <!-- Golestan team name -->
         <x-input key="name" placeholder="نام عضو گلستان" 
-          class="col-md-12 mb-3" required="true"/>
+          class="col-md-6 mb-3" required="true"/>
 
         <!-- Email -->
         <x-input key="email" placeholder="ایمیل عضو گلستان"

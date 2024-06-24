@@ -28,9 +28,6 @@ class GolestanTeamDataTable extends DataTable
             ->eloquent($query)
             ->addIndexColumn()
             ->rawColumns(['action'])
-            ->editColumn('code', function (Center $center) {
-                return 'GOLTEAM' . $center->code;
-            })
             ->addColumn('action', function (Center $center){
                 return $this->dataTable->setAction($center->id);
             })->editColumn('phone_number', function (Center $center) {
@@ -74,8 +71,6 @@ class GolestanTeamDataTable extends DataTable
     {
         return [
             $this->dataTable->getIndexCol(),
-            Column::make('code')
-                ->title('کد عضو گلستان'),
             Column::make('name')
                 ->title('نام شخص')
                 ->orderable(false),

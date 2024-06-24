@@ -40,6 +40,7 @@ class GeneralInfoDataTable extends DataTable
                 }
                 return $center->name;
             })
+            // Fix this error | It does not workd
             ->filterColumn('center_name', function ($query, $keyword) {
                 $query->whereHas('center', function ($q) use ($keyword) {
                     $q->where('name', 'like', '%' . $keyword . '%');

@@ -35,8 +35,14 @@ class ReportDataTable extends DataTable
             ->rawColumns(['action', 'receipt', 'date', 'center_name'])
             ->addColumn('center_name', function(Report $report) {
                 $center = Center::find($report->center_id);
-                
+
                 return $center ? $center->name : 'مرکز وجود ندارد';
+            })
+            // Fix this error
+            ->filterColumn('center_name', function ($query, $keyword) {
+                $query->whereHas('center', function ($q) use ($keyword) {
+                    $q->where('name', 'like', '%' . $keyword . '%');
+                });
             })
             ->addColumn('date', function (Report $report) {
                 $generalInfo = GeneralInfo::find($report->general_info_id);
