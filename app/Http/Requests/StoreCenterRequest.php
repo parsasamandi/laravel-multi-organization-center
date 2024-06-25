@@ -18,10 +18,10 @@ class StoreCenterRequest extends FormRequest
     {
         $id = $request->get('id') ? Crypt::decryptString($request->get('id')) : 'NULL'; // Use 'NULL' if id is not set
 
-        $rules = [
+        $rules = [  
             'name' => 'required',
             'code' => 'required|unique:centers,code,' . $id,
-            'password' => $this->input('id') ? 'nullable|min:7|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/' 
+            'password' => $request->get('id') ? 'nullable|min:7|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/' 
                 : 'required|min:7|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/',
             'password-confirm' => 'same:password',
             'phone_number' => 'required|numeric|digits:11|unique:centers,phone_number,' . $id,

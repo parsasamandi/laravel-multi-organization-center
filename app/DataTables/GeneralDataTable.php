@@ -29,7 +29,7 @@ class GeneralDataTable
             ->info(false)
             ->ordering(true)
             ->responsive(true)
-            ->pageLength(12)
+            ->pageLength(8)
             ->dom('Bfrtip')
             ->orderBy(1)
             ->language(asset('js/persian.json'));

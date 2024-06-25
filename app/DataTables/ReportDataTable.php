@@ -38,12 +38,12 @@ class ReportDataTable extends DataTable
 
                 return $center ? $center->name : 'مرکز وجود ندارد';
             })
-            // Fix this error
-            ->filterColumn('center_name', function ($query, $keyword) {
-                $query->whereHas('center', function ($q) use ($keyword) {
-                    $q->where('name', 'like', '%' . $keyword . '%');
-                });
-            })
+                // Fix this error
+                ->filterColumn('center_name', function ($query, $keyword) {
+                    $query->whereHas('center', function ($q) use ($keyword) {
+                        $q->where('name', 'like', '%' . $keyword . '%');
+                    });
+                })
             ->addColumn('date', function (Report $report) {
                 $generalInfo = GeneralInfo::find($report->general_info_id);
                 if ($generalInfo) {

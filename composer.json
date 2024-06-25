@@ -11,6 +11,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "barryvdh/laravel-debugbar": "^3.7",
+        "doctrine/dbal": "^2.13",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",

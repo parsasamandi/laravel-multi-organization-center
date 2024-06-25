@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Providers\Convertor;
 use App\Models\Center;
 use Storage;
-
+use DB;
 
 class GeneralInfoDataTable extends DataTable
 {
@@ -42,8 +42,9 @@ class GeneralInfoDataTable extends DataTable
             })
             // Fix this error | It does not workd
             ->filterColumn('center_name', function ($query, $keyword) {
+                // Use whereHas to filter based on related Center model's name attribute
                 $query->whereHas('center', function ($q) use ($keyword) {
-                    $q->where('name', 'like', '%' . $keyword . '%');
+                    $q->where('name', $keyword);
                 });
             })
             ->addColumn('date', function(GeneralInfo $generalInfo) {
@@ -52,6 +53,7 @@ class GeneralInfoDataTable extends DataTable
                     $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
             })
             ->filterColumn('date', function ($query, $keyword) {
+                DB::enableQueryLog();
                 // Ensure Convertor class is available
                 $convertor = new Convertor();
                 // Map Jalali month name to its corresponding number
@@ -60,8 +62,13 @@ class GeneralInfoDataTable extends DataTable
                 $jalaliYear = $convertor->persianToEnglishDecimal($keyword);
                 
                 // Query for records matching the provided year and month
-                $query->where('jalaliMonth', 'LIKE', "%{$jalaliMonth}%")
-                    ->orWhere('jalaliYear', 'LIKE', "%{$jalaliYear}%");
+                // $query->where('jalaliMonth', 'LIKE', "%$jalaliMonth%");
+                $query->where('jalaliYear', $jalaliYear);
+
+                // $results = $query->get();
+
+                // $queries = DB::getQueryLog();
+                // dd($queries); // Dump the logged queries
             })            
             ->orderColumn('date', function ($query, $direction) {
                 $query->orderBy('jalaliYear', $direction)
