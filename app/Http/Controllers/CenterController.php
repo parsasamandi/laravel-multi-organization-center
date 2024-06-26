@@ -12,10 +12,10 @@ use App\Models\Center;
 
 class CenterController extends Controller
 {
-    public $action;
+    protected $action;
 
-    public function __construct() {
-        $this->action = new Action();
+    public function __construct(Action $action) {
+        $this->action = $action;
     }
 
     // The home page
@@ -25,13 +25,8 @@ class CenterController extends Controller
 
     // DataTable to blade
     public function list() {
-        // dataTable
         $dataTable = new CenterDataTable();
-
-        // Center table
-        $vars['centerTable'] = $dataTable->html();
-
-        return view('centerList', $vars);
+        return view('centerList', ['centerTable' => $dataTable->html()]);
     }
 
     // Get Table
@@ -41,41 +36,33 @@ class CenterController extends Controller
 
     // Store
     public function store(StoreCenterRequest $request) {
+        $id = $request->filled('id') ? $this->decryptId($request->get('id')) : null;
 
-        $id = $request->get('id') ? 
-            Crypt::decryptString($request->get('id')) : null; // Decrypt the ID
+        $data = $request->only(['name', 'code', 'phone_number', 'email']) + ['type' => Center::CENTER];
 
-        $data = [
-            'name' => $request->get('name'),
-            'code' => $request->get('code'),
-            'phone_number' => $request->get('phone_number'), 
-            'email' => $request->get('email'), 
-            'type' => Center::CENTER
-        ];
-
-        if($request->get('password'))
+        if ($request->filled('password')) {
             $data['password'] = Hash::make($request->get('password'));
-    
-        // Insert or update
+        }
+
         Center::updateOrCreate(['id' => $id], $data);
-    
+
         return $this->getAction($request->get('button_action'));
-    } 
-    
+    }
 
-     // Edit
+    // Edit
     public function edit(Request $request) {
-
-        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
-
+        $id = $this->decryptId($request->get('id'));
         return $this->action->edit(Center::class, $id);
     }
 
     // Delete
     public function delete(Request $request) {
-        
-        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
-
+        $id = $this->decryptId($request->get('id'));
         return $this->action->delete(Center::class, $id);
+    }
+
+    // Decrypt ID
+    private function decryptId($encryptedId) {
+        return Crypt::decryptString($encryptedId);
     }
 }

@@ -14,32 +14,49 @@ use Auth;
 
 class StoreReportRequest extends FormRequest
 {
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
     public function rules()
     {
-        // Decrypt the ID if it's present, or set to null if decryption fails
-        $decryptedId = null;
-        if ($this->input('id')) {
-            $decryptedId = Crypt::decryptString($this->input('id'));
+        $centerId = $this->getCenterId();
 
-            $report = Report::find($decryptedId);
-            $centerId = $report->center_id;
-        } else {
-            // Get the authenticated user's center ID
-            $centerId = Auth::user()->id;
-        }
-
-        $rules = [
+        return [
             'expenses' => 'required|numeric',
             'range' => 'required|regex:/.*\d+.*$/',
-            'receipt' => $this->input('id') ? 'nullable|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096' : 'required|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096',
+            'receipt' => $this->input('id') 
+                ? 'nullable|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096' 
+                : 'required|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096',
             'jalaliMonth' => ['required', new GeneralInfoExists($this->get('jalaliYear'), $this->get('jalaliMonth'), $centerId)],
             'jalaliYear' => 'required',
             'type' => 'required'
         ];
-
-        return $rules;
     }
 
+    // Get Center Id
+    protected function getCenterId()
+    {
+        if ($this->input('id')) {
+            try {
+                $decryptedId = Crypt::decryptString($this->input('id'));
+                $report = Report::find($decryptedId);
+                return $report ? $report->center_id : null;
+            } catch (\Exception $e) {
+                return null;
+            }
+        }
+
+        return Auth::user()->id;
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
     public function attributes()
     {
         return [
@@ -49,7 +66,11 @@ class StoreReportRequest extends FormRequest
         ];
     }
 
-    // Prepare for validation (Mostly used to convert Persian to English decimals)
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
     protected function prepareForValidation()
     {
         $convertor = new Convertor();
@@ -60,6 +81,11 @@ class StoreReportRequest extends FormRequest
         ]);
     }
 
+    /**
+     * Get the validation messages that apply to the request.
+     *
+     * @return array
+     */
     public function messages()
     {
         return [

@@ -10,67 +10,56 @@ use App\Http\Requests\StoreCenterRequest;
 use App\Providers\Action;
 use App\Models\Center;
 
-
 class GolestanTeamController extends Controller
 {
-    public $action;
+    protected $action;
 
-    public function __construct() {
-        $this->action = new Action();
+    public function __construct(Action $action)
+    {
+        $this->action = $action;
     }
 
-    // DataTable to blade
-    public function list() {
-        // dataTable
+    public function list()
+    {
         $dataTable = new GolestanTeamDataTable();
-
-        // GolestanTeam table
-        $vars['golestanTeamTable'] = $dataTable->html();
-
-        return view('golestanTeamList', $vars);
+        return view('golestanTeamList', ['golestanTeamTable' => $dataTable->html()]);
     }
 
-    // Get Table
-    public function golestanTeamTable(GolestanTeamDataTable $golestanTeamTable) {
+    public function golestanTeamTable(GolestanTeamDataTable $golestanTeamTable)
+    {
         return $golestanTeamTable->render('golestanTeamList');
     }
 
-    // Store
-    public function store(StoreCenterRequest $request) {
+    public function store(StoreCenterRequest $request)
+    {
+        $id = $this->decryptId($request->get('id'));
 
-        $id = $request->get('id') ? 
-            Crypt::decryptString($request->get('id')) : null; // Decrypt the ID
+        $data = $request->only(['name', 'phone_number', 'email']);
+        $data['type'] = Center::GOLESTANTEAM;
 
-        $data = [
-            'name' => $request->get('name'),
-            'phone_number' => $request->get('phone_number'), 
-            'email' => $request->get('email'), 
-            'type' => Center::GOLESTANTEAM
-        ];
-
-        if($request->get('password'))
+        if ($request->filled('password')) {
             $data['password'] = Hash::make($request->get('password'));
+        }
 
-
-        // Insert or update
         Center::updateOrCreate(['id' => $id], $data);
 
         return $this->getAction($request->get('button_action'));
     }
-    
-    // Edit
-    public function edit(Request $request) {
 
-        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
-
+    public function edit(Request $request)
+    {
+        $id = $this->decryptId($request->get('id'));
         return $this->action->edit(Center::class, $id);
     }
 
-    // Delete
-    public function delete(Request $request) {
-
-        $id = Crypt::decryptString($request->get('id')); // Decrypt the ID
-
+    public function delete(Request $request)
+    {
+        $id = $this->decryptId($request->get('id'));
         return $this->action->delete(Center::class, $id);
+    }
+
+    private function decryptId($encryptedId)
+    {
+        return $encryptedId ? Crypt::decryptString($encryptedId) : null;
     }
 }

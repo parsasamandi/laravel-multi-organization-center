@@ -8,10 +8,41 @@ use Illuminate\Support\Facades\Crypt;
 use App\Providers\Convertor;
 use App\Models\GeneralInfo;
 use DB;
-use Auth;
+use Auth;   
 
 class StoreGeneralInfoRequest extends FormRequest
 {
+    protected $decryptedId = null;
+    protected $centerId = null;
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        // English conversion
+        $convertor = new Convertor();
+        $this->merge([
+            'bank_balance' => $convertor->persianToEnglishDecimal($this->input('bank_balance'))
+        ]);
+
+        // Decrypt the ID if it's present
+        if ($this->input('id')) {
+            try {
+                $this->decryptedId = Crypt::decryptString($this->input('id'));
+                $this->centerId = GeneralInfo::find($this->decryptedId)->center_id;
+            } catch (\Exception $e) {
+                $this->decryptedId = null;
+                $this->centerId = Auth::user()->id;
+            }
+        } else {
+            // Get the authenticated user's center ID
+            $this->centerId = Auth::user()->id;
+        }
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -19,43 +50,27 @@ class StoreGeneralInfoRequest extends FormRequest
      */
     public function rules()
     {
-        // Decrypt the ID if it's present, or set to null if decryption fails
-        $decryptedId = null;
-        if ($this->input('id')) {
-            $decryptedId = Crypt::decryptString($this->input('id'));
-
-            $generalInfo = GeneralInfo::find($decryptedId);
-            $centerId = $generalInfo->center_id;
-        } else {
-            // Get the authenticated user's center ID
-            $centerId = Auth::user()->id;
-            $decryptedId = null;
-        }
-
-        $rules = [
+        return [
             'bank_balance' => 'required|numeric',
             'jalaliYear' => 'required',
             'receipt' => $this->input('id') ? 'nullable|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096' : 'required|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096',
+            'jalaliMonth' => [
+                'required',
+                Rule::unique('general_infos')
+                    ->where(function ($query) {
+                        return $query->where('jalaliYear', $this->input('jalaliYear'))
+                                     ->where('center_id', $this->centerId)
+                                     ->whereExists(function ($query) {
+                                         $query->select(DB::raw(1))
+                                               ->from('centers')
+                                               ->whereColumn('centers.id', 'general_infos.center_id')
+                                               ->where('centers.type', 0)
+                                               ->where('centers.id', $this->centerId);
+                                     });
+                    })
+                    ->ignore($this->decryptedId, 'id') // Ignore current record ID during update
+            ]
         ];
-
-        $rules['jalaliMonth'] = [
-            'required',
-            Rule::unique('general_infos')
-                ->where(function ($query) use ($centerId) {
-                    return $query->where('jalaliYear', $this->input('jalaliYear'))
-                                 ->where('center_id', $centerId)
-                                 ->whereExists(function ($query) use ($centerId) {
-                                     $query->select(DB::raw(1))
-                                           ->from('centers')
-                                           ->whereColumn('centers.id', 'general_infos.center_id')
-                                           ->where('centers.type', 0);
-                                 });
-                })
-                ->ignore($decryptedId, 'id') // Ignore current record ID during update
-        ];
-
-
-        return $rules;
     }
 
     /**
@@ -71,21 +86,6 @@ class StoreGeneralInfoRequest extends FormRequest
             'jalaliYear' => 'سال',
             'jalaliMonth' => 'ماه',
         ];
-    }
-
-    /**
-     * Prepare the data for validation.
-     *
-     * @return void
-     */
-    public function prepareForValidation()
-    {
-        // English convertion
-        $convertor = new Convertor();
-
-        $this->merge([
-            'bank_balance' => $convertor->persianToEnglishDecimal($this->input('bank_balance'))
-        ]);
     }
 
     /**
