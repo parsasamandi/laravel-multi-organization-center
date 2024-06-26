@@ -20,15 +20,25 @@ class StoreCenterRequest extends FormRequest
 
         $rules = [  
             'name' => 'required',
-            'code' => 'required|unique:centers,code,' . $id,
-            'password' => $request->get('id') ? 'nullable|min:7|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/' 
+            'code' => $request->get('id') 
+                ? 'required|numeric|unique:centers,code,' . $id 
+                : 'required|numeric|digits:2|unique:centers,code,' . $id,
+            'password' => $request->get('id') 
+                ? 'nullable|min:7|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/' 
                 : 'required|min:7|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/',
             'password-confirm' => 'same:password',
-            'phone_number' => 'required|numeric|digits:11|unique:centers,phone_number,' . $id,
+            'phone_number' => [
+                'required',
+                'numeric',
+                'regex:/^\d{9}$|^\d{11}$/',
+                'unique:centers,phone_number,' . $id
+            ],
             'email' => 'email|max:255|unique:centers,email,' . $id
         ];
 
+        // Apply the validation rules
         return $rules;
+
     }
 
     /**
@@ -70,7 +80,7 @@ class StoreCenterRequest extends FormRequest
     {
         return [
             'code.digits' => 'کد مرکز باید دو رقم باشد.',
-            'phone_number.digits' => 'تلفن همراه باید یازده رقم باشد.',
+            'phone_number.regex' => 'تلفن همراه باید نه یا یازده رقم باشد.',
             'password.min' => 'رمز عبور نباید کمتر از هفت حرف باشد.',
             'password.regex' => 'رمز عبور باید حداقل یک حرف کوچک، یک حرف بزرگ و یک عدد داشته باشد.'
         ];

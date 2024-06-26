@@ -70,7 +70,6 @@ class GolestanTeamDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            $this->dataTable->getIndexCol(),
             Column::make('name')
                 ->title('نام شخص')
                 ->orderable(false),

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateCentersTableStringCodeColumn extends Migration
+class UpdateCentersTableToIntegerCodeColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -15,11 +15,11 @@ class UpdateCentersTableStringCodeColumn extends Migration
     {
         Schema::table('centers', function (Blueprint $table) {
             // Make code column nullable
-            $table->string('code')->nullable()->change();
+            $table->integer('code')->nullable()->change();
         });
     }
 
-    /**
+     /**
      * Reverse the migrations.
      *
      * @return void
@@ -28,8 +28,7 @@ class UpdateCentersTableStringCodeColumn extends Migration
     {
         Schema::table('centers', function (Blueprint $table) {
             // Revert the change (if needed)
-            $table->integer('code')->nullable(false)->change();
+            $table->string('code')->nullable()->change();
         });
     }
 }
-

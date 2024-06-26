@@ -8,9 +8,9 @@ use App\DataTables\GeneralDataTable;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Services\DataTable;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Center;
 use App\Providers\Convertor;
+use Illuminate\Support\Facades\Auth;
 use Storage;
 
 class ReportDataTable extends DataTable
@@ -33,53 +33,55 @@ class ReportDataTable extends DataTable
             ->eloquent($query)
             ->addIndexColumn()
             ->rawColumns(['action', 'receipt', 'date', 'center_name'])
-            ->addColumn('center_name', function(Report $report) {
+            ->addColumn('center_name', function (Report $report) {
                 $center = Center::find($report->center_id);
-
                 return $center ? $center->name : 'مرکز وجود ندارد';
             })
-                // Fix this error
-                ->filterColumn('center_name', function ($query, $keyword) {
-                    $query->whereHas('center', function ($q) use ($keyword) {
-                        $q->where('name', 'like', '%' . $keyword . '%');
-                    });
-                })
+            ->filterColumn('center_name', function ($query, $keyword) {
+                $query->whereHas('center', function ($q) use ($keyword) {
+                    $q->where('name', 'LIKE', "%$keyword%");
+                });
+            })
             ->addColumn('date', function (Report $report) {
                 $generalInfo = GeneralInfo::find($report->general_info_id);
-                if ($generalInfo) {
+                if ($generalInfo) 
                     return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) . ' ' .
                         $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
-                }
+
+                return null;
             })
             ->filterColumn('date', function ($query, $keyword) {
+                // Ensure Convertor class is available
                 $convertor = new Convertor();
-                $query->whereHas('generalInfo', function ($query) use ($keyword, $convertor) {
-                    $jalaliMonth = $convertor->numberTojalaliMonth($keyword);
-                    $jalaliYear = $convertor->persianToEnglishDecimal($keyword);
-                    $query->where('jalaliMonth', 'LIKE', "%{$jalaliMonth}%")
-                          ->orWhere('jalaliYear', 'LIKE', "%{$jalaliYear}%");
+                // Convert Persian numbers to English numbers
+                $jalaliYear = $convertor->persianToEnglishDecimal($keyword);
+                // Map Jalali month name to its corresponding number
+                $jalaliMonth = $convertor->numberTojalaliMonth($keyword);
+
+                $query->whereHas('generalInfo', function ($subQuery) use ($jalaliMonth, $jalaliYear) {
+                    if (!empty($jalaliMonth)) {
+                        $subQuery->where('jalaliMonth', 'LIKE', "%{$jalaliMonth}%");
+                    }
+                    if (is_numeric($jalaliYear)) {
+                        $subQuery->where('jalaliYear', 'LIKE', "%$jalaliYear%");
+                    }
                 });
             })
             ->orderColumn('date', function ($query, $direction) {
-                $generalInfosExists = GeneralInfo::exists();
-                if ($generalInfosExists) {
+                if (GeneralInfo::exists()) {
                     $query->join('general_infos', 'reports.general_info_id', '=', 'general_infos.id')
                         ->orderBy('general_infos.jalaliYear', $direction)
                         ->orderBy('general_infos.jalaliMonth', $direction)
-                        ->select('reports.*')
-                        ->where('reports.center_id', Auth::id()); // Explicitly specify the table name
-                } else {
-                    $query->orderBy('reports.date', $direction)
-                        ->where('reports.center_id', Auth::id()); // Explicitly specify the table name
+                        ->select('reports.*');
                 }
             })
-            ->editColumn('expenses', function(Report $report) {
+            ->editColumn('expenses', function (Report $report) {
                 return $this->dataTable->englishToPersianNumbers($report->expenses);
             })
-            ->editColumn('range', function(Report $report) {
+            ->editColumn('range', function (Report $report) {
                 return $this->dataTable->englishToPersianNumbers($report->range);
             })
-            ->editColumn('receipt', function(Report $report) {
+            ->editColumn('receipt', function (Report $report) {
                 $presignedUrl = Storage::disk('s3')->temporaryUrl('receipts/' . $report->receipt, now()->addHours(1));
                 return '<a href="' . $presignedUrl . '" target="_blank">دانلود</a>';
             })
@@ -97,13 +99,14 @@ class ReportDataTable extends DataTable
             ->orderColumn('type', function ($query, $direction) {
                 $query->orderBy('type', $direction);
             })
-            ->addColumn('status', function(Report $report) {
+            ->addColumn('status', function (Report $report) {
                 return $report->statuses->status == 1 ? 'تایید شده' : 'تایید نشده';
             })
             ->addColumn('action', function (Report $report) {
                 return $this->dataTable->setAction($report->id, 'report');
             });
     }
+
 
     /**
      * Get query source of dataTable.
@@ -139,7 +142,6 @@ class ReportDataTable extends DataTable
     protected function getColumns()
     {
         $columns = [
-            $this->dataTable->getIndexCol(),
             Column::computed('date')
                 ->title('تاریخ')
                 ->searchable(true)
@@ -167,7 +169,7 @@ class ReportDataTable extends DataTable
         ];
 
         if (Auth::user()->type == Center::GOLESTANTEAM) {
-            array_splice($columns, 1, 0, [
+            array_splice($columns, 0, 0, [
                 Column::computed('center_name')
                     ->title('نام مرکز')
                     ->searchable(true)

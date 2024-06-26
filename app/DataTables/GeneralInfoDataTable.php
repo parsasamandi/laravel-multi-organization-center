@@ -44,7 +44,7 @@ class GeneralInfoDataTable extends DataTable
             ->filterColumn('center_name', function ($query, $keyword) {
                 // Use whereHas to filter based on related Center model's name attribute
                 $query->whereHas('center', function ($q) use ($keyword) {
-                    $q->where('name', $keyword);
+                    $q->where('name', 'LIKE', "%$keyword%");
                 });
             })
             ->addColumn('date', function(GeneralInfo $generalInfo) {
@@ -53,22 +53,22 @@ class GeneralInfoDataTable extends DataTable
                     $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
             })
             ->filterColumn('date', function ($query, $keyword) {
-                DB::enableQueryLog();
                 // Ensure Convertor class is available
                 $convertor = new Convertor();
+                // Convert Persian numbers to English numbers
+                $jalaliYear = $convertor->persianToEnglishDecimal($keyword);
                 // Map Jalali month name to its corresponding number
                 $jalaliMonth = $convertor->numberTojalaliMonth($keyword);
-                // Converting Persian numbers to English numbers
-                $jalaliYear = $convertor->persianToEnglishDecimal($keyword);
-                
-                // Query for records matching the provided year and month
-                // $query->where('jalaliMonth', 'LIKE', "%$jalaliMonth%");
-                $query->where('jalaliYear', $jalaliYear);
 
-                // $results = $query->get();
-
-                // $queries = DB::getQueryLog();
-                // dd($queries); // Dump the logged queries
+                $query->join('general_infos', 'reports.general_info_id', '=', 'general_infos.id')
+                    ->where(function ($query) use ($jalaliMonth, $jalaliYear) {
+                        if (!empty($jalaliMonth)) {
+                            $query->where('general_infos.jalaliMonth', 'LIKE', "%{$jalaliMonth}%");
+                        }
+                        if (is_numeric($jalaliYear)) {
+                            $query->where('general_infos.jalaliYear', 'LIKE', "%$jalaliYear%");
+                        }
+                });
             })            
             ->orderColumn('date', function ($query, $direction) {
                 $query->orderBy('jalaliYear', $direction)
@@ -137,7 +137,6 @@ class GeneralInfoDataTable extends DataTable
     protected function getColumns()
     {
         $columns = [
-            $this->dataTable->getIndexCol(),
             Column::make('bank_statement_receipt')
                 ->title('صورتحساب بانکی')
                 ->orderable(false),
@@ -153,8 +152,8 @@ class GeneralInfoDataTable extends DataTable
         ];
 
         if(Auth::user()->type == Center::GOLESTANTEAM)
-            // Insert the 'code' column as the second column
-            array_splice($columns, 1, 0, [
+            // Insert the 'code' column as the firstcolumn
+            array_splice($columns, 0, 0, [
                 Column::computed('center_name')
                 ->title('نام مرکز')
                 ->searchable(true)

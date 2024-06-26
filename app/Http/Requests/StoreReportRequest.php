@@ -33,25 +33,8 @@ class StoreReportRequest extends FormRequest
             'range' => 'required|regex:/.*\d+.*$/',
             'receipt' => $this->input('id') ? 'nullable|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096' : 'required|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096',
             'jalaliMonth' => ['required', new GeneralInfoExists($this->get('jalaliYear'), $this->get('jalaliMonth'), $centerId)],
-            'jalaliYear' => ['required'],
-            'type' => [
-                'required',
-                Rule::unique('reports')
-                    ->where(function ($query) use ($centerId) {
-                        $jalaliYear = $this->input('jalaliYear');
-                        $jalaliMonth = $this->input('jalaliMonth');
-
-                        $query->where('general_info_id', function ($subQuery) use ($jalaliYear, $jalaliMonth, $centerId) {
-                            $subQuery->select('id')
-                                    ->from('general_infos')
-                                    ->where('center_id', $centerId)
-                                    ->where('jalaliYear', $jalaliYear)
-                                    ->where('jalaliMonth', $jalaliMonth);
-                        })
-                        ->where('type', $this->input('type'));
-                    })
-                    ->ignore($decryptedId, 'id')  // Ignore current record ID during update
-            ],
+            'jalaliYear' => 'required',
+            'type' => 'required'
         ];
 
         return $rules;
