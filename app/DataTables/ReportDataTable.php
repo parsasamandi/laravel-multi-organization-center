@@ -31,7 +31,6 @@ class ReportDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addIndexColumn()
             ->rawColumns(['action', 'receipt', 'date', 'center_name'])
             ->addColumn('center_name', function (Report $report) {
                 $center = Center::find($report->center_id);

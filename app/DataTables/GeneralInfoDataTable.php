@@ -31,7 +31,6 @@ class GeneralInfoDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addIndexColumn()
             ->rawColumns(['action', 'bank_statement_receipt', 'data', 'status', 'center_name'])
             ->addColumn('center_name', function(GeneralInfo $generalInfo) {
                 $center = Center::find($generalInfo->center_id);

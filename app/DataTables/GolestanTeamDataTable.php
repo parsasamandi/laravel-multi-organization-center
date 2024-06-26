@@ -26,7 +26,6 @@ class GolestanTeamDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addIndexColumn()
             ->rawColumns(['action'])
             ->addColumn('action', function (Center $center){
                 return $this->dataTable->setAction($center->id);

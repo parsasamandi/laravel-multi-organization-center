@@ -26,7 +26,6 @@ class CenterDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addIndexColumn()
             ->rawColumns(['action'])
             ->editColumn('code', function (Center $center) {
                 return 'GOL' . $center->code;
