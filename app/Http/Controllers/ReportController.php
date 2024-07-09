@@ -44,8 +44,8 @@ class ReportController extends Controller
         $report = null;
 
         if ($request->filled('id')) {
-            $decryptedId = $this->decryptId($request->get('id'));
-            $report = Report::find($decryptedId);
+            $reportId = $this->decryptId($request->get('id'));
+            $report = Report::find($reportId);
             $centerId = $report->center_id ?? $centerId;
         }
 
@@ -62,7 +62,8 @@ class ReportController extends Controller
 
         if ($request->hasFile('receipt')) {
             $receipt = $request->file('receipt');
-            $fileName = $this->getReceiptFileName($centerId, $request->get('jalaliMonth'), $request->get('jalaliYear'), $receipt->getClientOriginalName());
+            $fileName = $this->getReceiptFileName($centerId, 
+                $request->get('jalaliMonth'), $request->get('jalaliYear'), $receipt->getClientOriginalName());
             
             if ($report) {
                 Storage::disk('s3')->delete('receipts/' . $report->receipt);
@@ -72,12 +73,10 @@ class ReportController extends Controller
             $data['receipt'] = $fileName;
         }
 
-        $report = Report::updateOrCreate(['id' => $decryptedId ?? null], $data);
+        $report = Report::updateOrCreate(['id' => $reportId ?? null], $data);
 
-        $report->statuses()->updateOrCreate(
-            ['status_id' => $report->id, 'status_type' => Report::class],
-            ['status' => Status::NOTCONFIRMED]
-        );
+        // The status of the user's expense reports is NOT CONFIRMED by default
+        $report->statuses()->create(['status' => Status::NOTCONFIRMED]);
 
         return $this->getAction($request->get('button_action'));
     }
@@ -131,6 +130,6 @@ class ReportController extends Controller
     {
         $center = Center::find($centerId);
         $prefix = $center->type === Center::CENTER ? "GOL{$center->code}" : "GOLTEAM{$center->code}";
-        return "{$prefix}/{$month}_{$year}/{$originalName}";
+        return "{$prefix}/{$year}_{$month}/{$originalName}";
     }
 }

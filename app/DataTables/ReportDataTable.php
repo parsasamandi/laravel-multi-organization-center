@@ -81,7 +81,12 @@ class ReportDataTable extends DataTable
                 return $this->dataTable->englishToPersianNumbers($report->range);
             })
             ->editColumn('receipt', function (Report $report) {
-                $presignedUrl = Storage::disk('s3')->temporaryUrl('receipts/' . $report->receipt, now()->addHours(1));
+                $filePath = 'receipts/' . $report->receipt;
+                $fileName = $report->receipt;
+            
+                // Get the presigned URL with Content-Disposition header
+                $presignedUrl = $this->dataTable->getPresignedUrlWithContentDisposition($filePath, $fileName);
+                // Return a link to the file
                 return '<a href="' . $presignedUrl . '" target="_blank">دانلود</a>';
             })
             ->editColumn('type', function (Report $report) {

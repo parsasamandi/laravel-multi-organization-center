@@ -4,7 +4,7 @@ namespace App\DataTables;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\Crypt;
-
+use Aws\S3\S3Client;
 
 class GeneralDataTable
 {
@@ -178,5 +178,29 @@ class GeneralDataTable
                 break;
         }
     }
+
+    // Download the url with its original name stored in the database with an hour time limit.
+    public function getPresignedUrlWithContentDisposition($filePath, $fileName)
+    {
+        $s3Client = new S3Client([
+            'version' => 'latest',
+            'region'  => config('filesystems.disks.s3.region'),
+            'credentials' => [
+                'key'    => config('filesystems.disks.s3.key'),
+                'secret' => config('filesystems.disks.s3.secret'),
+            ],
+        ]);
+
+        $bucket = config('filesystems.disks.s3.bucket');
+        $cmd = $s3Client->getCommand('GetObject', [
+            'Bucket' => $bucket,
+            'Key'    => $filePath,
+            'ResponseContentDisposition' => 'attachment; filename="' . $fileName . '"',
+        ]);
+
+        $request = $s3Client->createPresignedRequest($cmd, '+1 hour');
+        return (string) $request->getUri();
+    }
+
 
 }

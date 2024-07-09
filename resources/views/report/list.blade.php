@@ -21,8 +21,7 @@
         <!-- Date -->
         <div class="col-md-6 mb-3">
           @include('includes.jalaliYearsSelectBox')
-        </div>
-
+        </div>  
         <div class="col-md-6 mb-3">
           @include('includes.jalaliMonthsSelectBox')
         </div>
@@ -50,8 +49,7 @@
         <x-input key="range" placeholder="ردیف های هزینه در صورتحساب بانکی (لطفا با ویرگول جدا گردد)"
           class="col-md-12 mb-3" required="true" />
 
-
-        {{-- Description --}}
+        <!-- Description -->
         <x-textarea key="description" placeholder="توضیحات" class="col-md-12 mb-2" />
       </div>
 

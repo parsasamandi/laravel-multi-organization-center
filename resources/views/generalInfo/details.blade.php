@@ -11,6 +11,9 @@
     $jalaliMonth = $convertor->numberToJalaliMonthBlade($generalInfo->jalaliMonth);
     // Jalali year
     $jalaliYear = $convertor->englishToPersianDecimal($generalInfo->jalaliYear);
+    // Presigned URL
+    $bankStatementPresignedUrl = $convertor->getPresignedUrlWithContentDisposition('receipts/' 
+        . $generalInfo->bank_statement_receipt, $generalInfo->bank_statement_receipt);
 @endphp
 
 <div class="container-fluid mt-3 right-text">
@@ -28,16 +31,14 @@
         <!-- Table data -->
         <x-slot name="tableData">
             <td>{{ $generalInfo->center->name }}</td>
+            <!-- Jalali year -->
             <td>{{ $convertor->englishToPersianDecimal($generalInfo->jalaliYear) }}</td>
              <!-- Jalali months -->
             <td>{{ $convertor->numberTojalaliMonthBlade($generalInfo->jalaliMonth) }}</td>
+            <!-- Bank balance -->
             <td>{{ $convertor->englishToPersianDecimal($generalInfo->bank_balance) }}</td>
-            <td>
-                <a href="{{ Storage::disk('s3')->temporaryUrl('receipts/' . 
-                        $generalInfo->bank_statement_receipt, now()->addHours(1)) }}" download>دانلود</a>
-            </td>
 
-
+            <td><a href="{{ $bankStatementPresignedUrl }}" target="_blank">دانلود</a></td>
         </x-slot>
         
     </x-details>

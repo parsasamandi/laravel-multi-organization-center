@@ -39,7 +39,6 @@ class GeneralInfoDataTable extends DataTable
                 }
                 return $center->name;
             })
-            // Fix this error | It does not workd
             ->filterColumn('center_name', function ($query, $keyword) {
                 // Use whereHas to filter based on related Center model's name attribute
                 $query->whereHas('center', function ($q) use ($keyword) {
@@ -47,9 +46,8 @@ class GeneralInfoDataTable extends DataTable
                 });
             })
             ->addColumn('date', function(GeneralInfo $generalInfo) {
-                return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) . ' ' . $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
-                return $generalInfo->jalaliMonth . ' ' .
-                    $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
+                return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) 
+                    . ' ' . $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
             })
             ->filterColumn('date', function ($query, $keyword) {
                 // Ensure Convertor class is available
@@ -76,13 +74,14 @@ class GeneralInfoDataTable extends DataTable
             ->editColumn('bank_balance', function(GeneralInfo $generalInfo) {
                 return $this->dataTable->englishToPersianNumbers($generalInfo->bank_balance);
             })
-            ->editColumn('bank_statement_receipt', function(GeneralInfo $generalInfo) {
-                // Get the URL for the file from S3 storage
-                $presignedUrl = Storage::disk('s3')->temporaryUrl('receipts/' . $generalInfo->bank_statement_receipt, now()->addHours(1));
-                
+            ->editColumn('bank_statement_receipt', function (GeneralInfo $generalInfo) {
+                $filePath = 'receipts/' . $generalInfo->bank_statement_receipt;
+                $fileName = $generalInfo->bank_statement_receipt;
+            
+                // Get the presigned URL with Content-Disposition header
+                $presignedUrl = $this->dataTable->getPresignedUrlWithContentDisposition($filePath, $fileName);
                 // Return a link to the file
                 return '<a href="' . $presignedUrl . '" target="_blank">دانلود</a>';
-
             })->addColumn('status', function(GeneralInfo $generalInfo) {
                 switch($generalInfo->statuses->status) {
                     case 0:
@@ -161,4 +160,5 @@ class GeneralInfoDataTable extends DataTable
 
         return $columns;
     }
+
 }

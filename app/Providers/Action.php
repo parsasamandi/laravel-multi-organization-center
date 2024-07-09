@@ -30,67 +30,13 @@ class Action {
      * @return json
      */
     public function delete($model, $id) {
-        // Why did not try catch work?
+
         $values = $model::find($id);
 
         return $values ? $values->delete() 
                 : $this->failedResponse();
 
         return $this->successfulResponse();
-    }
-
-    /**
-     * Delete with image
-     * 
-     * @return json
-     */
-    public function deleteWithFile($model, $id, $file) {
-
-        // Model file
-        $modelFile = $model::find($id);
-
-        if($modelFile) {
-            // Media
-            $fileDelete = public_path("receipts/" . $file);
-
-            if($fileDelete) {
-                File::delete($fileDelete); 
-            }
-
-            return $modelFile->delete();
-
-        } else {
-            return $this->failedResponse();
-        }
- 
-    }
-
-    // Image
-    public function image($request, $media_id, $class) {
-
-        $imageUploader = Media::where('media_id', $media_id)->where('media_type', $class)->first();
-        // Update
-        if(!$imageUploader) {
-            // Insert
-            $imageUploader = new Media();
-        }
-        $imageUploader->media_id = $media_id;
-        $imageUploader->media_type = $class;
-        // 0 = Image
-        $imageUploader->type = Media::IMAGE;
-
-        // File
-        $image = $request->file('image');
-        $file = $image->getClientOriginalName();
-
-        if(isset($file)) {
-            // Delete the old picture
-            File::delete(public_path("images/$imageUploader->media_url")); 
-
-            $image->move(public_path('images'), $file);
-            $imageUploader->media_url = $file;
-        }
-        $imageUploader->save();
     }
 
     // Response with error

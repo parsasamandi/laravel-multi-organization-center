@@ -36,34 +36,23 @@ class GeneralInfoController extends Controller
     }
 
     public function store(StoreGeneralInfoRequest $request) {
-        $data = $request->only(['jalaliMonth', 'jalaliYear', 'bank_balance']);
 
-        if (Auth::user()->type == Center::CENTER) {
-            $data['center_id'] = Auth::id();
+        $centerId = Auth::id();
+        $generalInfo = null;
+
+        if ($request->filled('id')) {
+            $generalInfoId = $this->decryptId($request->get('id'));
+            $generalInfo = GeneralInfo::find($generalInfoId) ?? null;
+            $centerId = $generalInfo->center_id ?? $centerId;
         }
 
-        $generalInfoId = $request->filled('id') ? $this->decryptId($request->get('id')) : null;
-        $generalInfo = $generalInfoId ? GeneralInfo::find($generalInfoId) : new GeneralInfo();
+        $data = $request->only(['jalaliMonth', 'jalaliYear', 'bank_balance']);
+        $data['center_id'] = $centerId;
 
-        $this->handleReceiptUpload($request, $generalInfo, $data);
-
-        $generalInfo = GeneralInfo::updateOrCreate(['id' => $generalInfoId], $data);
-
-        $generalInfo->statuses()->updateOrCreate(
-            ['status_id' => $generalInfo->id, 'status_type' => GeneralInfo::class],
-            ['status' => Status::NOTCONFIRMED]
-        );
-
-        return $this->getAction($request->get('button_action'));
-    }
-
-    private function handleReceiptUpload(StoreGeneralInfoRequest $request, GeneralInfo $generalInfo, array &$data) {
         if ($request->hasFile('receipt')) {
             $receipt = $request->file('receipt');
-            $center = Center::find(Auth::user()->id);
-            $fileName = $center->type === Center::CENTER ?
-                "GOL{$center->code}/{$request->get('jalaliMonth')}_{$request->get('jalaliYear')}/{$receipt->getClientOriginalName()}" :
-                "GOLTEAM{$center->code}/{$request->get('jalaliMonth')}_{$request->get('jalaliYear')}/{$receipt->getClientOriginalName()}";
+            $fileName = $this->getReceiptFileName($centerId, $request->get('jalaliMonth'), 
+                $request->get('jalaliYear'), $receipt->getClientOriginalName());
 
             if ($generalInfo && $generalInfo->bank_statement_receipt) {
                 Storage::disk('s3')->delete('receipts/' . $generalInfo->bank_statement_receipt);
@@ -71,7 +60,21 @@ class GeneralInfoController extends Controller
 
             $receipt->storeAs('receipts', $fileName, 's3');
             $data['bank_statement_receipt'] = $fileName;
-        }
+        }   
+
+        $generalInfo = GeneralInfo::updateOrCreate(['id' => $generalInfoId ?? null], $data);
+
+        // The status of the user's brank receipts is NOT CONFIRMED by default
+        $generalInfo->statuses()->create(['status' => Status::NOTCONFIRMED]);
+
+        return $this->getAction($request->get('button_action'));
+    }
+
+    private function getReceiptFileName($centerId, $month, $year, $originalName)
+    {
+        $center = Center::find($centerId);
+        $prefix = $center->type === Center::CENTER ? "GOL{$center->code}" : "GOLTEAM{$center->code}";
+        return "{$prefix}/{$year}_{$month}/{$originalName}";
     }
 
     public function edit(Request $request) {

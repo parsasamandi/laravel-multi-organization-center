@@ -11,6 +11,9 @@
     $jalaliMonth = $convertor->numberToJalaliMonthBlade($report->generalInfo->jalaliMonth);
     // Jalali year
     $jalaliYear = $convertor->englishToPersianDecimal($report->generalInfo->jalaliYear);
+    // Presigned URL
+    $presignedUrl = $convertor->getPresignedUrlWithContentDisposition('receipts/' 
+        . $report->receipt, $report->receipt);
 @endphp
 
 
@@ -37,7 +40,6 @@
             <td>{{ $convertor->englishToPersianDecimal($report->expenses) }}</td>
             <!-- Range -->
             <td>{{ $convertor->englishToPersianDecimal($report->range) }}</td>
-
             <!-- Type -->
             @switch($report->type)
                 @case(0)
@@ -50,24 +52,19 @@
                     <td>هزینه های سلامت</td>
                     @break
             @endswitch
-
             <!-- Jalali months -->
             <td>{{ $jalaliMonth }}</td>
-
             <!-- Jalali Year -->
             <td>{{ $jalaliYear }}</td>
-
             <!-- Receipt -->
-            <td>
-                <a href="{{ Storage::disk('s3')->temporaryUrl('receipts/' . 
-                        $report->receipt, now()->addHours(1)) }}" download>دانلود</a>
-            </td>
+            <td><a href="{{ $presignedUrl }}" target="_blank">دانلود</a></td>
         </x-slot>
 
     </x-details>    
 
     <!-- Description -->
-    <x-textarea key="description" class="mt-2" rows="2" placeholder="توضیحات" value="{{ $report->description }}" readonly />
+    <x-textarea key="description" class="mt-2" rows="2" 
+        placeholder="توضیحات" value="{{ $report->description }}" readonly />
 
     <!-- Status form -->
     @include('includes.form.status', ['id' => $report->id])

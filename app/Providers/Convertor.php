@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Providers;
+use Aws\S3\S3Client;
 use File;
 
 class Convertor {
@@ -28,8 +29,6 @@ class Convertor {
     
         return $englishNumber;
     }
-
-
 
     // Jalali months convertor in dataTable
     public function numberTojalaliMonth($jalaliMonthString) {
@@ -92,4 +91,28 @@ class Convertor {
                 break;
         }
     }
+
+    // Download the url with its original name stored in the database with an hour time limit.
+    public function getPresignedUrlWithContentDisposition($filePath, $fileName)
+    {
+        $s3Client = new S3Client([
+            'version' => 'latest',
+            'region'  => config('filesystems.disks.s3.region'),
+            'credentials' => [
+                'key'    => config('filesystems.disks.s3.key'),
+                'secret' => config('filesystems.disks.s3.secret'),
+            ],
+        ]);
+
+        $bucket = config('filesystems.disks.s3.bucket');
+        $cmd = $s3Client->getCommand('GetObject', [
+            'Bucket' => $bucket,
+            'Key'    => $filePath,
+            'ResponseContentDisposition' => 'attachment; filename="' . $fileName . '"',
+        ]);
+
+        $request = $s3Client->createPresignedRequest($cmd, '+1 hour');
+        return (string) $request->getUri();
+    }
+
 }
