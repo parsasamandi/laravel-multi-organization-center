@@ -48,6 +48,8 @@ class GolestanTeamDataTable extends DataTable
             return $model->where('type', Center::GOLESTANTEAM);
         }
 
+        return $model->where('type', Center::CENTER);
+
     }   
 
     /**
