@@ -75,7 +75,7 @@ class GeneralInfoDataTable extends DataTable
                 return $this->dataTable->englishToPersianNumbers($generalInfo->bank_balance);
             })
             ->editColumn('bank_statement_receipt', function (GeneralInfo $generalInfo) {
-                $filePath = 'receipts/' . $generalInfo->bank_statement_receipt;
+                $filePath = 'bank_statement_receipts/' . $generalInfo->bank_statement_receipt;
                 $fileName = $generalInfo->bank_statement_receipt;
             
                 // Get the presigned URL with Content-Disposition header

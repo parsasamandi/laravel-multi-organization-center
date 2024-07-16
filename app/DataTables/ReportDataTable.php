@@ -81,7 +81,7 @@ class ReportDataTable extends DataTable
                 return $this->dataTable->englishToPersianNumbers($report->range);
             })
             ->editColumn('receipt', function (Report $report) {
-                $filePath = 'receipts/' . $report->receipt;
+                $filePath = 'report_receipts/' . $report->receipt;
                 $fileName = $report->receipt;
             
                 // Get the presigned URL with Content-Disposition header

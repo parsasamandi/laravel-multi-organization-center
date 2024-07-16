@@ -66,10 +66,10 @@ class ReportController extends Controller
                 $request->get('jalaliMonth'), $request->get('jalaliYear'), $receipt->getClientOriginalName());
             
             if ($report) {
-                Storage::disk('s3')->delete('receipts/' . $report->receipt);
+                Storage::disk('s3')->delete('report_receipts/' . $report->receipt);
             }
 
-            $receipt->storeAs('receipts', $fileName, 's3');
+            $receipt->storeAs('report_receipts', $fileName, 's3');
             $data['receipt'] = $fileName;
         }
 
@@ -116,7 +116,7 @@ class ReportController extends Controller
         $id = $this->decryptId($request->get('id'));
         $report = Report::findOrFail($id);
 
-        Storage::disk('s3')->delete('receipts/' . $report->receipt);
+        Storage::disk('s3')->delete('report_receipts/' . $report->receipt);
 
         return $this->action->delete(Report::class, $id);
     }
@@ -130,6 +130,6 @@ class ReportController extends Controller
     {
         $center = Center::find($centerId);
         $prefix = $center->type === Center::CENTER ? "GOL{$center->code}" : "GOLTEAM{$center->code}";
-        return "{$prefix}/{$year}_{$month}/{$originalName}";
+        return "{$prefix}/Y{$year}/M{$month}_{$originalName}";
     }
 }
