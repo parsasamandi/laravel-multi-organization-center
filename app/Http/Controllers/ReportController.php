@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreReportRequest;
-use App\Http\Requests\UpdateReportRequest;
 use App\DataTables\ReportDataTable;
 use App\Providers\SuccessMessages;
 use App\Providers\Action;
@@ -66,10 +65,10 @@ class ReportController extends Controller
                 $request->get('jalaliMonth'), $request->get('jalaliYear'), $receipt->getClientOriginalName());
             
             if ($report) {
-                Storage::disk('s3')->delete('report_receipts/' . $report->receipt);
+                Storage::disk('s3')->delete('receipt/' . $report->receipt);
             }
 
-            $receipt->storeAs('report_receipts', $fileName, 's3');
+            $receipt->storeAs('receipt', $fileName, 's3');
             $data['receipt'] = $fileName;
         }
 
@@ -79,6 +78,13 @@ class ReportController extends Controller
         $report->statuses()->create(['status' => Status::NOTCONFIRMED]);
 
         return $this->getAction($request->get('button_action'));
+    }
+
+    private function getReceiptFileName($centerId, $month, $year, $originalName)
+    {
+        $center = Center::find($centerId);
+        $prefix = $center->type === Center::CENTER ? "GOL{$center->code}" : "GOLTEAM{$center->code}";
+        return "{$prefix}/Y{$year}/M{$month}_{$originalName}";
     }
 
     public function edit(Request $request)
@@ -116,7 +122,7 @@ class ReportController extends Controller
         $id = $this->decryptId($request->get('id'));
         $report = Report::findOrFail($id);
 
-        Storage::disk('s3')->delete('report_receipts/' . $report->receipt);
+        Storage::disk('s3')->delete('receipt/' . $report->receipt);
 
         return $this->action->delete(Report::class, $id);
     }
@@ -124,12 +130,5 @@ class ReportController extends Controller
     private function decryptId($encryptedId)
     {
         return $encryptedId ? Crypt::decryptString($encryptedId) : null;
-    }
-
-    private function getReceiptFileName($centerId, $month, $year, $originalName)
-    {
-        $center = Center::find($centerId);
-        $prefix = $center->type === Center::CENTER ? "GOL{$center->code}" : "GOLTEAM{$center->code}";
-        return "{$prefix}/Y{$year}/M{$month}_{$originalName}";
     }
 }

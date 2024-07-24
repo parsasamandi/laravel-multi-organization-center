@@ -55,10 +55,10 @@ class GeneralInfoController extends Controller
                 $request->get('jalaliYear'), $receipt->getClientOriginalName());
 
             if ($generalInfo && $generalInfo->bank_statement_receipt) {
-                Storage::disk('s3')->delete('bank_statement_receipts/' . $generalInfo->bank_statement_receipt);
+                Storage::disk('s3')->delete('bank_statement' . $generalInfo->bank_statement_receipt);
             }
 
-            $receipt->storeAs('bank_statement_receipts', $fileName, 's3');
+            $receipt->storeAs('bank_statement', $fileName, 's3');
             $data['bank_statement_receipt'] = $fileName;
         }   
 
@@ -102,7 +102,7 @@ class GeneralInfoController extends Controller
         $id = $this->decryptId($request->get('id'));
         $generalInfo = GeneralInfo::findOrFail($id);
 
-        Storage::disk('s3')->delete('bank_statement_receipts/' . $generalInfo->bank_statement_receipt);
+        Storage::disk('s3')->delete('receipt/' . $generalInfo->bank_statement_receipt);
         return $this->action->delete(GeneralInfo::class, $id);
     }
 
