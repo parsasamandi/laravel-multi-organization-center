@@ -1,23 +1,11 @@
 ## About this
 
-<!-- This project was coded on January for Pouya Samandi. I have worked hard to be the best version of myself and optimized every single line of code to look simpler and more comfortable. This was my first experience of freelancary work and helped me have a better aspect of commercial work.
-I have been trying to improve it any time I find a new optmized way.     -->
-
-- Simple
-- Fast
-- Optimized
-- Nice user interface
-
-This is accessible, powerful, and provides an easy tool to CRUD.
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+This automation tool is designed to streamline the management of monthly expense reports for the charities supported by the Golestan Foundation. The Golestan Foundation is a non-profit organization dedicated to supporting orphans in Iran. 
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The project is only for internal use.
 
 ## Copyright
 
-THe original theme and Admin panel are copyrighted by <a href="https://bootstrapmade.com/">BootstrapMade</a> and <a href="https://github.com/badranawad/adminlte-rtl">AdminLTE</a> respectively.
+The original theme and Admin panel are copyrighted by <a href="https://bootstrapmade.com/">BootstrapMade</a> and <a href="https://github.com/badranawad/adminlte-rtl">AdminLTE</a> respectively.
