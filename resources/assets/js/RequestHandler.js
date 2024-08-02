@@ -1,6 +1,7 @@
+// Efficient process of handling ajax requests
 class RequestHandler {
     // Constructor
-    constructor(dt, formId, url) {
+    constructor(dt,formId,url) {
         window.dt = dt; // Datatable 
         window.formId = formId; // Form id
         window.url = url; // Url
@@ -20,11 +21,10 @@ class RequestHandler {
     // Insertion
     insert() {
         // Store or Update
-        $(window.formId).on('submit', (event) => {
-
+        $(window.formId).on('submit', function (event) {
             event.preventDefault();
             // Form Data
-            const form_data = new FormData(event.target);; // Include all form data
+            const form_data = new FormData(event.target); // Include all form data
 
             $.ajax({
                 url: "/" + window.url + "/store",
@@ -33,9 +33,13 @@ class RequestHandler {
                 processData: false,
                 cache: false,
                 data: form_data,
-                success: (data) => this.handleSuccess(data),
-                error: (data) => this.handleError(data),
-            });
+                success: function (data) { 
+                    success(data);
+                },
+                error: function (data) {
+                    error(data);
+                }
+            })
         });
     }
 
@@ -43,16 +47,18 @@ class RequestHandler {
     delete(id) {
         $('#confirmationModal').modal('show'); // Confirm
 
-        $('#ok_button').off('click').on('click', () => {
+        $('#ok_button').click(function () {
+
             $.ajax({
                 url: "/" + window.url + "/delete",
-                method: "GET",
+                method: "get",
                 data: { id: id },
-                success: (data) => {
+                success: function(data) {
+
                     $('#confirmationModal').modal('hide');
                     window.dt.draw(false);
                 }
-            });
+            })
         });
     }
 
@@ -70,25 +76,27 @@ class RequestHandler {
         // Remove "required field" from heading
         $('.required-heading .input-required').hide();
     }
+}
 
-    // Success handler
-    handleSuccess(data) {
-        $('#formModal').modal('hide');
-        $('#successModal').modal('show');
-        $(window.formId)[0].reset();
-        if (window.dt != null) {
-            window.dt.draw(false);
-        }
+// Success
+function success(data) {
+    $('#formModal').modal('hide');
+    $('#successModal').modal('show');
+    // $('#form_output').html(data.message);
+    $(window.formId)[0].reset();
+    if(window.dt != null) {
+        window.dt.draw(false);
     }
+}
 
-    // Error handler
-    handleError(data) {
-        // Parse to JSON
-        const errors = JSON.parse(data.responseText).errors;
-        let errorHtml = '';
-        for (const key in errors) {
-            errorHtml += `<div class="alert alert-danger">${errors[key]}</div>`;
-        }
-        $('#form_output').html(errorHtml);
+// Error
+function error(data) {
+    // Parse To Json
+    var data = JSON.parse(data.responseText);
+    // Error
+    error_html = '';
+    for(var all in data.errors) {
+        error_html += '<div class="alert alert-danger">' + data.errors[all] + '</div>';
     }
+    $('#form_output').html(error_html);
 }
