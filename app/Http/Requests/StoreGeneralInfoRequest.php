@@ -53,7 +53,8 @@ class StoreGeneralInfoRequest extends FormRequest
         return [
             'bank_balance' => 'required|numeric',
             'jalaliYear' => 'required',
-            'receipt' => $this->input('id') ? 'nullable|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096' : 'required|mimes:xls,xlsx,pdf,doc,docx,csv|max:5096',
+            'receipt' => $this->input('id') ? 'nullable|mimes:xls,xlsx,pdf,doc,docx,csv|max:15000' 
+            : 'required|mimes:xls,xlsx,pdf,doc,docx,csv|max:15000',
             'jalaliMonth' => [
                 'required',
                 Rule::unique('general_infos')
