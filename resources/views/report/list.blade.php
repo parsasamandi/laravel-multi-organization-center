@@ -40,8 +40,7 @@
               <option value="2">هزینه های سلامت</option>
               <option value="3">هزینه های غذا</option>
               <option value="4">هزینه های پوشاک</option>
-              <option value="5">هزینه های دیگر یک</option>
-              <option value="6">هزینه های دیگر دو</option>
+              <option value="5">هزینه های دیگر</option>
           </select>
         </div>
 
