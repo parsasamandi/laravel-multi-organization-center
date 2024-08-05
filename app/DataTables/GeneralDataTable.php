@@ -5,6 +5,8 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\Crypt;
 use Aws\S3\S3Client;
+use Aws\CommandInterface;
+use Aws\Exception\AwsException;
 
 class GeneralDataTable
 {
@@ -192,15 +194,23 @@ class GeneralDataTable
         ]);
 
         $bucket = config('filesystems.disks.s3.bucket');
-        $cmd = $s3Client->getCommand('GetObject', [
-            'Bucket' => $bucket,
-            'Key'    => $filePath,
-            'ResponseContentDisposition' => 'attachment; filename="' . $fileName . '"',
-        ]);
+        
+        // URL encode the filename to handle non-ASCII characters
+        $encodedFileName = rawurlencode($fileName);
 
-        $request = $s3Client->createPresignedRequest($cmd, '+1 hour');
-        return (string) $request->getUri();
+        try {
+            $cmd = $s3Client->getCommand('GetObject', [
+                'Bucket' => $bucket,
+                'Key'    => $filePath,
+                'ResponseContentDisposition' => 'attachment; filename="' . $encodedFileName . '"',
+            ]);
+
+            $request = $s3Client->createPresignedRequest($cmd, '+1 hour');
+            return (string) $request->getUri();
+        } catch (AwsException $e) {
+            // Handle the error
+            return null;
+        }
     }
-
 
 }
