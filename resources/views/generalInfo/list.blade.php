@@ -70,10 +70,7 @@
 
     // Edit Modal
     window.showEditModal = function showEditModal(id) {
-
-      console.log(id);
-
-
+      
       // Edit
       action.reloadModal();
 
