@@ -31,7 +31,7 @@
       <!-- File -->
       <h6 class="required-heading">پیوست فایل صورتحساب بانکی <span class="input-required">*</span></h6>
       <input type="file" id="file" name="receipt" class="mb-3" 
-        accept=".pdf,.doc,.docx,.csv,application/msword,application/
+        accept=".pdf,.doc,.docx,.csv,.xls,application/msword,application/
         vnd.openxmlformats-officedocument.wordprocessingml.document,application/
         vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
 
