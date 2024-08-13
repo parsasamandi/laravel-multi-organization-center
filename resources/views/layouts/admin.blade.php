@@ -40,7 +40,7 @@
                                 {{-- Admin --}}
                                 <input type="hidden" name="admin" />
                                 {{-- Exit --}}
-                                <button class="dropdown-item text-danger" type="submit">خروج</button>
+                                <button class="dropdown-item text-danger" type="submit"><i class="fa fa-sign-out"></i> خروج</button>
                             </div>
                         </div>
                     </div>
