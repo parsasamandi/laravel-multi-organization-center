@@ -89,14 +89,26 @@ function success(data) {
     }
 }
 
-// Error
+// Error Handler
 function error(data) {
-    // Parse To Json
-    var data = JSON.parse(data.responseText);
-    // Error
-    error_html = '';
-    for(var all in data.errors) {
-        error_html += '<div class="alert alert-danger">' + data.errors[all] + '</div>';
+    // Parse the JSON response
+    const response = JSON.parse(data.responseText);
+
+    // Initialize error HTML
+    let error_html = '';
+
+    // Add field-specific errors if they exist
+    if (response.errors) {
+        Object.values(response.errors).forEach(errors => {
+            error_html += errors.map(error => `<div class="alert alert-danger">${error}</div>`).join('');
+        });
     }
+
+    // If there are no field-specific errors, show the response.message
+    if (!error_html && response.message) {
+        error_html = `<div class="alert alert-danger">${response.message}</div>`;
+    }
+
+    // Display all errors in the form_output element
     $('#form_output').html(error_html);
 }

@@ -40,8 +40,7 @@ class GeneralInfoController extends Controller
 
     // Method to handle storing or updating general information
     public function store(StoreGeneralInfoRequest $request) {
-
-        // Get the current authenticated user's center ID
+        // // Get the current authenticated user's center ID
         $centerId = Auth::id();
         $generalInfo = null;
 
@@ -68,8 +67,16 @@ class GeneralInfoController extends Controller
             }
 
             // Store the new receipt file on S3
-            $receipt->storeAs('bank_statement', $fileName, 's3');
-            $data['bank_statement_receipt'] = $fileName;
+            if ($receipt->storeAs('bank_statement', $fileName, 's3')) {
+                // If the file is successfully uploaded, update the data array with the file name
+                $data['bank_statement_receipt'] = $fileName;
+            } else {
+                // Return a JSON error response if the upload fails
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'رسید فایل به درستی بارگزاری نشد، لطفا دوباره امتحان کنید.'
+                ], 500);
+            }
         }   
 
         // Create or update the GeneralInfo record

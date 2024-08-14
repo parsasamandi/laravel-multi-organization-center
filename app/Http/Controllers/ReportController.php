@@ -88,8 +88,16 @@ class ReportController extends Controller
             }
 
             // Store the new receipt file in S3 and update the data array with the file name
-            $receipt->storeAs('receipt', $fileName, 's3');
-            $data['receipt'] = $fileName;
+            if ($receipt->storeAs('receipt', $fileName, 's3')) {
+                // If the file is successfully uploaded, update the data array with the file name
+                $data['receipt'] = $fileName;
+            } else {
+                // Return a JSON error response if the upload fails
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'رسید فایل به درستی بارگزاری نشد، لطفا دوباره امتحان کنید.'
+                ], 500);
+            }
         }
 
         // Create a new report or update the existing one
