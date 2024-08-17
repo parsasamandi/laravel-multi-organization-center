@@ -22,11 +22,10 @@ class GeneralInfoExists implements Rule
 
     public function passes($attribute, $value)
     {
-        $generalInfo = GeneralInfo::where(function ($query) {
-            $query->where('center_id', $this->center_id)
-                ->where('jalaliMonth', $this->jalaliMonth)
-                ->where('jalaliYear', $this->jalaliYear);
-        })->first();
+        $generalInfo = GeneralInfo::where('center_id', $this->center_id)
+            ->where('jalaliMonth', $this->jalaliMonth)
+            ->where('jalaliYear', $this->jalaliYear)
+            ->first();
 
         return $generalInfo != null;
     }

@@ -72,7 +72,8 @@ class GeneralInfoDataTable extends DataTable
                       ->orderBy('jalaliMonth', $direction);
             })
             ->editColumn('bank_balance', function(GeneralInfo $generalInfo) {
-                return $this->dataTable->englishToPersianNumbers($generalInfo->bank_balance);
+                return $this->dataTable->englishToPersianNumbers
+                    (number_format($generalInfo->bank_balance, 0, '', ','));
             })
             ->editColumn('bank_statement_receipt', function (GeneralInfo $generalInfo) {
                 $filePath = 'bank_statement/' . $generalInfo->bank_statement_receipt;
@@ -140,7 +141,7 @@ class GeneralInfoDataTable extends DataTable
                 ->title('صورتحساب بانکی')
                 ->orderable(false),
             Column::make('bank_balance')
-                ->title('موجودی حساب'),
+                ->title('موجودی حساب (ریال)'),
             Column::computed('date')
                 ->title('تاریخ')
                 ->searchable(true)

@@ -22,6 +22,7 @@ class StoreReportRequest extends FormRequest
      */
     public function rules()
     {
+
         $centerId = $this->getCenterId();
 
         return [
@@ -41,14 +42,16 @@ class StoreReportRequest extends FormRequest
     {
         if ($this->input('id')) {
             try {
+
                 $decryptedId = Crypt::decryptString($this->input('id'));
                 $report = Report::find($decryptedId);
+
                 return $report ? $report->center_id : null;
+
             } catch (\Exception $e) {
                 return null;
             }
         }
-
         return Auth::user()->id;
     }
 

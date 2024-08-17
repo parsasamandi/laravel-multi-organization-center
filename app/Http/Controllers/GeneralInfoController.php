@@ -128,8 +128,9 @@ class GeneralInfoController extends Controller
         $generalInfo = GeneralInfo::findOrFail($id);
 
         // Delete the associated receipt file from S3
-        Storage::disk('s3')->delete('receipt/' . $generalInfo->bank_statement_receipt);
-        return $this->action->delete(GeneralInfo::class, $id);
+        if (Storage::disk('s3')->delete('receipt/' . $generalInfo->bank_statement_receipt)) {
+            return $this->action->delete(GeneralInfo::class, $id);
+        }
     }
 
     // Helper method to decrypt an encrypted ID

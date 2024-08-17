@@ -75,7 +75,8 @@ class ReportDataTable extends DataTable
                 }
             })
             ->editColumn('expenses', function (Report $report) {
-                return $this->dataTable->englishToPersianNumbers($report->expenses);
+                return $this->dataTable->englishToPersianNumbers
+                    (number_format($report->expenses, 0, '', ','));
             })
             ->editColumn('range', function (Report $report) {
                 return $this->dataTable->englishToPersianNumbers($report->range);
@@ -154,7 +155,7 @@ class ReportDataTable extends DataTable
                 ->orderable(true)
                 ->searchable(true),
             Column::make('expenses')
-                ->title('مبلغ هزینه')
+                ->title('مبلغ هزینه (ریال)')
                 ->orderable(true)
                 ->searchable(true),
             Column::make('range')
