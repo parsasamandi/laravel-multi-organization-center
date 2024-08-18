@@ -3,56 +3,63 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Crypt;
 use App\Providers\Convertor;
-use App\Http\Requests\Rules\GeneralInfoExists;
-use App\Http\Requests\Rules\CommaSeparatedNumbers;
-use App\Models\Center;
+use App\Models\GeneralInfo;
 use App\Models\Report;
 use Auth;
 
 class StoreReportRequest extends FormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array
-     */
+    */
     public function rules()
     {
-
-        $centerId = $this->getCenterId();
-
         return [
             'expenses' => 'required|numeric',
             'range' => 'required|regex:/.*\d+.*$/',
             'receipt' => $this->input('id') 
                 ? 'nullable|mimes:xls,xlsx,pdf,doc,docx,csv|max:15000' 
                 : 'required|mimes:xls,xlsx,pdf,doc,docx,csv|max:15000',
-            'jalaliMonth' => ['required', new GeneralInfoExists($this->get('jalaliYear'), $this->get('jalaliMonth'), $centerId)],
+            'jalaliMonth' => ['required', function ($attribute, $value, $fail) {
+                $this->checkGeneralInfoExists($fail);
+            }],
             'jalaliYear' => 'required',
             'type' => 'required'
         ];
     }
 
-    // Get Center Id
-    protected function getCenterId()
+
+    /**
+     * Check if generalInfo exists.
+     *
+     * @return error
+     */
+    protected function checkGeneralInfoExists($fail)
     {
-        if ($this->input('id')) {
-            try {
+        // Jalali year select box
+        $jalaliYear = $this->input('jalaliYear');
+        // Jalali month select box
+        $jalaliMonth = $this->input('jalaliMonth');
 
-                $decryptedId = Crypt::decryptString($this->input('id'));
-                $report = Report::find($decryptedId);
+        // Center Id
+        $encryptedId = $this->input('id');
+        $centerId = $encryptedId
+            ? Report::where('id', Crypt::decryptString($encryptedId))->value('center_id')
+            : null;
 
-                return $report ? $report->center_id : null;
+        // Check if it exists
+        $exists = GeneralInfo::where('center_id', $centerId)
+            ->where('jalaliMonth', $jalaliMonth)
+            ->where('jalaliYear', $jalaliYear)
+            ->exists();
 
-            } catch (\Exception $e) {
-                return null;
-            }
+        if (!$exists) {
+            $fail('برای سال و ماه انتخاب شده، قبلا گزارش صورتحساب وارد نشده است. لطفا ابتدا گزارش صورتحساب را برای این تاریخ وارد نمایید.');
         }
-        return Auth::user()->id;
     }
 
     /**
@@ -65,9 +72,10 @@ class StoreReportRequest extends FormRequest
         return [
             'receipt' => 'رسید',
             'expenses' => 'مبلغ هزینه',
-            'range' => 'ردیف های هزینه در صورتحساب',   
+            'range' => 'ردیف های هزینه در صورتحساب',
         ];
     }
+
 
     /**
      * Prepare the data for validation.
