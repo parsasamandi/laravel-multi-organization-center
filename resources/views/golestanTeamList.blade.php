@@ -18,12 +18,7 @@
     <x-slot name="content">
       {{-- Form --}}
       <div class="row">
-        <!-- 
-          Code input type: hidden 
-          Value: 00
-        -->
-        <input type="hidden" name="code" value="00">
-
+        
         <!-- Phone number -->
         <x-input key="phone_number" placeholder="شماره تلفن"
           class="col-md-6 mb-3" required="true"/>

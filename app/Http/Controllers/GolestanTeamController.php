@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use App\DataTables\GolestanTeamDataTable;
 use App\Http\Requests\StoreCenterRequest;
+use App\Http\Requests\StoreGolestanTeamRequest;
 use App\Providers\Action;
 use App\Models\Center;
 
@@ -37,7 +38,7 @@ class GolestanTeamController extends Controller
     }
 
     // Method to store or update a Golestan team member's information
-    public function store(StoreCenterRequest $request)
+    public function store(StoreGolestanTeamRequest $request)
     {
         // Decrypt the ID if it exists in the request, otherwise set it to null
         $id = $this->decryptId($request->get('id'));
