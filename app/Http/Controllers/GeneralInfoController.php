@@ -63,7 +63,7 @@ class GeneralInfoController extends Controller
 
             // Delete the old receipt file from S3 if it exists
             if ($generalInfo && $generalInfo->bank_statement_receipt) {
-                Storage::disk('s3')->delete('bank_statement' . $generalInfo->bank_statement_receipt);
+                Storage::disk('s3')->delete('bank_statement/' . $generalInfo->bank_statement_receipt);
             }
 
             // Store the new receipt file on S3
@@ -128,9 +128,8 @@ class GeneralInfoController extends Controller
         $generalInfo = GeneralInfo::findOrFail($id);
 
         // Delete the associated receipt file from S3
-        if (Storage::disk('s3')->delete('receipt/' . $generalInfo->bank_statement_receipt)) {
-            return $this->action->delete(GeneralInfo::class, $id);
-        }
+        Storage::disk('s3')->delete('bank_statement/' .  $generalInfo->bank_statement_receipt);
+        return $this->action->delete(GeneralInfo::class, $id);
     }
 
     // Helper method to decrypt an encrypted ID

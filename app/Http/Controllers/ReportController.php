@@ -173,10 +173,9 @@ class ReportController extends Controller
         $report = Report::findOrFail($id);
 
         // Delete the associated receipt file from S3
-        if (Storage::disk('s3')->delete('receipt/' . $report->receipt)) {
-            // Use the Action service to handle the deletion process
-            return $this->action->delete(Report::class, $id);
-        }
+        Storage::disk('s3')->delete('receipt/' . $report->receipt);
+        // Use the Action service to handle the deletion process
+        return $this->action->delete(Report::class, $id);
     }
 
     // Helper method to decrypt an encrypted ID, returning null if no ID is provided
