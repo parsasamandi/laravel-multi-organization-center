@@ -32,11 +32,11 @@ class StoreReportRequest extends FormRequest
         ];
     }
 
-
     /**
      * Check if generalInfo exists.
      *
-     * @return error
+     * @param  \Closure  $fail
+     * @return void
      */
     protected function checkGeneralInfoExists($fail)
     {
@@ -45,17 +45,22 @@ class StoreReportRequest extends FormRequest
         // Jalali month select box
         $jalaliMonth = $this->input('jalaliMonth');
 
-        // Center Id
-        $encryptedId = $this->input('id');
-        $centerId = $encryptedId
-            ? Report::where('id', Crypt::decryptString($encryptedId))->value('center_id')
-            : null;
+        // Center Id 
+        $centerId = null;
+        if ($this->input('id')) {
+            $decryptedId = Crypt::decryptString($this->input('id'));
+            $report = Report::find($decryptedId);
+
+            $centerId = $report ? $report->center_id : null;
+        } else {
+            $centerId = Auth::user()->id;
+        }
 
         // Check if it exists
         $exists = GeneralInfo::where('center_id', $centerId)
             ->where('jalaliMonth', $jalaliMonth)
             ->where('jalaliYear', $jalaliYear)
-            ->exists();
+            ->first();
 
         if (!$exists) {
             $fail('برای سال و ماه انتخاب شده، قبلا گزارش صورتحساب وارد نشده است. لطفا ابتدا گزارش صورتحساب را برای این تاریخ وارد نمایید.');
@@ -75,7 +80,6 @@ class StoreReportRequest extends FormRequest
             'range' => 'ردیف های هزینه در صورتحساب',
         ];
     }
-
 
     /**
      * Prepare the data for validation.
