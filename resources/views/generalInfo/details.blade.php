@@ -4,13 +4,15 @@
 @section('content')
 
 @php
-    // $convertor is an instance of the Action class
+    // $convertor is an instance of the Convertor class
     $convertor = new \App\Providers\Convertor();
     
     // Jalali month
-    $jalaliMonth = $convertor->numberToJalaliMonthBlade($generalInfo->jalaliMonth);
+    $jalaliMonth = $convertor->convertJalaliMonth($generalInfo->jalaliMonth);
     // Jalali year
     $jalaliYear = $convertor->englishToPersianDecimal($generalInfo->jalaliYear);
+    // Bank balance 
+    $bankBalance = $convertor->englishToPersianDecimal($generalInfo->bank_balance);
     // Presigned URL
     $bankStatementPresignedUrl = $convertor->getPresignedUrlWithContentDisposition('receipts/' 
         . $generalInfo->bank_statement_receipt, $generalInfo->bank_statement_receipt);
@@ -32,11 +34,11 @@
         <x-slot name="tableData">
             <td>{{ $generalInfo->center->name }}</td>
             <!-- Jalali year -->
-            <td>{{ $convertor->englishToPersianDecimal($generalInfo->jalaliYear) }}</td>
+            <td>{{ $jalaliYear }}</td>
              <!-- Jalali months -->
-            <td>{{ $convertor->numberTojalaliMonthBlade($generalInfo->jalaliMonth) }}</td>
+            <td>{{ $jalaliMonth }}</td>
             <!-- Bank balance -->
-            <td>{{ $convertor->englishToPersianDecimal($generalInfo->bank_balance) }}</td>
+            <td>{{ $bankBalance }}</td>
 
             <td><a href="{{ $bankStatementPresignedUrl }}" target="_blank">دانلود</a></td>
         </x-slot>

@@ -16,9 +16,11 @@ use Storage;
 class ReportDataTable extends DataTable
 {
     public $dataTable;
+    public $convertor;
 
     public function __construct() {
         $this->dataTable = new GeneralDataTable();
+        $this->convertor = new Convertor();
     }
 
     /**
@@ -44,18 +46,16 @@ class ReportDataTable extends DataTable
             ->addColumn('date', function (Report $report) {
                 $generalInfo = GeneralInfo::find($report->general_info_id);
                 if ($generalInfo) 
-                    return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) . ' ' .
-                        $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
+                    return $this->convertor->convertJalaliMonth($generalInfo->jalaliMonth) . ' ' .
+                        $this->convertor->englishToPersianDecimal($generalInfo->jalaliYear);
 
                 return null;
             })
             ->filterColumn('date', function ($query, $keyword) {
-                // Ensure Convertor class is available
-                $convertor = new Convertor();
                 // Convert Persian numbers to English numbers
-                $jalaliYear = $convertor->persianToEnglishDecimal($keyword);
+                $jalaliYear = $this->convertor->persianToEnglishDecimal($keyword);
                 // Map Jalali month name to its corresponding number
-                $jalaliMonth = $convertor->numberTojalaliMonth($keyword);
+                $jalaliMonth = $this->convertor->numberTojalaliMonth($keyword);
 
                 $query->whereHas('generalInfo', function ($subQuery) use ($jalaliMonth, $jalaliYear) {
                     if (!empty($jalaliMonth)) {
@@ -75,11 +75,11 @@ class ReportDataTable extends DataTable
                 }
             })
             ->editColumn('expenses', function (Report $report) {
-                return $this->dataTable->englishToPersianNumbers
+                return $this->convertor->englishToPersianDecimal
                     (number_format($report->expenses, 0, '', ','));
             })
             ->editColumn('range', function (Report $report) {
-                return $this->dataTable->englishToPersianNumbers($report->range);
+                return $this->convertor->englishToPersianDecimal($report->range);
             })
             ->editColumn('receipt', function (Report $report) {
                 $filePath = 'receipt/' . $report->receipt;

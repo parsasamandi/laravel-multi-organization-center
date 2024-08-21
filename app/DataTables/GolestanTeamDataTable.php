@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Center;
 use App\DataTables\GeneralDataTable;
+use App\Providers\Convertor;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use Auth;
@@ -11,9 +12,11 @@ use Auth;
 class GolestanTeamDataTable extends DataTable
 {
     public $dataTable;
+    public $convertor;
 
     public function __construct() {
         $this->dataTable = new GeneralDataTable();
+        $this->convertor = new Convertor();
     }
 
     /**
@@ -30,7 +33,7 @@ class GolestanTeamDataTable extends DataTable
             ->addColumn('action', function (Center $center){
                 return $this->dataTable->setAction($center->id);
             })->editColumn('phone_number', function (Center $center) {
-                return $this->dataTable->englishToPersianNumbers($center->phone_number);
+                return $this->convertor->englishToPersianDecimal($center->phone_number);
             });
     }
 

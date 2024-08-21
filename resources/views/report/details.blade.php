@@ -8,9 +8,13 @@
     $convertor = new \App\Providers\Convertor();
     
     // Jalali month
-    $jalaliMonth = $convertor->numberToJalaliMonthBlade($report->generalInfo->jalaliMonth);
+    $jalaliMonth = $convertor->convertJalaliMonth($report->generalInfo->jalaliMonth);
     // Jalali year
     $jalaliYear = $convertor->englishToPersianDecimal($report->generalInfo->jalaliYear);
+    // Expenses
+    $expenses = $convertor->englishToPersianDecimal($report->expenses);
+    // Range
+    $range = $convertor->englishToPersianDecimal($report->range);
     // Presigned URL
     $presignedUrl = $convertor->getPresignedUrlWithContentDisposition('receipts/' 
         . $report->receipt, $report->receipt);
@@ -37,9 +41,9 @@
             <!-- Center name -->
             <td>{{ $report->center->name }}</td>
             <!-- Expenses -->
-            <td>{{ $convertor->englishToPersianDecimal($report->expenses) }}</td>
+            <td>{{ $expenses }}</td>
             <!-- Range -->
-            <td>{{ $convertor->englishToPersianDecimal($report->range) }}</td>
+            <td>{{ $range }}</td>
             <!-- Type -->
             @switch($report->type)
                 @case(0)

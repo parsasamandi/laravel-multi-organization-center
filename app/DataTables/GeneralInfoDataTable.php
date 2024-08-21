@@ -3,22 +3,24 @@
 namespace App\DataTables;
 
 use App\Models\GeneralInfo;
+use App\Models\Center;
 use App\DataTables\GeneralDataTable;
+use App\Providers\Convertor;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\Auth;
-use App\Providers\Convertor;
-use App\Models\Center;
 use Storage;
 use DB;
 
 class GeneralInfoDataTable extends DataTable
 {
     public $dataTable;
+    public $convertor;
 
     public function __construct() {
         $this->dataTable = new GeneralDataTable();
+        $this->convertor = new Convertor();
     }
 
     /**
@@ -46,16 +48,16 @@ class GeneralInfoDataTable extends DataTable
                 });
             })
             ->addColumn('date', function(GeneralInfo $generalInfo) {
-                return $this->dataTable->jalaliMonth($generalInfo->jalaliMonth) 
-                    . ' ' . $this->dataTable->englishToPersianNumbers($generalInfo->jalaliYear);
+                return $this->convertor->convertJalaliMonth($generalInfo->jalaliMonth) 
+                    . ' ' . $this->convertor->englishToPersianDecimal($generalInfo->jalaliYear);
             })
             ->filterColumn('date', function ($query, $keyword) {
                 // Ensure Convertor class is available
                 $convertor = new Convertor();
                 // Convert Persian numbers to English numbers
-                $jalaliYear = $convertor->persianToEnglishDecimal($keyword);
+                $jalaliYear = $this->convertor->englishToPersianDecimal($keyword);
                 // Map Jalali month name to its corresponding number
-                $jalaliMonth = $convertor->numberTojalaliMonth($keyword);
+                $jalaliMonth = $this->convertor->convertJalaliMonth($keyword);
 
                 $query->join('general_infos', 'reports.general_info_id', '=', 'general_infos.id')
                     ->where(function ($query) use ($jalaliMonth, $jalaliYear) {
@@ -72,7 +74,7 @@ class GeneralInfoDataTable extends DataTable
                       ->orderBy('jalaliMonth', $direction);
             })
             ->editColumn('bank_balance', function(GeneralInfo $generalInfo) {
-                return $this->dataTable->englishToPersianNumbers
+                return $this->convertor->englishToPersianDecimal
                     (number_format($generalInfo->bank_balance, 0, '', ','));
             })
             ->editColumn('bank_statement_receipt', function (GeneralInfo $generalInfo) {

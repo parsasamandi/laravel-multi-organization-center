@@ -30,8 +30,9 @@ class Convertor {
         return $englishNumber;
     }
 
-    // Jalali months convertor in dataTable
-    public function numberTojalaliMonth($jalaliMonthString) {
+    // Jalali months convertor
+    public function convertJalaliMonth($value) {
+        // Define the mapping between Persian month names and their corresponding numbers
         $months = [
             'فروردین' => 1,
             'اردیبهشت' => 2,
@@ -46,50 +47,17 @@ class Convertor {
             'بهمن' => 11,
             'اسفند' => 12
         ];
-
-        return $months[$jalaliMonthString] ?? null;
-    }
-
-    // Jalali months convertor in Blade
-    public function numberTojalaliMonthBlade($column) {
-        switch ($column) {
-            case 1:
-                return 'فروردین';
-                break;
-            case 2:
-                return 'اردیبهشت';
-                break;
-            case 3:
-                return 'خرداد';
-                break;
-            case 4:
-                return 'تیر';
-                break;
-            case 5:
-                return 'مرداد';
-                break;
-            case 6:
-                return 'شهریور';
-                break;
-            case 7:
-                return 'مهر';
-                break;
-            case 8:
-                return 'آبان';
-                break;
-            case 9:
-                return 'آذر';
-                break;
-            case 10:
-                return 'دی';
-                break;
-            case 11:
-                return 'بهمن';
-                break;
-            case 12:
-                return 'اسفند';
-                break;
+    
+        if (is_string($value)) {
+            // Convert Persian month name to integer
+            return $months[$value] ?? null;
+        } elseif (is_int($value)) {
+            // Convert integer to Persian month name
+            $flippedMonths = array_flip($months); // Reverse the array to map integers to month names
+            return $flippedMonths[$value] ?? null;
         }
+    
+        return null; // Return null if the input is neither a string nor an integer
     }
 
     // Download the url with its original name stored in the database with an hour time limit.
