@@ -93,10 +93,7 @@ class ReportController extends Controller
                 $data['receipt'] = $fileName;
             } else {
                 // Return a JSON error response if the upload fails
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'رسید فایل به درستی بارگزاری نشد، لطفا دوباره امتحان کنید.'
-                ], 500);
+                return $this->getErrorMessage("رسید فایل به درستی بارگزاری نشد، لطفا دوباره امتحان کنید.");
             }
         }
 
@@ -173,9 +170,12 @@ class ReportController extends Controller
         $report = Report::findOrFail($id);
 
         // Delete the associated receipt file from S3
-        Storage::disk('s3')->delete('receipt/' . $report->receipt);
-        // Use the Action service to handle the deletion process
-        return $this->action->delete(Report::class, $id);
+        if(Storage::disk('s3')->delete('receipt/' . $report->receipt)) {
+            //  Use the Action service to handle the deletion process
+            return $this->action->delete(Report::class, $id);
+        }
+
+        return $this->getErrorMessage("رسید فایل به درستی حذف نشد، رسید فایل قبلا به درستی بارگزاری نشده است.");
     }
 
     // Helper method to decrypt an encrypted ID, returning null if no ID is provided

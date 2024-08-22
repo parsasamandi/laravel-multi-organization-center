@@ -6,7 +6,10 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body text-center">
-                <h5 class="alert alert-danger mb-0">آیا مایل به حذف {{ $title }} هستید؟</h5>
+                <!-- Form output -->
+                <span class="form_output"></span>
+                <!-- Title to display for deleting -->
+                <h5 class="alert alert-danger mb-0">آیا مایل به حذف {{ $title }} هستید؟ </h5>
             </div>
 
             <div class="modal-footer">

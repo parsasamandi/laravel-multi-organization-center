@@ -72,10 +72,7 @@ class GeneralInfoController extends Controller
                 $data['bank_statement_receipt'] = $fileName;
             } else {
                 // Return a JSON error response if the upload fails
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'رسید فایل به درستی بارگزاری نشد، لطفا دوباره امتحان کنید.'
-                ], 500);
+                return $this->getErrorMessage("رسید فایل به درستی بارگزاری نشد، لطفا دوباره امتحان کنید.");
             }
         }   
 
@@ -126,11 +123,14 @@ class GeneralInfoController extends Controller
     public function delete(Request $request) {
         $id = $this->decryptId($request->get('id'));
         $generalInfo = GeneralInfo::findOrFail($id);
-
+    
         // Delete the associated receipt file from S3
-        Storage::disk('s3')->delete('bank_statement/' .  $generalInfo->bank_statement_receipt);
-        return $this->action->delete(GeneralInfo::class, $id);
-    }
+        if (Storage::disk('s3')->delete('bank_statement/' .  $generalInfo->bank_statement_receipt)) {
+            return $this->action->delete(GeneralInfo::class, $id);
+        }
+    
+        return $this->getErrorMessage("رسید فایل قبلا به درستی بارگزاری نشده است و حذف نمی‌شود.");
+    }    
 
     // Helper method to decrypt an encrypted ID
     private function decryptId($encryptedId) {

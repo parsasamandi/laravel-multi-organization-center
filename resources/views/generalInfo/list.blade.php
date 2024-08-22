@@ -51,7 +51,7 @@
 
 <script>
   $(document).ready(function () {
-    // phoneNumber Table
+    // Datatable
     let dt = window.LaravelDataTables['generalInfoTable'];
     let action = new RequestHandler(dt,'#generalInfoForm', 'generalInfo');
 
@@ -86,8 +86,6 @@
         }
       })
     }
-
-    
   });
 </script>
 @endsection

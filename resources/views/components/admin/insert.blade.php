@@ -13,7 +13,7 @@
           {{ csrf_field() }}
 
           {{-- Output --}}
-          <span id="form_output"></span>
+          <span class="form_output"></span>
 
           {{ $content ?? null }}
 

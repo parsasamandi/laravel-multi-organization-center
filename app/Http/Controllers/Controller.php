@@ -35,4 +35,12 @@ class Controller extends BaseController
     public function getUpdateMessage() {
         return '<div class="alert alert-success">اطلاعات جدید با موفقیت ثبت شد</div>';
     }
+
+    // Get error message
+    public function getErrorMessage($message) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $message
+        ], 500);
+    }
 }
