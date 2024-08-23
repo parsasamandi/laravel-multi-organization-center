@@ -62,6 +62,12 @@
 
 <script>
   $(document).ready(function () {
+
+    // Change the English number of pagination to Persian
+    $('#golestanTeamTable').DataTable().on('draw', function() {
+      convertNumbersToPersian('.dataTables_paginate .paginate_button');
+    });
+
     // Golestan Team Table
     let dt = window.LaravelDataTables['golestanTeamTable'];
     let action = new RequestHandler(dt,'#golestanTeamForm', 'golestanTeam');

@@ -65,6 +65,12 @@
 
 <script>
   $(document).ready(function () {
+
+    // Change the English number of pagination to Persian
+    $('#centerTable').DataTable().on('draw', function() {
+      convertNumbersToPersian('.dataTables_paginate .paginate_button');
+    });
+
     // Center Table
     let dt = window.LaravelDataTables['centerTable'];
     let action = new RequestHandler(dt,'#centerForm', 'center');

@@ -77,6 +77,11 @@
 <script>
   $(document).ready(function () {
 
+    // Change the English number of pagination to Persian number
+    $('#reportTable').DataTable().on('draw', function() {
+      convertNumbersToPersian('.dataTables_paginate .paginate_button');
+    });
+
     // Report Table
     let dt = window.LaravelDataTables['reportTable'];
     let action = new RequestHandler(dt,'#reportForm', 'report');

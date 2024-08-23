@@ -3,6 +3,7 @@
 
 @section('content')
 
+  {{-- Success Modal To Show After Insertion --}}
   @include('includes.successModal')
 
   {{-- Header --}}
@@ -51,6 +52,12 @@
 
 <script>
   $(document).ready(function () {
+
+    // Change the English number of pagination to Persian number
+    $('#generalInfoTable').DataTable().on('draw', function() {
+      convertNumbersToPersian('.dataTables_paginate .paginate_button');
+    });
+
     // Datatable
     let dt = window.LaravelDataTables['generalInfoTable'];
     let action = new RequestHandler(dt,'#generalInfoForm', 'generalInfo');

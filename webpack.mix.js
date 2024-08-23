@@ -17,6 +17,8 @@ mix.js('resources/assets/js/app.js',  'public/js')
     .js('resources/assets/js/isotope.js','public/js/isotope.js')
     // Ajax request handler
     .scripts('resources/assets/js/RequestHandler.js', 'public/js/RequestHandler.js')
+    // Utilities 
+    .scripts('resources/assets/js/utils.js', 'public/js/utils.js')
     // Fonts
     .copy('resources/assets/fonts','public/fonts')
     // Images

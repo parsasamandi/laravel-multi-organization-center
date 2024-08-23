@@ -117,7 +117,10 @@
         <script src="{{ mix('js/manifest.js') }}"></script>
         <script src="{{ mix('js/vendor.js') }}"></script>
         <script src="{{ mix('js/app.js') }}"></script>
+        {{-- Ajax request handlers --}}
         <script src="{{ mix('js/RequestHandler.js') }}"></script>
+        {{-- Utilities --}}
+        <script src="{{ mix('js/utils.js') }}"></script>
 
         <!-- DataTables JavaScript -->
         <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
