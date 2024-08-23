@@ -100,11 +100,12 @@
 
         <!-- Main Footer -->
         <footer class="main-footer">
-            <!-- To the right -->
+            <!-- Copyright -->
             <div class="float-right d-none d-sm-inline">
-                <!-- Anything you want -->
-                تمامی حقوق معنوی این وبسایت متعلق به خیریه گلستان می باشد.
+                حقوق معنوی سامانه متعلق به خیریه گلستان می‌باشد 
             </div>
+            <strong>(قالب وبسایت: <a href="https://github.com/badranawad/adminlte-rtl" target="_blank">بدران عوض</a>).</strong>
+            
             <!-- Footer logo -->
             <object data="/images/golestan-logo-dark-wide.svg" class="brand-image img-circle elevation-3" type="image/svg+xml"></object>
         </footer>
