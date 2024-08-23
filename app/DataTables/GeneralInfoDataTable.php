@@ -36,10 +36,7 @@ class GeneralInfoDataTable extends DataTable
             ->rawColumns(['action', 'bank_statement_receipt', 'data', 'status', 'center_name'])
             ->addColumn('center_name', function(GeneralInfo $generalInfo) {
                 $center = Center::find($generalInfo->center_id);
-                if(!$center) {
-                    return 'مرکز وجود ندارد';
-                }
-                return $center->name;
+                return $center ? $center->name : 'مرکز وجود ندارد';
             })
             ->filterColumn('center_name', function ($query, $keyword) {
                 // Use whereHas to filter based on related Center model's name attribute
@@ -52,8 +49,6 @@ class GeneralInfoDataTable extends DataTable
                     . ' ' . $this->convertor->englishToPersianDecimal($generalInfo->jalaliYear);
             })
             ->filterColumn('date', function ($query, $keyword) {
-                // Ensure Convertor class is available
-                $convertor = new Convertor();
                 // Convert Persian numbers to English numbers
                 $jalaliYear = $this->convertor->englishToPersianDecimal($keyword);
                 // Map Jalali month name to its corresponding number

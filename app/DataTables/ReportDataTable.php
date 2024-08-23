@@ -5,13 +5,14 @@ namespace App\DataTables;
 use App\Models\Report;
 use App\Models\GeneralInfo;
 use App\DataTables\GeneralDataTable;
+use App\Models\Center;
+use App\Providers\Convertor;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Services\DataTable;
-use App\Models\Center;
-use App\Providers\Convertor;
 use Illuminate\Support\Facades\Auth;
 use Storage;
+use DB;
 
 class ReportDataTable extends DataTable
 {
@@ -38,11 +39,6 @@ class ReportDataTable extends DataTable
                 $center = Center::find($report->center_id);
                 return $center ? $center->name : 'مرکز وجود ندارد';
             })
-            ->filterColumn('center_name', function ($query, $keyword) {
-                $query->whereHas('center', function ($q) use ($keyword) {
-                    $q->where('name', 'LIKE', "%$keyword%");
-                });
-            })
             ->addColumn('date', function (Report $report) {
                 $generalInfo = GeneralInfo::find($report->general_info_id);
                 if ($generalInfo) 
@@ -51,19 +47,28 @@ class ReportDataTable extends DataTable
 
                 return null;
             })
+            ->filterColumn('center_name', function ($query, $keyword) {
+                $query->whereHas('center', function ($q) use ($keyword) {
+                    $q->where('name', 'LIKE', "%$keyword%");
+                });
+            })
             ->filterColumn('date', function ($query, $keyword) {
                 // Convert Persian numbers to English numbers
                 $jalaliYear = $this->convertor->persianToEnglishDecimal($keyword);
                 // Map Jalali month name to its corresponding number
-                $jalaliMonth = $this->convertor->numberTojalaliMonth($keyword);
-
+                $jalaliMonth = $this->convertor->convertJalaliMonth($keyword);
+                
                 $query->whereHas('generalInfo', function ($subQuery) use ($jalaliMonth, $jalaliYear) {
-                    if (!empty($jalaliMonth)) {
-                        $subQuery->where('jalaliMonth', 'LIKE', "%{$jalaliMonth}%");
-                    }
-                    if (is_numeric($jalaliYear)) {
-                        $subQuery->where('jalaliYear', 'LIKE', "%$jalaliYear%");
-                    }
+                    $subQuery->where(function ($q) use ($jalaliMonth, $jalaliYear) {
+                        if (!empty($jalaliMonth)) {
+                            $q->where('general_infos.jalaliMonth', '=', "{$jalaliMonth}");
+                        }
+                        
+                        if (!empty($jalaliYear)) {
+                            // Use orWhere for jalaliYear to ensure it is applied alongside jalaliMonth
+                            $q->orWhere('general_infos.jalaliYear', '=', "{$jalaliYear}");
+                        }
+                    });
                 });
             })
             ->orderColumn('date', function ($query, $direction) {

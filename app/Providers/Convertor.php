@@ -20,12 +20,15 @@ class Convertor {
 
     // Persian to English number decimals
     public function persianToEnglishDecimal($number) {
-        // Define the mapping of English digits to Persian digits
-        $persianDigits = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
-        $englishDigits = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+        // Define the mapping of Persian digits to English digits
+        $persianDigits = '۰۱۲۳۴۵۶۷۸۹';
+        $englishDigits = '0123456789';
     
-        // Convert each English digit in the number to its Persian equivalent
-        $englishNumber = str_replace($persianDigits, $englishDigits, $number);
+        // Create a translation table for Persian to English digit conversion
+        $translationTable = array_flip(mb_str_split($persianDigits));
+        
+        // Convert Persian digits to English using the translation table
+        $englishNumber = strtr($number, $translationTable);
     
         return $englishNumber;
     }
