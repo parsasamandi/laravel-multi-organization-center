@@ -34,10 +34,59 @@ class ReportDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->rawColumns(['action', 'receipt', 'date', 'center_name'])
+            ->rawColumns(['action', 'receipt', 'center_name', 'date'])
             ->addColumn('center_name', function (Report $report) {
                 $center = Center::find($report->center_id);
                 return $center ? $center->name : 'مرکز وجود ندارد';
+            })
+            ->filterColumn('center_name', function ($query, $keyword) {
+                
+                // Convert the keyword from Persian to English numbers
+                $keyword = $this->convertor->persianToEnglishDecimal(trim($keyword));
+
+                $persianMonths = [
+                    "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
+                    "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"
+                ];
+                
+                if (in_array($keyword, $persianMonths) || is_numeric($keyword)) { 
+                    // Initialize variables
+                    $jalaliMonth = null;
+                    $jalaliYear = null;
+                
+                    // Check if the keyword contains only numbers (indicating it might be a year)
+                    if (is_numeric($keyword)) {
+                        $jalaliYear = (int) $keyword;
+                    } else {
+                        // Split the keyword by spaces to determine if it contains both month and year
+                        $parts = preg_split('/\s+/', $keyword);
+                
+                        foreach ($parts as $part) {
+                            if (is_numeric($part)) {
+                                $jalaliYear = (int) $part;
+                            } else {
+                                $jalaliMonth = (int) $this->convertor->convertJalaliMonth($part);
+                            }
+                        }
+                    }
+
+                    $query->whereHas('generalInfo', function ($subQuery) use ($jalaliMonth, $jalaliYear) {
+                        $subQuery->where(function ($q) use ($jalaliMonth, $jalaliYear) {
+                            if (!empty($jalaliMonth)) {
+                                $q->where('general_infos.jalaliMonth', '=', "{$jalaliMonth}");
+                            }
+                            
+                            if (!empty($jalaliYear)) {
+                                // Use orWhere for jalaliYear to ensure it is applied alongside jalaliMonth
+                                $q->orWhere('general_infos.jalaliYear', '=', "{$jalaliYear}");
+                            }
+                        });
+                    });
+                } else {
+                    $query->whereHas('center', function ($q) use ($keyword) {
+                        $q->where('name', 'LIKE', "%$keyword%");
+                    });
+                }
             })
             ->addColumn('date', function (Report $report) {
                 $generalInfo = GeneralInfo::find($report->general_info_id);
@@ -46,30 +95,6 @@ class ReportDataTable extends DataTable
                         $this->convertor->englishToPersianDecimal($generalInfo->jalaliYear);
 
                 return null;
-            })
-            ->filterColumn('center_name', function ($query, $keyword) {
-                $query->whereHas('center', function ($q) use ($keyword) {
-                    $q->where('name', 'LIKE', "%$keyword%");
-                });
-            })
-            ->filterColumn('date', function ($query, $keyword) {
-                // Convert Persian numbers to English numbers
-                $jalaliYear = $this->convertor->persianToEnglishDecimal($keyword);
-                // Map Jalali month name to its corresponding number
-                $jalaliMonth = $this->convertor->convertJalaliMonth($keyword);
-                
-                $query->whereHas('generalInfo', function ($subQuery) use ($jalaliMonth, $jalaliYear) {
-                    $subQuery->where(function ($q) use ($jalaliMonth, $jalaliYear) {
-                        if (!empty($jalaliMonth)) {
-                            $q->where('general_infos.jalaliMonth', '=', "{$jalaliMonth}");
-                        }
-                        
-                        if (!empty($jalaliYear)) {
-                            // Use orWhere for jalaliYear to ensure it is applied alongside jalaliMonth
-                            $q->orWhere('general_infos.jalaliYear', '=', "{$jalaliYear}");
-                        }
-                    });
-                });
             })
             ->orderColumn('date', function ($query, $direction) {
                 if (GeneralInfo::exists()) {

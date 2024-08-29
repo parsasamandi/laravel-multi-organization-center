@@ -39,31 +39,51 @@ class GeneralInfoDataTable extends DataTable
                 return $center ? $center->name : 'مرکز وجود ندارد';
             })
             ->filterColumn('center_name', function ($query, $keyword) {
-                // Use whereHas to filter based on related Center model's name attribute
-                $query->whereHas('center', function ($q) use ($keyword) {
-                    $q->where('name', 'LIKE', "%$keyword%");
-                });
+
+                // Convert the keyword from Persian to English numbers
+                $keyword = $this->convertor->persianToEnglishDecimal(trim($keyword));
+
+                $persianMonths = [
+                    "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
+                    "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"
+                ];
+                
+                if (in_array($keyword, $persianMonths) || is_numeric($keyword)) { 
+                    // Initialize variables
+                    $jalaliMonth = null;
+                    $jalaliYear = null;
+
+                     // Check if the keyword contains only numbers (indicating it might be a year)
+                    if (is_numeric($keyword)) {
+                        $jalaliYear = (int) $keyword;
+                    } else {
+                        // Split the keyword by spaces to determine if it contains both month and year
+                        $parts = preg_split('/\s+/', $keyword);
+
+                        foreach ($parts as $part) {
+                            if (is_numeric($part)) {
+                                $jalaliYear = (int) $part;
+                            } else {
+                                $jalaliMonth = (int) $this->convertor->convertJalaliMonth($part);
+                            }
+                        }
+                    }
+                    if ($jalaliMonth) 
+                        $query->where('jalaliMonth', '=', $jalaliMonth);
+                    
+                    if ($jalaliYear) 
+                        $query->orWhere('jalaliYear', '=', $jalaliYear);
+
+                } else {
+                    $query->whereHas('center', function ($q) use ($keyword) {
+                        $q->where('name', 'LIKE', "%$keyword%");
+                    });
+                }
             })
             ->addColumn('date', function(GeneralInfo $generalInfo) {
                 return $this->convertor->convertJalaliMonth($generalInfo->jalaliMonth) 
                     . ' ' . $this->convertor->englishToPersianDecimal($generalInfo->jalaliYear);
-            })
-            ->filterColumn('date', function ($query, $keyword) {
-                // Convert Persian numbers to English numbers
-                $jalaliYear = $this->convertor->englishToPersianDecimal($keyword);
-                // Map Jalali month name to its corresponding number
-                $jalaliMonth = $this->convertor->convertJalaliMonth($keyword);
-
-                $query->join('general_infos', 'reports.general_info_id', '=', 'general_infos.id')
-                    ->where(function ($query) use ($jalaliMonth, $jalaliYear) {
-                        if (!empty($jalaliMonth)) {
-                            $query->where('general_infos.jalaliMonth', 'LIKE', "%{$jalaliMonth}%");
-                        }
-                        if (is_numeric($jalaliYear)) {
-                            $query->where('general_infos.jalaliYear', 'LIKE', "%$jalaliYear%");
-                        }
-                });
-            })            
+            })                     
             ->orderColumn('date', function ($query, $direction) {
                 $query->orderBy('jalaliYear', $direction)
                       ->orderBy('jalaliMonth', $direction);
