@@ -8,29 +8,38 @@ class Convertor {
 
     // English to Persian number decimals
     public function englishToPersianDecimal($number) {
-        // Define the mapping of English digits to Persian digits
-        $englishDigits = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
-        $persianDigits = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
-    
-        // Convert each English digit in the number to its Persian equivalent
-        $persianNumber = str_replace($englishDigits, $persianDigits, $number);
-    
-        return $persianNumber;
+        $translationTable = [
+            '0' => '۰', 
+            '1' => '۱', 
+            '2' => '۲', 
+            '3' => '۳', 
+            '4' => '۴', 
+            '5' => '۵', 
+            '6' => '۶', 
+            '7' => '۷', 
+            '8' => '۸', 
+            '9' => '۹'
+        ];
+
+        return strtr($number, $translationTable);
     }
 
     // Persian to English number decimals
     public function persianToEnglishDecimal($number) {
-        // Define the mapping of Persian digits to English digits
-        $persianDigits = '۰۱۲۳۴۵۶۷۸۹';
-        $englishDigits = '0123456789';
+        $translationTable = [
+            '۰' => '0', 
+            '۱' => '1', 
+            '۲' => '2', 
+            '۳' => '3', 
+            '۴' => '4', 
+            '۵' => '5', 
+            '۶' => '6', 
+            '۷' => '7', 
+            '۸' => '8', 
+            '۹' => '9'
+        ];
     
-        // Create a translation table for Persian to English digit conversion
-        $translationTable = array_flip(mb_str_split($persianDigits));
-        
-        // Convert Persian digits to English using the translation table
-        $englishNumber = strtr($number, $translationTable);
-    
-        return $englishNumber;
+        return strtr($number, $translationTable);
     }
 
     // Jalali months convertor
