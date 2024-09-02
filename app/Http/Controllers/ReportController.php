@@ -175,7 +175,7 @@ class ReportController extends Controller
             return $this->action->delete(Report::class, $id);
         }
 
-        return $this->getErrorMessage("رسید فایل به درستی حذف نشد، رسید فایل قبلا به درستی بارگزاری نشده است.");
+        return $this->getErrorMessage("رسید فایل قبلا به درستی بارگزاری نشده است و حذف نمی‌شود.");
     }
 
     // Helper method to decrypt an encrypted ID, returning null if no ID is provided
