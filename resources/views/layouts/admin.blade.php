@@ -102,12 +102,17 @@
         <footer class="main-footer">
             <!-- Copyright -->
             <div class="float-right d-none d-sm-inline">
-                حقوق معنوی سامانه متعلق به خیریه گلستان می‌باشد 
+                <p> حقوق معنوی سامانه متعلق به خیریه گلستان می‌باشد |&nbsp; </p>
             </div>
-            <strong>(قالب وبسایت: <a href="https://github.com/badranawad/adminlte-rtl" target="_blank">بدران عوض</a>).</strong>
-            
-            <!-- Footer logo -->
-            <object data="/images/golestan-logo-dark-wide.svg" class="brand-image img-circle elevation-3" type="image/svg+xml"></object>
+            <!-- Responsive Copyright -->
+            <div class="responsive-footer"> 
+                <span>
+                    قالب وبسایت:
+                    <a href="https://github.com/badranawad/adminlte-rtl" target="_blank">بدران عوض.</a>
+                </span>
+                <!-- Footer logo -->
+                <object data="/images/golestan-logo-dark-wide.svg" class="brand-image img-circle elevation-3" type="image/svg+xml"></object>
+            <div>
         </footer>
 
     </div>
