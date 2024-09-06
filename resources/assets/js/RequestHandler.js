@@ -31,6 +31,10 @@ class RequestHandler {
         // Store or Update
         $(window.formId).on('submit', function (event) {
             event.preventDefault();
+
+            // Disable the submit button to prevent double submissions
+            toggleButton(false);
+
             // Form Data
             const form_data = new FormData(event.target); // Include all form data
 
@@ -43,9 +47,13 @@ class RequestHandler {
                 data: form_data,
                 success: function (data) { 
                     success(data, "#formModal");
+                    // Re-enable the button after success
+                    toggleButton(true);
                 },
                 error: function (data) {
                     error(data);
+                    // Re-enable the button after error
+                    toggleButton(true);
                 }
             })
         });
@@ -53,6 +61,7 @@ class RequestHandler {
 
     // Delete
     delete(id) {
+        emptyFormOutput();
         $('#confirmationModal').modal('show'); // Confirm
 
         $('#ok_button').click(function () {
@@ -98,6 +107,11 @@ function showFormModal() {
 // Empty the form output
 function emptyFormOutput() {
     $('.form_output').empty();
+}
+
+// Function to toggle the submit button state
+function toggleButton(enable = true) {
+    $('#action').prop('disabled', !enable);
 }
 
 // Success handler
