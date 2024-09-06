@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Providers;
+
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\Media;
-use File;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Throwable;
 
 class Action {
 
@@ -14,13 +15,15 @@ class Action {
      */
     public function edit($model, $id) {
         try {
-            $values = $model::find($id);
+            $values = $model::findOrFail($id); // Use findOrFail to throw exception if not found
+            return response()->json($values);
 
-            return $values ? response()->json($values) 
-                : $this->failedResponse();
-
+        } catch (ModelNotFoundException $e) {
+            // Handle case when the record is not found
+            return $this->failedResponse();
         } catch (Throwable $e) {
-            return response()->json($e);
+            // Handle other possible exceptions
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -30,24 +33,29 @@ class Action {
      * @return json
      */
     public function delete($model, $id) {
+        try {
+            $values = $model::findOrFail($id); // Use findOrFail for better error handling
+            $values->delete();
+            
+            // Return success response after deletion
+            return response()->json(['message' => 'گزارش و فایل رسید با موفقیت حذف شد.'], Response::HTTP_OK);
 
-        $values = $model::find($id);
 
-        return $values ? $values->delete() 
-                : $this->failedResponse();
-
-        return $this->successfulResponse();
+        } catch (ModelNotFoundException $e) {
+            // Handle case when the record is not found
+            return $this->failedResponse();
+        } catch (Throwable $e) {
+            // Handle other possible exceptions
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // Response with error
+    /**
+     * Response with error
+     * 
+     * @return json
+     */
     public function failedResponse() {
-        return response()->json(['error' => 'No data was found'], Response::HTTP_NOT_FOUND);
-    }
-
-    // Response with success
-    public function successfulResponse() {
-        return response()->json(['success' => 'Deleted successfully'], Response::HTTP_OK);
+        return response()->json(['message' => 'اطلاعاتی یافت نشد.'], Response::HTTP_NOT_FOUND);
     }
 }
-
-?>
