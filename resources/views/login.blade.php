@@ -34,12 +34,12 @@
                     <i class="fa fa-key"></i>
                 </div>
                 <!-- remember token  -->
-                <label class="form-remember">
+                <!-- <label class="form-remember">
                     <input type="checkbox" name="remember_me"/>
                     <span>
                         مرا به خاطر بسپارید
                     </span>
-                </label>
+                </label> -->
                 <button>
                     <span class="state">ورود</span>
                 </button>
