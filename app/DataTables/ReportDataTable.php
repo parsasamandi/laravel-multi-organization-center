@@ -134,7 +134,7 @@ class ReportDataTable extends DataTable
                 $query->orderBy('type', $direction);
             })
             ->addColumn('status', function (Report $report) {
-                return $report->statuses->status == 1 ? 'تایید شده' : 'تایید نشده';
+                return $report->statuses->status == 1 ? 'بررسی شده' : 'بررسی نشده';
             })
             ->addColumn('action', function (Report $report) {
                 return $this->dataTable->setAction($report->id, 'report');

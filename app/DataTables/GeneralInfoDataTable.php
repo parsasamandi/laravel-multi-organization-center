@@ -104,10 +104,10 @@ class GeneralInfoDataTable extends DataTable
             })->addColumn('status', function(GeneralInfo $generalInfo) {
                 switch($generalInfo->statuses->status) {
                     case 0:
-                        return 'تایید نشده';
+                        return 'بررسی نشده';
                         break;
                     case 1:
-                        return 'تایید شده';
+                        return 'بررسی شده';
                         break;
                 }
             })

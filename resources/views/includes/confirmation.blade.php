@@ -1,6 +1,6 @@
 <!-- Confirmation -->
-<label for="status">وضعیت تایید</label>
+<label for="status">وضعیت بررسی</label>
 <select name="status" id="status">
-    <option value="0">تایید نشده</option>
-    <option value="1">تایید شده</option>
+    <option value="0">بررسی نشده</option>
+    <option value="1">بررسی شده</option>
 </select>

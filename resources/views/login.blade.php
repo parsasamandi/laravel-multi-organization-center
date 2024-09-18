@@ -30,7 +30,7 @@
                     <i class="fa fa-user"></i>
                 </div>
                 <div class="form-group">
-                    <input class="text-right" type="password" name="password" placeholder="رمز عبور" required/>
+                    <input class="text-right" type="password" name="password" placeholder="رمز عبور"/>
                     <i class="fa fa-key"></i>
                 </div>
                 <!-- remember token  -->
