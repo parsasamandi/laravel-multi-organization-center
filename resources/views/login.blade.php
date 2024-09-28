@@ -14,7 +14,7 @@
             <form action="{{ route('login', [], false)}} " method="POST" class="login">
                 @csrf
                 <!-- Title -->
-                <p class="title">ورود به اتوماسیون گزارش هزینه های ماهانه</p>
+                <p class="title">ورود به اتوماسیون مالی گلستان</p>
 
                 {{-- Errors --}}
                 @if($errors->any())
