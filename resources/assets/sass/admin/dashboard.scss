@@ -6,9 +6,9 @@
 html,
 body,
 .wrapper {
-  min-height: 100%;
-  overflow-x: hidden;
-  /* background-color: #F5F5F5; */
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .inline-div {
@@ -17,10 +17,12 @@ body,
 
 .wrapper {
   position: relative;
+  min-height: 100vh; /* Full viewport height */
 }
 
 .content-wrapper {
-  min-height: 645px !important;
+  padding-bottom: 80px; /* Leave space for the footer */
+  overflow: auto; /* If content overflows, it can scroll within the wrapper */
 }
 
 .layout-boxed .wrapper {
@@ -117,7 +119,10 @@ body,
 }
 
 .main-footer {
-  padding: 15px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 3px;
   color: #555;
   border-top: 1px solid #dee2e6;
 }
@@ -283,17 +288,17 @@ input {
 }
 
 .brand-image {
-  float: left;
   line-height: .8;
-  max-height: 34px;
+  float: left;
+  max-height: 40px;
   width: auto;
-  margin-left: .8rem;
-  margin-right: .5rem;
-  margin-top: -3px;
 }
 
-.main-footer .brand-image {
-  margin-left: 0.1em;
+.brand-link .brand-image {
+  margin-left: .5rem;
+  margin-right: .5rem;
+  margin-top: -3px;
+  max-height: 35px;
 }
 
 /**
