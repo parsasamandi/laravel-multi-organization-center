@@ -11,8 +11,6 @@
     <title>@yield('title')</title>
     {{-- App --}}
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-    <!-- DataTables Buttons CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
 @show
 
 <body class="hold-transition sidebar-mini">
