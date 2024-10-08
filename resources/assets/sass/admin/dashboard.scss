@@ -49,8 +49,19 @@ body,
     margin-top: 4em;
   }
 
+  // .responsive-footer {
+  //   margin-right: 20px;
+  // }
+
+  // .responsive-footer span {
+  //   margin-bottom: 3em;
+  // }
+}
+
+@media (max-width: 556px) {
   .responsive-footer {
-    margin-right: 0.5em;
+    margin-bottom: 1em;
+    margin-right: 20px;
   }
 }
 
@@ -127,8 +138,13 @@ body,
   border-top: 1px solid #dee2e6;
 }
 
-.main-footer div p{
-  margin-right: 0.5em;
+.main-footer div {
+  margin-top: 1rem;
+}
+
+.main-footer p {
+  margin-right: 20px;
+  margin-left: 5px;
 }
 
 .content-header {
