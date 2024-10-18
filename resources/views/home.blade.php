@@ -9,7 +9,7 @@
                 <div class="card">
                     <div class="card-header">
                         <object data="/images/golestan-logo-dark.svg" class="brand-image img-circle elevation-3" type="image/svg+xml"></object>
-                        <h5 class="mt-1 mb-0">به اتوماسیون گزارش هزینه‌های ماهانه گلستان خوش آمدید. </h5>
+                        <h5>به اتوماسیون گزارش هزینه‌های ماهانه گلستان خوش آمدید. </h5>
                     </div>
                     <div class="card-body">
                         <p class="card-text">

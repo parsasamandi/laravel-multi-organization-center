@@ -49,14 +49,11 @@ body,
   .main-footer {
     margin-top: 4em;
   }
+}
 
-  // .responsive-footer {
-  //   margin-right: 20px;
-  // }
 
-  // .responsive-footer span {
-  //   margin-bottom: 3em;
-  // }
+.card-header h5 {
+  margin-top: 0.6em;
 }
 
 @media (max-width: 556px) {
@@ -305,6 +302,7 @@ input {
 }
 
 .brand-image {
+  margin-top: 0.24em;
   line-height: .8;
   float: left;
   max-height: 40px;

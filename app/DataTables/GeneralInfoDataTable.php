@@ -33,7 +33,7 @@ class GeneralInfoDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->rawColumns(['action', 'bank_statement_receipt', 'data', 'status', 'center_name'])
+            ->rawColumns(['action', 'bank_statement_receipt', 'data', 'status', 'center_name', 'test'])
             ->addColumn('center_name', function(GeneralInfo $generalInfo) {
                 $center = Center::find($generalInfo->center_id);
                 return $center ? $center->name : 'مرکز وجود ندارد';

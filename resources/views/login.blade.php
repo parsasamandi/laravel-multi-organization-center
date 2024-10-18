@@ -15,7 +15,6 @@
                 @csrf
                 <!-- Title -->
                 <p class="title">ورود به اتوماسیون مالی گلستان</p>
-
                 {{-- Errors --}}
                 @if($errors->any())
                     @foreach ($errors->all() as $error)
@@ -33,7 +32,7 @@
                     <input class="text-right" type="password" name="password" placeholder="رمز عبور"/>
                     <i class="fa fa-key"></i>
                 </div>
-                <!-- remember token  -->
+                <!-- remember token -->
                 <!-- <label class="form-remember">
                     <input type="checkbox" name="remember_me"/>
                     <span>
@@ -44,8 +43,6 @@
                     <span class="state">ورود</span>
                 </button>
             </form>
-
         </div>
     </body>
-
 </html>

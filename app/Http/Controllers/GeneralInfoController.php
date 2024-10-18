@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Morilog\Jalali\Jalalian;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -131,7 +132,7 @@ class GeneralInfoController extends Controller
     
         return $this->getErrorMessage("رسید فایل قبلا به درستی بارگزاری نشده است و حذف نمی‌شود.");
     }    
-
+    
     // Helper method to decrypt an encrypted ID
     private function decryptId($encryptedId) {
         return $encryptedId ? Crypt::decryptString($encryptedId) : null;
