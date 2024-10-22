@@ -22,8 +22,8 @@ class StoreReportRequest extends FormRequest
             'expenses' => 'required|numeric',
             'range' => 'required|regex:/.*\d+.*$/',
             'receipt' => $this->input('id') 
-                ? 'nullable|mimes:xls,xlsx,pdf,doc,docx,csv|max:15000' 
-                : 'required|mimes:xls,xlsx,pdf,doc,docx,csv|max:15000',
+                ? 'nullable|mimes:xls,xlsx,pdf,doc,docx,csv|max:25000' 
+                : 'required|mimes:xls,xlsx,pdf,doc,docx,csv|max:25000',
             'jalaliMonth' => ['required', function ($attribute, $value, $fail) {
                 $this->checkGeneralInfoExists($fail);
             }],
