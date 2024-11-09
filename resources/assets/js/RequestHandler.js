@@ -9,20 +9,15 @@ class RequestHandler {
 
     // Modal
     openInsertionModal() {
-        // Empty the form output
-        emptyFormOutput();
-        // Show the insertion/update modal
-        showFormModal();
-        // Set the button action for insertion
-        $('#button_action').val('insert');
-        // Set the button value to 'تایید'
-        $('#action').val('تایید');
+        // Reset the dataTable
+        $(window.formId)[0].reset();
+        // Reload the modal and show it
+        this.reloadModal();
         // Set the sign * as 'required'
         $('.required-heading .input-required').show();
         // Set the selectbox values to null
         $('select').val(null).trigger('change');
-        // Reset the dataTable
-        $(window.formId)[0].reset();
+        // Clear the datatable
         window.dt.cear().draw();
     }
 
@@ -32,14 +27,14 @@ class RequestHandler {
         $(window.formId).on('submit', function (event) {
             event.preventDefault();
 
-            // Disable the submit button to prevent double submissions
+            // Disable the submit button to prevent double submissions 
             toggleButton(false);
 
             // Form Data
             const form_data = new FormData(event.target); // Include all form data
 
             $.ajax({
-                url: "/" + window.url + "/store",
+                url: `/${window.url}/store`,
                 method: "POST",
                 contentType: false,
                 processData: false,
@@ -47,13 +42,9 @@ class RequestHandler {
                 data: form_data,
                 success: function (data) { 
                     success(data, "#formModal");
-                    // Re-enable the button after success
-                    toggleButton(true);
                 },
                 error: function (data) {
                     error(data);
-                    // Re-enable the button after error
-                    toggleButton(true);
                 }
             })
         });
@@ -61,12 +52,19 @@ class RequestHandler {
 
     // Delete
     delete(id) {
+        // Empty the form output
         emptyFormOutput();
+        // Show the confirmation modal
         $('#confirmationModal').modal('show'); // Confirm
+        // Re-enable the toggle button
+        toggleButton(true);
 
-        $('#ok_button').click(function () {
+        $('#delete_confirmation').off().on('click', function () {
+            // Disable the submit button to prevent double submissions 
+            toggleButton(false);
+
             $.ajax({
-                url: "/" + window.url + "/delete",
+                url: `/${window.url}/delete`,
                 method: "get",
                 data: { id: id },
                 success: function(data) {
@@ -81,10 +79,11 @@ class RequestHandler {
 
     // Default edit data
     reloadModal() {
-        // Empty the form output
         emptyFormOutput();
         // Show the #formModal
         showFormModal();
+        // Reset the form to clear all fields and set default values
+        toggleButton(true);
     }
 
     // Edit on success
@@ -111,7 +110,8 @@ function emptyFormOutput() {
 
 // Function to toggle the submit button state
 function toggleButton(enable = true) {
-    $('#action').prop('disabled', !enable);
+    $('.action-button').prop('disabled', !enable);
+    $('.action-button').val(enable ? 'ثبت' : 'در حال ثبت');
 }
 
 // Success handler
@@ -150,4 +150,6 @@ function error(data) {
 
     // Display all errors in the form_output element
     $('.form_output').html(error_html);
+    // Re-enable the submit button
+    toggleButton(true);
 }

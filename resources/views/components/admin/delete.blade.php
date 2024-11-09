@@ -13,7 +13,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" name="ok_button" id="ok_button" class="btn btn-primary">تایید</button>
+                <button type="button" id="delete_confirmation" class="btn btn-primary action-button">تایید</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
             </div>
         </div>

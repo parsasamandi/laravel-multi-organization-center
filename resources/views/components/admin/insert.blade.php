@@ -22,7 +22,7 @@
           <div class="form-group" align="center">
             <input type="hidden" name="id" id="id" value="" />
             <input type="hidden" name="button_action" id="button_action" value="insert" />
-            <input type="submit" name="submit" id="action" value="تایید" class="btn btn-primary" />
+            <input type="submit" name="submit" value="تایید" class="btn btn-primary action-button" />
             <button type="button" class="btn btn-secondary" data-dismiss="modal">خروج</button>
           </div>
         </form>
