@@ -14,7 +14,7 @@
     // Bank balance 
     $bankBalance = $convertor->englishToPersianDecimal($generalInfo->bank_balance);
     // Presigned URL
-    $bankStatementPresignedUrl = $convertor->getPresignedUrlWithContentDisposition('receipts/' 
+    $bankStatementPresignedUrl = $convertor->getPresignedUrlWithContentDisposition('bank_statement/' 
         . $generalInfo->bank_statement_receipt, $generalInfo->bank_statement_receipt);
 @endphp
 

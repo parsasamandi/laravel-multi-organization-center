@@ -16,7 +16,7 @@
     // Range
     $range = $convertor->englishToPersianDecimal($report->range);
     // Presigned URL
-    $presignedUrl = $convertor->getPresignedUrlWithContentDisposition('receipts/' 
+    $presignedUrl = $convertor->getPresignedUrlWithContentDisposition('receipt/' 
         . $report->receipt, $report->receipt);
 @endphp
 
@@ -47,13 +47,22 @@
             <!-- Type -->
             @switch($report->type)
                 @case(0)
-                    <td>حقوق کارمند</td>
+                    <td>هزینه حقوق کارمند</td>
                     @break
                 @case(1)
                     <td>هزینه آموزش</td>
                     @break
                 @case(2)
                     <td>هزینه های سلامت</td>
+                    @break
+                @case(3)
+                    <td>هزینه های غذا</td>
+                    @break
+                @case(4)
+                    <td>هزینه های پوشاک</td>
+                    @break
+                @case(5)
+                    <td>هزینه های دیگر</td>
                     @break
             @endswitch
             <!-- Jalali months -->
