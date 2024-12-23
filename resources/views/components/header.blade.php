@@ -1,6 +1,6 @@
 <div class="container-fluid mt-3">
     {{-- List --}}
-    <h2 class="mt-4">{{ $pageName }}</h2>
+    <h2 class="mt-3">{{ $pageName }}</h2>
 
     @if(Auth::user()->type == $type)
         <button type="button" id="create_record"

@@ -79,6 +79,9 @@ class CenterDataTable extends DataTable
             Column::make('name')
                 ->title('نام مرکز')
                 ->orderable(false),
+            Column::make('name_en')
+                ->title('نام انگلیسی مرکز')
+                ->orderable(false),
             Column::make('email')
                 ->title('ایمیل')
                 ->orderable(false),

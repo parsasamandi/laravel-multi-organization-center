@@ -36,7 +36,7 @@ hr {
 }
 
 .ltr {
-    direction:ltr;
+    direction: ltr;
 }
 
 ul {
@@ -236,6 +236,53 @@ select {
 
 $datatable_color: #1B9A57;
 
+/* Style optgroups for better separation */
+// select optgroup {
+//     font-weight: bold;
+//     color: #1b9a57 !important; /* Adjust the color as needed */
+// }
+
+.select2-container--default .select2-results__group {
+    font-weight: bold; /* Makes the label bold */
+    color: #1b9a57 !important; /* Adjust the color as needed */
+    font-size: 1em; /* Optional: adjust font size */
+    padding: 5px 10px; /* Optional: adjust spacing */
+}
+
+// .select2-container .select2-selection--single .select2-selection__rendered {
+//     padding-right: 3px;
+// }
+  
+/* Indent options within optgroups */
+// select option {
+//     padding-left: 5px;
+// }
+  
+/* Customize subcategories to appear distinct */
+select option[value^="education_"] {
+    color: #555; /* Subtle color difference */
+    font-style: italic; /* Optional: Italicize subcategories */
+}
+
+#paymentTransferTable {
+    direction: ltr;
+}
+
+#paymentTransferTable_paginate {
+    float: left;
+}
+
+#paymentTransferTable_filter {
+    text-align: left;
+}
+
+#paymentTransferTable_wrapper input {
+    text-align: left !important;
+    direction: ltr !important;
+    margin: 0;
+}
+
+
 .admin_panel {
     background-color: #1B9A57 !important;
     text-align: center;
@@ -306,12 +353,12 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before, table.dataT
 
 /* paginate button style */
 .paginate_button {
-    background-color: #FFFFFF; /* Light gray background */
-    color: #333; /* Dark gray text */
-    border: 1px solid #ccc; /* Light gray border */
-    padding: 5px 10px; /* Add some padding */
+    background-color: #FFFFFF;
+    color: #333; 
+    border: 1px solid #ccc; 
+    padding: 5px 10px; 
     border-radius: 2px;
-    cursor: pointer; /* Make it look clickable */
+    cursor: pointer; 
   }
   
 .paginate_button:hover {
@@ -323,8 +370,7 @@ div.dataTables_wrapper div.dataTables_paginate {
     margin-top: 0.5em;
 }
 
-// Responsive button
-
+// Responsive buttons
 table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, 
     table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
     color: #FFFFFF !important;
@@ -336,7 +382,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before,
     margin-left: 8px;
     padding: 8px 8px 10px 10px;
     color: #FFFFFF;
-    content: 'نمایش کامل سطر';
+    // content: 'نمایش کامل سطر';
     border-radius: 100px;
     background-color: #1B9A57 !important;
 }

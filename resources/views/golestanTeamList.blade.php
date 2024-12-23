@@ -14,7 +14,7 @@
 
 
   {{-- Insertion --}}
-  <x-admin.insert size="modal-g" formId="golestanTeamForm">
+  <x-admin.insert size="modal-g" formId="golestanTeamForm" english="false">
     <x-slot name="content">
       {{-- Form --}}
       <div class="row">
@@ -31,15 +31,14 @@
         <x-input key="email" placeholder="ایمیل عضو گلستان"
           class="col-md-12 mb-3" required="true"/>
 
-        {{-- Passwords --}}
+        <!-- Password -->
         <div class="col-md-6 mb-3">
-          <label for="password" class="required-heading">رمز <span class="input-required">*</span></label>
+          <label for="password" class="required-heading">رمز: <span class="input-required">*</span></label>
           <input name="password" id="password" class="form-control" 
             placeholder="رمز" autocomplete="new-password">
         </div>
-
         <div class="col-md-6">
-          <label for="password-confirm" class="required-heading">تکرار رمز <span class="input-required">*</span></label>
+          <label for="password-confirm" class="required-heading">تکرار رمز: <span class="input-required">*</span></label>
           <input name="password-confirm" id="password-confirm" class="form-control"  
             placeholder="تکرار رمز" autocomplete="new-password">
         </div>
@@ -48,7 +47,7 @@
   </x-admin.insert>
 
   {{-- Delete --}}
-  <x-admin.delete title="عضو گلستان" />
+  <x-admin.delete title="عضو گلستان" english="false" />
   
 @endsection
 

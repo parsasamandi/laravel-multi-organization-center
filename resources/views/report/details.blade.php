@@ -21,10 +21,9 @@
 @endphp
 
 
-<div class="container-fluid mt-3 right-text">
+<div class="container-fluid right-text">
     {{-- List --}}
     <x-details tableId="reportDetailsTable" header="گزارش هزینه {{ $jalaliMonth }} {{ $jalaliYear }}">
-
         <!-- Table header -->
         <x-slot name="tableHeader">
             <th>مرکز</th>
@@ -72,7 +71,6 @@
             <!-- Receipt -->
             <td><a href="{{ $presignedUrl }}" target="_blank">دانلود</a></td>
         </x-slot>
-
     </x-details>    
 
     <!-- Description -->

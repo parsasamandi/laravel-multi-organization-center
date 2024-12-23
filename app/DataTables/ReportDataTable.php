@@ -122,12 +122,28 @@ class ReportDataTable extends DataTable
             })
             ->editColumn('type', function (Report $report) {
                 switch ($report->type) {
-                    case 0: return 'هزینه حقوق کارمندان';
-                    case 1: return 'هزینه آموزش';
-                    case 2: return 'هزینه های سلامت';
-                    case 3: return 'هزینه های غذا';
-                    case 4: return 'هزینه های پوشاک';
-                    case 5: return 'هزینه های دیگر';
+                    case 0: 
+                        return 'هزینه حقوق کارمندان';
+                    case 2: 
+                        return 'هزینه های سلامت';
+                    case 3: 
+                        return 'هزینه های غذا';
+                    case 4: 
+                        return 'هزینه های پوشاک';
+                    case 5: 
+                        return 'هزینه های دیگر';
+                    case 9: 
+                        return 'هزینه آموزش - نیمسال اوله';
+                    case 8: 
+                        return 'هزینه آموزش - نیمسال دوم';
+                    case 7: 
+                        return 'هزینه آموزش تابستان';
+                    case 6: 
+                        return 'هزینه آموزش اقلام مهر';
+                    case 1: 
+                        return 'هزینه آموزش - دیگر';
+                    default:
+                        return 'نوع هزینه نامشخص';
                 }
             })
             ->orderColumn('type', function ($query, $direction) {

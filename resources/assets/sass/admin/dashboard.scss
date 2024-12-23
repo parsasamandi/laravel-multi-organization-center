@@ -183,8 +183,17 @@ body,
 }
 
 input {
-  text-align: right !important;
-  direction: rtl !important;
+  text-align: right;
+  direction: rtl;
+}
+
+.text-left {
+  direction: ltr;
+}
+
+.text-left input {
+  text-align: left;
+  direction: ltr !important;
 }
 
 /*

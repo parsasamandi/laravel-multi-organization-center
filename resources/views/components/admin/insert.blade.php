@@ -1,34 +1,40 @@
-<!-- Modal creation -->
-<div id="formModal" class="modal fade text-right" tabindex="-1" role="dialog" aria-hidden="true" enctype="multipart/form-data">
+<div id="formModal" 
+     class="modal fade {{ $english == "true" ? 'text-left' : 'text-right' }}" 
+     tabindex="-1" 
+     role="dialog" 
+     aria-hidden="true" 
+     data-english="{{ $english == 'true' ? 'true' : 'false' }}">
   <div class="modal-dialog {{ $size }}">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header {{ $english == "true" ? 'text-left' : 'text-right' }}">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
-      <div class="modal-body text-right">
-        {{-- Form --}}
-        <form id="{{ $formId }}" class="form-horizontal" enctype="multipart/form-data">
+      <div class="modal-body {{ $english == "true" ? 'text-left' : 'text-right' }}">
+        <form id="{{ $formId }}" 
+              class="form-horizontal" 
+              style="direction: {{ $english == "true" ? 'ltr' : 'rtl' }};">
 
           {{ csrf_field() }}
 
-          {{-- Output --}}
           <span class="form_output"></span>
-
           {{ $content ?? null }}
 
           <br />
-          {{-- Buttons --}}
           <div class="form-group" align="center">
             <input type="hidden" name="id" id="id" value="" />
             <input type="hidden" name="button_action" id="button_action" value="insert" />
-            <input type="submit" name="submit" value="تایید" class="btn btn-primary action-button" />
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">خروج</button>
+
+            <input type="submit" name="submit" value="ثبت" class="btn btn-primary action-button" />
+
+            <button type="button" 
+                    class="btn btn-secondary" 
+                    data-dismiss="modal">
+              {{ $english == "true" ? 'Exit' : 'خروج' }}
+            </button>
           </div>
         </form>
       </div>
     </div>
   </div>
 </div>
-
-

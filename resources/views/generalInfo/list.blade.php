@@ -14,7 +14,7 @@
   </x-header>
 
   {{-- Insertion --}}
-  <x-admin.insert size="modal-l" formId="generalInfoForm">
+  <x-admin.insert size="modal-l" formId="generalInfoForm" english="false">
     <x-slot name="content">
       {{-- Form --}}
       <div class="row">
@@ -40,7 +40,7 @@
   </x-admin.insert>
 
   {{-- Delete --}}
-  <x-admin.delete title="صورتحساب" />
+  <x-admin.delete title="صورتحساب" english="false" />
 
 @endsection
 
@@ -77,8 +77,6 @@
 
     // Edit Modal
     window.showEditModal = function showEditModal(id) {
-      
-      // Edit
       action.reloadModal();
 
       $.ajax({

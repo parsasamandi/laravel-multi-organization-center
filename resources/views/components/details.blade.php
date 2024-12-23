@@ -1,6 +1,7 @@
 <div class="table-responsive">
     {{-- List --}}
-    <h4 class="mb-3">جزئیات {{ $header ?? null }}</h4>
+    <h4 class="mb-3 mt-3">جزئیات {{ $header ?? null }}</h4>
+    <hr>
 
     <div class="row">
         <div class="col-md-12">

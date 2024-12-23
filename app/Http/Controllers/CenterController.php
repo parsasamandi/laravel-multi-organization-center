@@ -44,7 +44,7 @@ class CenterController extends Controller
         $id = $request->filled('id') ? $this->decryptId($request->get('id')) : null;
 
         // Extract relevant data from the request and set the type to 'CENTER'
-        $data = $request->only(['name', 'code', 'phone_number', 'email']) + ['type' => Center::CENTER];
+        $data = $request->only(['name', 'name_en', 'code', 'phone_number', 'email']) + ['type' => Center::CENTER];
 
         // If a password is provided, hash it and add it to the data array
         if ($request->filled('password')) {

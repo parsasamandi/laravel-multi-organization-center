@@ -9,8 +9,6 @@ mix.js('resources/assets/js/app.js',  'public/js')
     .sass('resources/assets/sass/app.scss','public/css')
     // Authentication
     .sass('resources/assets/sass/auth.scss','public/css/auth.css')
-    // Isotope
-    .js('resources/assets/js/isotope.js','public/js/isotope.json')
     // Home js
     .js('resources/assets/js/main.js','public/js/main.js')
     // Isotope
@@ -23,8 +21,10 @@ mix.js('resources/assets/js/app.js',  'public/js')
     .copy('resources/assets/fonts','public/fonts')
     // Images
     .copy('resources/assets/images','public/images')
-    // DataTable persian language
-    .copy('resources/assets/js/persian.json','public/js/persian.json');
+    // DataTable Persian language
+    .copy('resources/assets/js/persian.json','public/js/persian.json')
+    // DataTable English language
+    .copy('resources/assets/js/english.json','public/js/english.json');
 
 mix.sourceMaps();
 mix.version();

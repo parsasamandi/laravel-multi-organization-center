@@ -72,8 +72,9 @@
                                     <x-admin.urlAddress text="تیم گلستان" fontAwesome="null" route="{{ url('golestanTeam/list') }}"  />
                                 </x-slot>
                             </x-admin.urlAddressParent>
+                            {{-- Payment Info --}}
+                            <x-admin.urlAddress text="اطلاعات پرداخت‌ها" fontAwesome="fa fa-info" route="{{ url('paymentTransfer/list') }}" />
                         @endif
-                            {{-- Monthly Expense Report --}}
                             <x-admin.urlAddressParent text="گزارش مالی ماهانه" fontAwesome="fa fa-file">
                                 <x-slot name="content">
                                     {{-- General Info --}}
@@ -127,16 +128,14 @@
         <!-- DataTables Buttons JavaScript -->
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.bootstrap.min.js"></script>
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
 
 
         <script>
             // Ajax Setup
-            $.ajaxSetup({ processing: true, dataType: "json" });
+            $.ajaxSetup({ cache: false, processing: true, dataType: "json" });
             // Select2
-            $('select').select2({ width:'100%' });
-
+            $('select').select2({ width:'100%',});
             // Record modal
             $('#return_button').click(function () {
                 window.history.back();

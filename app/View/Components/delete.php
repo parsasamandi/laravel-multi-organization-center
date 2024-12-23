@@ -7,14 +7,17 @@ use Illuminate\View\Component;
 class delete extends Component
 {
     public $title;
+    public $isEnglish;
+    
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($title)
+    public function __construct($title, $isEnglish)
     {
         $this->title = $title;
+        $this->isEnglish = $isEnglish;
     }
 
     /**

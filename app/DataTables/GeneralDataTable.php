@@ -15,7 +15,7 @@ class GeneralDataTable
      *
      * @return \Yajra\DataTables\Html\Builder
      */
-    public function html($builder, $columns, $table)
+    public function html($builder, $columns, $table, $language = "persian.json")
     {
         return $builder
             ->setTableId("{$table}Table")
@@ -34,7 +34,7 @@ class GeneralDataTable
             ->pageLength(8)
             ->dom('frtip')
             ->orderBy(1)
-            ->language(asset('js/persian.json'));
+            ->language(asset("js/" . $language));
     }
 
     // Computed column in datatables for delete, update, insertion

@@ -1,6 +1,6 @@
 <div class="{{ $class ?? null }}">
     {{-- Label --}}
-    <label for="{{ $key }}">{{ $placeholder ? (string) $placeholder : '' }} (اختیاری)</label>
+    <label for="{{ $key }}">{{ $placeholder ? (string) $placeholder : '' }}:</label>
     {{-- Textarea --}}
     <textarea name="{{ $key }}" id="{{ $key }}" rows="{{ $rows ?? 2 }}" class="form-control"
         placeholder="{{ $placeholder ? (string) $placeholder : '' }}"

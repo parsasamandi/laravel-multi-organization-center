@@ -12,14 +12,15 @@ class input extends Component
     public $value;
     public $class;
     public $required;
+    public $readonly;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($key, $placeholder = null, $type = 'text', 
-                                $value = null, $class = null, $required = null)
+    public function __construct($key = null, $placeholder = null, $type = 'text', 
+                                $value = null, $class = null, $required = false, $readonly = false)
     {
         $this->type = $type;
         $this->key = $key;
@@ -27,6 +28,7 @@ class input extends Component
         $this->value = $value;
         $this->class = $class;
         $this->required = $required;
+        $this->readonly = $readonly;
     }
 
     /**

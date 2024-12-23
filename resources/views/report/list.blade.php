@@ -13,7 +13,7 @@
   </x-header>
 
   {{-- Insertion --}}
-  <x-admin.insert size="modal-lg" formId="reportForm">
+  <x-admin.insert size="modal-lg" formId="reportForm" english="false">
     <x-slot name="content">
       {{-- Form --}}
       <div class="row">
@@ -32,15 +32,21 @@
 
         <!-- Type -->
         <div class="col-md-6 mb-3">
-          <!-- Type -->
-          <label for="type">نوع هزینه: <span class="input-required">*</span> </label>
+        <!-- Type -->
+        <label for="type">نوع هزینه: <span class="input-required">*</span></label>
           <select id="type" name="type">
-              <option value="0">هزینه حقوق کارمندان</option>
-              <option value="1">هزینه آموزش</option>
-              <option value="2">هزینه های سلامت</option>
-              <option value="3">هزینه های غذا</option>
-              <option value="4">هزینه های پوشاک</option>
-              <option value="5">هزینه های دیگر</option>
+            <option value="0">هزینه حقوق کارمندان</option>
+            <option value="2">هزینه های سلامت</option>
+            <option value="3">هزینه های غذا</option>
+            <option value="4">هزینه های پوشاک</option>
+            <option value="5">هزینه های دیگر</option>
+            <optgroup style="10" label="هزینه آموزش">
+              <option value="9">آموزش - نیمسال اول &nbsp;&nbsp; </option>
+              <option value="8"> آموزش - نیمسال دوم&nbsp;&nbsp; </option>
+              <option value="7">آموزش تابستان &nbsp;&nbsp;</option>
+              <option value="6">آموزش اقلام مهر &nbsp;&nbsp;</option>
+              <option value="1">آموزش - دیگر &nbsp;&nbsp;</option>
+            </optgroup>
           </select>
         </div>
 
@@ -63,7 +69,7 @@
   </x-admin.insert>
 
   {{-- Delete --}}
-  <x-admin.delete title="گزارش هزینه" />
+  <x-admin.delete title="گزارش هزینه" english="false" />
 
 
 @endsection
@@ -76,6 +82,12 @@
 
 <script>
   $(document).ready(function () {
+
+    $('#type').select2({
+      width: '100%',
+      placeholder: 'لطفا نوع هزینه را انتخاب کنید',
+      // allowClear: true
+    });
 
     // Change the English number of pagination to Persian number
     $('#reportTable').DataTable().on('draw', function() {
@@ -96,7 +108,6 @@
 
     // Delete
     window.showConfirmationModal = function showConfirmationModal(id) {
-      console.log(id);
       action.delete(id);
     }
 

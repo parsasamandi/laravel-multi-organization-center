@@ -36,7 +36,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('delete','GolestanTeamController@delete');
     });
 
-    // General info
+    // General Info
     Route::group(['prefix' => 'generalInfo','as' => 'generalInfo.'], function() {
         Route::get('list', 'GeneralInfoController@list');
         Route::get('/table/list', 'GeneralInfoController@generalInfoTable')->name('list.table');
@@ -59,7 +59,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/details', 'ReportController@details');
         Route::get('delete','ReportController@delete');
     });
-
+    // Transfer Report
+    Route::group(['prefix' => 'paymentTransfer', 'as' => 'paymentTransfer.'], function() {
+        Route::get('list', 'PaymentTransferController@list')->name('list');
+        Route::get('/table/list', 'PaymentTransferController@paymentTransferTable')->name('list.table');
+        Route::post('store', 'PaymentTransferController@store')->name('store');
+        Route::get('/edit', 'PaymentTransferController@edit')->name('edit');
+        Route::get('/details', 'PaymentTransferController@details')->name('details');
+        Route::post('/update', 'PaymentTransferController@update')->name('update');
+        Route::get('delete', 'PaymentTransferController@delete')->name('delete');
+    });
 });
 
 // Login page

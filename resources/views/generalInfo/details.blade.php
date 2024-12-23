@@ -18,8 +18,7 @@
         . $generalInfo->bank_statement_receipt, $generalInfo->bank_statement_receipt);
 @endphp
 
-<div class="container-fluid mt-3 right-text">
-
+<div class="container-fluid right-text">
     <x-details tableId="generalInfoDetailsTable" header="صورتحساب {{ $jalaliMonth }} {{ $jalaliYear }}">
         <!-- Table header -->
         <x-slot name="tableHeader">
@@ -42,7 +41,6 @@
 
             <td><a href="{{ $bankStatementPresignedUrl }}" target="_blank">دانلود</a></td>
         </x-slot>
-        
     </x-details>
 
     <!-- Status form -->
@@ -53,7 +51,6 @@
         <button type="button" id="print_button" class="btn btn-primary">چاپ</button>
         <button type="button" id="return_button" class="btn btn-secondary">بازگشت</button>
     </div>
-
 </div>
 
 @endsection

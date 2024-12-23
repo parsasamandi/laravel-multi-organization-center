@@ -33,13 +33,13 @@ class Center extends Model implements Authenticatable
     /**
      * Cascade On Delete.
      */
-    protected $cascadeDeletes = ['generalInfo', 'reports', 'statuses'];
+    protected $cascadeDeletes = ['generalInfo', 'reports', 'statuses', 'paymentTransfers'];
 
     /**
      * @var array
      */
     protected $fillable = [
-        'code', 'name', 'phone_number', 'email', 'type', 'password',
+        'code', 'name', 'name_en', 'phone_number', 'email', 'type', 'password',
     ];
 
     /**
@@ -56,6 +56,14 @@ class Center extends Model implements Authenticatable
     public function reports()
     {
         return $this->hasMany('App\Models\Report', 'center_id');
+    }
+
+     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function paymentTransfers()
+    {
+        return $this->hasMany('App\Models\PaymentTransfer', 'center_id');
     }
 
     /*

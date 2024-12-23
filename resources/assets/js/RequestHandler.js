@@ -1,102 +1,85 @@
-// Efficient process of handling ajax requests
 class RequestHandler {
-    // Constructor
-    constructor(dt,formId,url) {
-        window.dt = dt; // Datatable 
-        window.formId = formId; // Form id
-        window.url = url; // Url
+    constructor(dt, formId, url, language = "Persian") {
+        window.dt = dt; // DataTable instance
+        window.formId = formId; // Form ID
+        window.url = url; // URL
+        window.language = language; // URL
     }
 
     // Modal
     openInsertionModal() {
-        // Reset the dataTable
-        $(window.formId)[0].reset();
-        // Reload the modal and show it
-        this.reloadModal();
-        // Set the sign * as 'required'
-        $('.required-heading .input-required').show();
-        // Set the selectbox values to null
-        $('select').val(null).trigger('change');
-        // Clear the datatable
-        window.dt.cear().draw();
+        $(window.formId)[0].reset(); // Reset the form
+        $('select').val(null).trigger('change'); // Reset select inputs
+        $('.required-heading .input-required').show(); // Show required field indicators
+        this.reloadModal(); // Reload modal
+        window.dt.clear().draw(); // Clear the DataTable
     }
 
-    // Insertion
+    // Insertion (or Update)
     insert() {
-        // Store or Update
-        $(window.formId).on('submit', function (event) {
+        $(window.formId).off('submit').on('submit', function (event) {
             event.preventDefault();
 
-            // Disable the submit button to prevent double submissions 
+            // Disable the submit button
             toggleButton(false);
 
-            // Form Data
-            const form_data = new FormData(event.target); // Include all form data
+            const formData = new FormData(event.target); // Form data
 
             $.ajax({
                 url: `/${window.url}/store`,
-                method: "POST",
+                method: 'POST',
                 contentType: false,
                 processData: false,
                 cache: false,
-                data: form_data,
-                success: function (data) { 
-                    success(data, "#formModal");
+                data: formData,
+                success: function (data) {
+                    success(data, '#formModal'); // Handle success
                 },
-                error: function (data) {
-                    error(data);
+                error: function (xhr) {
+                    error(xhr); // Handle error
                 }
-            })
+            });
         });
     }
 
     // Delete
     delete(id) {
-        // Empty the form output
-        emptyFormOutput();
-        // Show the confirmation modal
-        $('#confirmationModal').modal('show'); // Confirm
-        // Re-enable the toggle button
-        toggleButton(true);
+        emptyFormOutput(); // Clear the form output
+        $('#confirmationModal').modal('show'); // Show confirmation modal
 
         $('#delete_confirmation').off().on('click', function () {
-            // Disable the submit button to prevent double submissions 
             toggleButton(false);
 
             $.ajax({
                 url: `/${window.url}/delete`,
-                method: "get",
+                method: 'GET',
                 data: { id: id },
-                success: function(data) {
-                    success(data, "#confirmationModal");
+                success: function (data) {
+                    success(data, '#confirmationModal'); // Handle success
                 },
-                error: function (data) {
-                    error(data);
+                error: function (xhr) {
+                    error(xhr); // Handle error
                 }
-            })
+            });
         });
     }
 
-    // Default edit data
+    // Reload Modal
     reloadModal() {
-        emptyFormOutput();
-        // Show the #formModal
-        showFormModal();
-        // Reset the form to clear all fields and set default values
-        toggleButton(true);
+        emptyFormOutput(); // Clear form output
+        showFormModal(); // Show the form modal
+        toggleButton(true); // Enable buttons
     }
 
-    // Edit on success
+    // Edit on Success
     editOnSuccess(id) {
-        $('#id').val(id);
-        // Set the button action for update
-        $('#button_action').val('update');
-        // Set the button value to 'ثبت تغییرات'
-        $('#action').val('ثبت تغییرات');
-        // Remove "required field" from heading
-        $('.required-heading .input-required').hide();
+        $('#id').val(id); // Set ID for editing
+        $('#button_action').val('update'); // Set action to update
+        $('.required-heading .input-required').hide(); // Hide required indicators
     }
 }
+
+// Utility Functions
 
 // Show the form modal
 function showFormModal() {
@@ -108,48 +91,44 @@ function emptyFormOutput() {
     $('.form_output').empty();
 }
 
-// Function to toggle the submit button state
+// Toggle the submit button state
 function toggleButton(enable = true) {
-    $('.action-button').prop('disabled', !enable);
-    $('.action-button').val(enable ? 'ثبت' : 'در حال ثبت');
+    const button = $('.action-button');
+    
+    if (window.language === 'English') {
+        // If the language is English, set button text as "Submit" and "Submitting"
+        button.val(enable ? 'Submit' : 'Submitting...');
+    } else {
+        // If the language is not English (default Persian), set button text to Persian
+        button.val(enable ? 'ثبت' : 'در حال ثبت');
+    }
+
+    button.prop('disabled', !enable); // Disable or enable the button
 }
 
-// Success handler
+// Success Handler
 function success(data, modal) {
-    // Hide the current modal
-    $(modal).modal('hide');
-    // Show the success modal if the modal was #formModal
-    modal === "#formModal" && $('#successModal').modal('show');
-    // Empty the form output
-    emptyFormOutput();
-    // Reset the form
-    $(window.formId)[0].reset();
-    // Check if dataTable is not null, then refresh
-    window.dt && window.dt.draw(false);
+    $(modal).modal('hide'); // Hide the modal
+    if (modal === '#formModal') $('#successModal').modal('show'); // Show success modal
+    emptyFormOutput(); // Clear form output
+    $(window.formId)[0].reset(); // Reset the form
+    window.dt && window.dt.ajax.reload(null, false); // Reload DataTable
+    toggleButton(true); // Re-enable buttons
 }
 
 // Error Handler
-function error(data) {
-    // Parse the JSON response
-    const response = JSON.parse(data.responseText);
-
-    // Initialize error HTML
-    let error_html = '';
-
-    // Add field-specific errors if they exist
-    if (response.errors) {
-        Object.values(response.errors).forEach(errors => {
-            error_html += errors.map(error => `<div class="alert alert-danger">${error}</div>`).join('');
+function error(xhr) {
+    let errorHtml = '';
+    if (xhr.responseJSON?.errors) {
+        Object.values(xhr.responseJSON.errors).forEach((errors) => {
+            errorHtml += errors.map((err) => `<div class="alert alert-danger">${err}</div>`).join('');
         });
+    } else if (xhr.responseJSON?.message) {
+        errorHtml = `<div class="alert alert-danger">${xhr.responseJSON.message}</div>`;
+    } else {
+        errorHtml = '<div class="alert alert-danger">An unexpected error occurred.</div>';
     }
 
-    // If there are no field-specific errors, show the response.message
-    if (!error_html && response.message) {
-        error_html = `<div class="alert alert-danger">${response.message}</div>`;
-    }
-
-    // Display all errors in the form_output element
-    $('.form_output').html(error_html);
-    // Re-enable the submit button
-    toggleButton(true);
+    $('.form_output').html(errorHtml); // Display errors
+    toggleButton(true); // Re-enable buttons
 }

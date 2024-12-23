@@ -2,7 +2,7 @@
     {{-- Has sub menus --}}
     <a class="nav-link">
         <i class="{{ $fontAwesome }}"></i>
-        <p class="mr-1 text-bold">
+        <p class="mr-1">
             {{ $text }}
         </p>
     </a>
