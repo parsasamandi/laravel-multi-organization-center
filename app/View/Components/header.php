@@ -14,7 +14,7 @@ class header extends Component
      *
      * @return void
      */
-    public function __construct($pageName, $buttonValue, $type = 0)
+    public function __construct($pageName, $buttonValue = null, $type = 0)
     {
         $this->pageName = $pageName;
         $this->buttonValue = $buttonValue;

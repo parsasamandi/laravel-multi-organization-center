@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\GeneralInfo;
 use App\Models\Center;
+use App\Models\Status;
 use App\DataTables\GeneralDataTable;
 use App\Providers\Convertor;
 use Yajra\DataTables\Html\Button;
@@ -34,6 +35,7 @@ class GeneralInfoDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->rawColumns(['action', 'bank_statement_receipt', 'data', 'status', 'center_name'])
+            
             ->addColumn('center_name', function(GeneralInfo $generalInfo) {
                 $center = Center::find($generalInfo->center_id);
                 return $center ? $center->name : 'مرکز وجود ندارد';
@@ -102,14 +104,12 @@ class GeneralInfoDataTable extends DataTable
                 return '<a href="' . $presignedUrl . '" target="_blank">دانلود</a>';
                 
             })->addColumn('status', function(GeneralInfo $generalInfo) {
-                switch($generalInfo->statuses->status) {
-                    case 0:
-                        return 'بررسی نشده';
-                        break;
-                    case 1:
-                        return 'بررسی شده';
-                        break;
-                }
+                return match ($generalInfo->statuses->status) {
+                    Status::NOTCONFIRMED => 'بررسی نشده',
+                    Status::SUCCESSFUL => 'موفق',
+                    Status::UNSUCCESSFUL => 'ناموفق',
+                    default => 'وضعیت نامشخص',
+                };
             })
             ->addColumn('action', function(GeneralInfo $generalInfo) {
                 return $this->dataTable->setAction($generalInfo->id, 'generalInfo');

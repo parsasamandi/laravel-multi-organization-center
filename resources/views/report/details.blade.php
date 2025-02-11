@@ -78,7 +78,7 @@
         placeholder="توضیحات" value="{{ $report->description }}" readonly />
 
     <!-- Status form -->
-    @include('includes.form.status', ['id' => $report->id])
+    @include('includes.form.statusForm', ['id' => $report->id, 'status' => $report->statuses->status])
 
     <!-- Return button -->
     <div class="text-center mt-3">

@@ -3,7 +3,7 @@
 
 <!-- Head -->
 @section('head')
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="اتوماسیون مالی، اطلاعات مالی">
     <meta name="keywords" content="گلستان، داشبورد، پنل">
@@ -74,6 +74,8 @@
                             </x-admin.urlAddressParent>
                             {{-- Payment Info --}}
                             <x-admin.urlAddress text="اطلاعات پرداخت‌ها" fontAwesome="fa fa-info" route="{{ url('paymentTransfer/list') }}" />
+                            {{-- Center Status Report --}}
+                            <x-admin.urlAddress text="وضعیت ماهانه مراکز" fontAwesome="fa fa-check" route="{{ url('centerStatusReport/list') }}" />
                         @endif
                             <x-admin.urlAddressParent text="گزارش مالی ماهانه" fontAwesome="fa fa-file">
                                 <x-slot name="content">
@@ -129,6 +131,12 @@
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+
+        <!-- Include Moment.js -->
+        <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+
+        <!-- Include Moment Jalaali for Jalali date support -->
+        <script src="https://cdn.jsdelivr.net/npm/moment-jalaali@0.9.1/moment-jalaali.min.js"></script>
 
 
         <script>

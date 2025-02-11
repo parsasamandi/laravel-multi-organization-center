@@ -47,14 +47,15 @@ class PaymentTransferDataTable extends DataTable {
                     $q->where('name_en', 'LIKE', "%$keyword%");
                 });
             })
-            // ->editColumn('total_cad', function ($paymentTransfer) {
-            //     return number_format($paymentTransfer->total_cad, 1); // Format to 1 decimal point
-            // })
-            // ->editColumn('total_rial', function ($paymentTransfer) {
-            //     return number_format($paymentTransfer->total_rial, 1); // Format to 1 decimal point
-            // })
+            ->editColumn('total_cad', function ($paymentTransfer) {
+                return number_format($paymentTransfer->total_cad, 1); // Format to 1 decimal point
+            })
+            ->editColumn('total_rial', function ($paymentTransfer) {
+                return number_format($paymentTransfer->total_rial, 3); // Format to 3 decimal points if they have any decimal point, do not format to decimal point at all if they have no decimal point
+            })
             ->editColumn('date', function ($paymentTransfer) {
-                return $paymentTransfer->date;
+                // Convert the Jalali date to Gregorian date
+                return Jalalian::fromFormat('Y-m-d', $paymentTransfer->date)->toCarbon()->format('Y-m-d');
             })
             ->addColumn('action', function ($paymentTransfer) {
                 return $this->dataTable->setAction($paymentTransfer->id, "paymentTransfer");

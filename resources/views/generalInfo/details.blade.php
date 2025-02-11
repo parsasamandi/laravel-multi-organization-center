@@ -44,7 +44,7 @@
     </x-details>
 
     <!-- Status form -->
-    @include('includes.form.status', ['id' => $generalInfo->id])
+    @include('includes.form.statusForm', ['id' => $generalInfo->id])
 
     <!-- Return button -->
     <div class="text-center mt-3">

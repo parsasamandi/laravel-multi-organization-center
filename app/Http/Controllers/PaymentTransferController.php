@@ -8,12 +8,13 @@ use App\Providers\SuccessMessages;
 use App\Providers\Action;
 use App\Models\PaymentTransfer;
 use App\Models\Center;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
+use Morilog\Jalali\Jalalian;
 
 class PaymentTransferController extends Controller
 {
@@ -55,19 +56,11 @@ class PaymentTransferController extends Controller
             fn($value) => $value === '' ? null : $value,
             $request->only([
                 'cad_to_usd_rate', 'total_rial', 'total_cad', 
-                'outfit', 'education', 'salary', 
+                'outfit', 'education', 'salary', 'date',
                 'food', 'misc', 'misc_desc', 'date', 'center_id'
             ])
         );
-
-        // Resolve center_id if provided
-        if (!empty($data['center_id'])) {
-            $data['center_id'] = optional(Center::find($data['center_id']))->id;
-        }
-
-        // Default the date to now if not provided
-        $data['date'] = $data['date'] ?? now();
-
+        
         // Update or create the payment transfer
         PaymentTransfer::updateOrCreate(['id' => $paymentTransferId], $data);
 
@@ -75,13 +68,33 @@ class PaymentTransferController extends Controller
         return $this->getAction($request->get('button_action'));
     }
 
-
     public function edit(Request $request)
     {
         // Decrypt the ID from the request to find the center
         $id = $this->decryptId($request->get('id'));
+        
         // Use the Action service to handle the edit process
-        return $this->action->edit(PaymentTransfer::class, $id);
+        $paymentTransfer = PaymentTransfer::findOrFail($id); // Retrieve the PaymentTransfer by ID
+    
+        // Convert the Jalali date to Gregorian
+        $jalaliDate = $paymentTransfer->date;  // Assume 'date' is in Jalali format
+        $gregorianDate = Jalalian::fromFormat('Y-m-d', $jalaliDate)->toCarbon()->format('Y-m-d'); // Convert to Gregorian using Jalalian
+    
+        // Return the data with the converted Gregorian date
+        return response()->json([
+            'date' => $gregorianDate,
+            'cad_to_usd_rate' => $paymentTransfer->cad_to_usd_rate,
+            'total_rial' => $paymentTransfer->total_rial,
+            'total_cad' => $paymentTransfer->total_cad,
+            'operation' => $paymentTransfer->operation,
+            'outfit' => $paymentTransfer->outfit,
+            'education' => $paymentTransfer->education,
+            'salary' => $paymentTransfer->salary,
+            'food' => $paymentTransfer->food,
+            'misc' => $paymentTransfer->misc,
+            'misc_desc' => $paymentTransfer->misc_desc,
+            'center_id' => $paymentTransfer->center_id
+        ]);
     }
 
     public function details(Request $request)

@@ -20,7 +20,6 @@ class StoreCenterRequest extends FormRequest
 
         $rules = [  
             'name' => 'required',
-            'name_en' => 'required',
             'code' => $request->get('id') 
                 ? 'nullable|numeric|digits:2|unique:centers,code,' . $id 
                 : 'required|numeric|digits:2|unique:centers,code,' . $id,

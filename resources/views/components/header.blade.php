@@ -1,15 +1,16 @@
 <div class="container-fluid mt-3">
-    {{-- List --}}
+    {{-- عنوان صفحه --}}
     <h2 class="mt-3">{{ $pageName }}</h2>
 
     @if(Auth::user()->type == $type)
-        <button type="button" id="create_record"
-            class="btn btn-primary btn-sm">+ افزودن {{ $buttonValue }}</button>
-
+        @if($buttonValue != "null")
+            <button type="button" id="create_record"
+                class="btn btn-primary btn-sm">+ افزودن {{ $buttonValue }}</button>
+        @endif
         <hr>
     @endif
     
-    {{-- Responsive Table --}}
+    {{-- جدول ریسپانسیو --}}
     <div>
         {{ $table ?? null }}
     </div>

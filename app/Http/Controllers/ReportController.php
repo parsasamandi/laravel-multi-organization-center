@@ -141,7 +141,13 @@ class ReportController extends Controller
         $report = Report::findOrFail($id);
 
         // Determine the new status based on the request input
-        $status = $request->get('status') == Status::CONFIRMED ? Status::CONFIRMED : Status::NOTCONFIRMED;
+        $statusValue = (int) $request->get('status');
+        $status = match ($statusValue) {
+            Status::SUCCESSFUL => Status::SUCCESSFUL,
+            Status::UNSUCCESSFUL => Status::UNSUCCESSFUL,
+            default => Status::NOTCONFIRMED,
+        };
+        
         // Update the report's status
         $report->statuses()->update(['status' => $status]);
 

@@ -27,6 +27,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('delete','CenterController@delete');
     });
 
+    // Center Status Report
+    Route::group(['prefix' => 'centerStatusReport','as' => 'centerStatusReport.'], function() {
+        Route::get('list', 'CenterStatusReportController@list');
+        Route::get('table/list', 'CenterStatusReportController@centerStatusReportTable')->name('list.table');
+        Route::post('store', 'CenterStatusReportController@store');
+        Route::get('edit', 'CenterStatusReportController@edit');
+        Route::get('delete','CenterStatusReportController@delete');
+    });
+
     // Golestan Team
     Route::group(['prefix' => 'golestanTeam','as' => 'golestanTeam.'], function() {
         Route::get('list', 'GolestanTeamController@list');

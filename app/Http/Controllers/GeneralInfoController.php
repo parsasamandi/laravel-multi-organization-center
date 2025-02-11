@@ -101,13 +101,20 @@ class GeneralInfoController extends Controller
         return $this->action->edit(GeneralInfo::class, $id);
     }
 
-    // Method to confirm or unconfirm the status of a GeneralInfo record
+    // Review status
     public function confirmStatus(Request $request) {
         $id = $request->get('id');
         $generalInfo = GeneralInfo::findOrFail($id);
 
         // Determine the new status based on the input and update the record
-        $status = $request->get('status') == Status::CONFIRMED ? Status::CONFIRMED : Status::NOTCONFIRMED;
+        $statusValue = (int) $request->get('status');
+        $status = match ($statusValue) {
+            Status::SUCCESSFUL => Status::SUCCESSFUL,
+            Status::UNSUCCESSFUL => Status::UNSUCCESSFUL,
+            default => Status::NOTCONFIRMED,
+        };
+        
+        // Update the bank_receipt's info status
         $generalInfo->statuses()->update(['status' => $status]);
 
         return response()->json(['success' => true], Response::HTTP_CREATED);

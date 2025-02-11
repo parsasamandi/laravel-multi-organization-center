@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Report;
 use App\Models\GeneralInfo;
+use App\Models\Status;
 use App\DataTables\GeneralDataTable;
 use App\Models\Center;
 use App\Providers\Convertor;
@@ -121,36 +122,30 @@ class ReportDataTable extends DataTable
                 return '<a href="' . $presignedUrl . '" target="_blank">دانلود</a>';
             })
             ->editColumn('type', function (Report $report) {
-                switch ($report->type) {
-                    case 0: 
-                        return 'هزینه حقوق کارمندان';
-                    case 2: 
-                        return 'هزینه های سلامت';
-                    case 3: 
-                        return 'هزینه های غذا';
-                    case 4: 
-                        return 'هزینه های پوشاک';
-                    case 5: 
-                        return 'هزینه های دیگر';
-                    case 9: 
-                        return 'هزینه آموزش - نیمسال اوله';
-                    case 8: 
-                        return 'هزینه آموزش - نیمسال دوم';
-                    case 7: 
-                        return 'هزینه آموزش تابستان';
-                    case 6: 
-                        return 'هزینه آموزش اقلام مهر';
-                    case 1: 
-                        return 'هزینه آموزش - دیگر';
-                    default:
-                        return 'نوع هزینه نامشخص';
-                }
+                return match ($report->type) {
+                    0 => 'هزینه حقوق کارمندان',
+                    2 => 'هزینه های سلامت',
+                    3 => 'هزینه های غذا',
+                    4 => 'هزینه های پوشاک',
+                    5 => 'هزینه های دیگر',
+                    9 => 'هزینه آموزش - نیمسال اوله',
+                    8 => 'هزینه آموزش - نیمسال دوم',
+                    7 => 'هزینه آموزش تابستان',
+                    6 => 'هزینه آموزش اقلام مهر',
+                    1 => 'هزینه آموزش - دیگر',
+                    default => 'نوع هزینه نامشخص',
+                };
             })
             ->orderColumn('type', function ($query, $direction) {
                 $query->orderBy('type', $direction);
             })
             ->addColumn('status', function (Report $report) {
-                return $report->statuses->status == 1 ? 'بررسی شده' : 'بررسی نشده';
+                return match ($report->statuses->status) {
+                    Status::NOTCONFIRMED => 'بررسی نشده',
+                    Status::SUCCESSFUL => 'موفق',
+                    Status::UNSUCCESSFUL => 'ناموفق',
+                    default => 'وضعیت نامشخص',
+                };
             })
             ->addColumn('action', function (Report $report) {
                 return $this->dataTable->setAction($report->id, 'report');

@@ -85,6 +85,7 @@
 
 <script>
   $(document).ready(function () {
+    
     // Expense Transfer Table
     let dt = window.LaravelDataTables['paymentTransferTable'];
     let action = new RequestHandler(dt,'#paymentTransferForm', 'paymentTransfer', "English");
@@ -107,25 +108,31 @@
       action.reloadModal();
 
       $.ajax({
-        url: "{{ url('paymentTransfer/edit') }}",
-        method: 'get',
-        data: { id: id },
-        success: function (data) {  
-          action.editOnSuccess(id);
-          $('#date').val(data.date);
-          $('#cad_to_usd_rate').val(data.cad_to_usd_rate);
-          $('#total_rial').val(data.total_rial);
-          $('#total_cad').val(data.total_cad);
-          $('#operation').val(data.operation);
-          $('#outfit').val(data.outfit);
-          $('#education').val(data.education);
-          $('#salary').val(data.salary);
-          $('#food').val(data.food);
-          $('#misc').val(data.misc);
-          $('#misc_desc').val(data.misc_desc);
-          $('#center_id').val(data.center_id).trigger('change');
-        }
-      })
+    url: "{{ url('paymentTransfer/edit') }}",
+    method: 'get',
+    data: { id: id },
+    success: function (data) {  
+      action.editOnSuccess(id);
+
+        console.log("Converted Gregorian date:", data.date);  // Should now be a valid Gregorian date
+        
+        // Set the Gregorian date in the input field
+        $('#date').val(data.date);
+
+        // Populate other fields
+        $('#cad_to_usd_rate').val(data.cad_to_usd_rate);
+        $('#total_rial').val(data.total_rial);
+        $('#total_cad').val(data.total_cad);
+        $('#operation').val(data.operation);
+        $('#outfit').val(data.outfit);
+        $('#education').val(data.education);
+        $('#salary').val(data.salary);
+        $('#food').val(data.food);
+        $('#misc').val(data.misc);
+        $('#misc_desc').val(data.misc_desc);
+        $('#center_id').val(data.center_id).trigger('change');
+    }
+});
     }
   });
 </script>

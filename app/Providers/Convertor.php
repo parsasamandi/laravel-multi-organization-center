@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Providers;
+use Morilog\Jalali\Jalalian;
 use Aws\S3\S3Client;
 use File;
 
@@ -43,7 +44,7 @@ class Convertor {
     }
 
     // Jalali months convertor
-    public function convertJalaliMonth($value) {
+    public function convertJalaliMonth($value = null) {
         // Define the mapping between Persian month names and their corresponding numbers
         $months = [
             'فروردین' => 1,
@@ -59,6 +60,10 @@ class Convertor {
             'بهمن' => 11,
             'اسفند' => 12
         ];
+
+        if ($value === null) {
+            return $months; 
+        }
     
         if (is_string($value)) {
             // Convert Persian month name to integer
@@ -70,6 +75,24 @@ class Convertor {
         }
     
         return null; // Return null if the input is neither a string nor an integer
+    }
+
+    public function jalaliYearDropdown()
+    {
+        // Get the current Jalali year
+        $currentYear = Jalalian::now()->getYear();
+        
+        // Define the start year
+        $startYear = 1402;
+    
+        // Generate the dropdown HTML
+        $dropdown = '';
+        for ($year = $startYear; $year <= $currentYear; $year++) {
+            $persianYear = $this->englishToPersianDecimal($year);
+            $dropdown .= '<option value=\'' . $year . '\'>' . $persianYear . '</option>';
+        }
+    
+        return $dropdown;
     }
 
     // Download the url with its original name stored in the database with an hour time limit.

@@ -27,7 +27,7 @@ class GeneralDataTable
                 ]
             )
             ->searching(true)
-            ->lengthMenu([10,25,40])
+            ->lengthMenu([10, 25, 40])
             ->info(false)
             ->ordering(true)
             ->responsive(true)
@@ -118,7 +118,7 @@ class GeneralDataTable
     public function filterProductCol($query, $keyword) {
 
         return $this->filterColumn($query, 'product_id in
-                    (select id from product where name like ?)', $keyword);
+                (select id from product where name like ?)', $keyword);
 
     }
 

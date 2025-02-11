@@ -14,7 +14,8 @@ class Status extends Model
 {
 
     const NOTCONFIRMED = 0;
-    const CONFIRMED = 1;
+    const SUCCESSFUL = 1;
+    const UNSUCCESSFUL = 2;
 
     public $timestamps = false;
 
