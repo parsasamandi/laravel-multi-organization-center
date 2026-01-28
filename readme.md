@@ -1,6 +1,6 @@
 ## About this
 
-This automation tool is designed to streamline the management of monthly expense reports for the charities supported by the Golestan Foundation. The Golestan Foundation is a non-profit organization dedicated to supporting orphans in Iran. 
+This automation tool is designed to streamline the management of centers' reports.
 
 ## License
 
