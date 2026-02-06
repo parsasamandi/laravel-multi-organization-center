@@ -1,0 +1,10 @@
+{
+    "paginate": {
+        "next": "Next",
+        "previous": "Previous"
+    },
+    "search": "_INPUT_",
+    "searchPlaceholder": "Search..."
+}
+
+

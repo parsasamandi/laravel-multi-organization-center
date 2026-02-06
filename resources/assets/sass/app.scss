@@ -1,0 +1,27 @@
+// Bootstrap
+$primary: #1B9A57;
+@import "~bootstrap/scss/bootstrap";
+// Font Awesome
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
+@import '~@fortawesome/fontawesome-free/scss/brands';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+// Boxiicons
+@import "~boxicons/css/boxicons.css";
+// Aos
+@import "~aos/src/sass/aos.scss";
+// DataTables
+@import "~datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+@import "~datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css";
+// Select2
+@import "~select2/dist/css/select2.css";
+// Admin Dashboard
+@import "admin/dashboard";
+@import "admin/custom-style";
+// Filepond
+@import "~filepond/dist/filepond.min.css";
+
+
+
+

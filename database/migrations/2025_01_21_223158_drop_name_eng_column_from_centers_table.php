@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class DropNameEngColumnFromCentersTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('centers', function (Blueprint $table) {
+            if (Schema::hasColumn('centers', 'name_eng')) {
+                $table->dropColumn('name_eng');
+            }
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('centers', function (Blueprint $table) {
+            // Optionally add back the 'name_eng' column
+            $table->string('name_eng')->nullable();
+        });
+    }
+}

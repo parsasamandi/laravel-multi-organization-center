@@ -1,0 +1,397 @@
+@font-face {
+    font-family: "shabnam";
+    src: url("/fonts/Shabnam.ttf") format('truetype');
+}
+@font-face {
+    font-family: "shabnam-bold";
+    src: url("/fonts/Shabnam-Bold.ttf") format('truetype');
+  }
+  
+/*---------------------------------- End of fonts ---------------------------------- */
+
+body {
+    font-family: 'shabnam';
+    text-align: right;
+    direction: rtl;
+    padding-right: 0px !important;
+}
+
+.btn-primary {
+    background-color: #1B9A57;
+    border-color: #1B9A57;
+
+    &:hover {
+        background-color: #17804A; /* Adjust the hover color as desired */
+    }
+}
+
+.card-text {
+    font-size: 15px !important;
+    text-align: justify;
+}
+
+hr {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.ltr {
+    direction: ltr;
+}
+
+ul {
+    padding-inline-start: 0px;
+}
+
+.w-100 {
+    width: 100% !important;
+}
+  
+
+.dropdown-item {
+    text-align: right;
+}
+.dropdown-footer, .dropdown-header {
+    text-align: center;
+}
+
+.breadcrumb {
+    background-color: rgba(0,0,0,.05) !important;
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+    padding-left: .5rem;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: "shabnam-bold";
+}
+
+input {
+    direction: rtl;
+}
+  
+select {
+    direction: rtl;
+}
+
+.right-direction{
+    text-align: right;
+    direction:rtl;
+}
+
+/* Table Image */
+.image_form {
+    width:105px;
+    height:110px;
+}
+
+// Image for preview
+.image{
+    height: 75%;
+    width: 100%;
+    margin-top: 10px;
+    padding-bottom: 2em;
+}
+
+/* Background style  */
+.tableBackground {
+    background-color: #e9ecef;
+    border-radius:5px;
+    padding: 17px 17px 10px 17px;
+    margin-bottom: 2em;
+}
+
+/* Hide footer when printing */
+@media print {
+    footer, .btn{
+        display: none;
+    }
+}
+
+
+
+/*------------------------- Sidebar ----------------------------*/
+
+.sidebar {
+    direction: ltr;
+}
+
+.sidebar > div:first-child {
+    direction: rtl;
+}
+
+.control-sidebar, .control-sidebar:before {
+    left: -250px;
+    right: auto;
+    transition: left .3s ease-in-out;
+}
+
+.control-sidebar-slide-open .control-sidebar, .control-sidebar-slide-open .control-sidebar:before {
+    left: 0;
+    right: auto;
+}
+
+.small-box .icon {
+    right:auto;
+    left:10px;
+}
+
+.nav-sidebar .nav-link>p>.right {
+    left: 1rem;
+    right: auto;
+}
+
+.nav-sidebar>.nav-item .nav-icon {
+    margin-right: 0;
+    margin-left: .2rem;
+}
+
+
+@media (min-width: 992px) {
+    .sidebar-mini.sidebar-collapse .content-wrapper, .sidebar-mini.sidebar-collapse .main-footer, .sidebar-mini.sidebar-collapse .main-header {
+        margin-right: 4.6rem;
+        margin-left: 0;
+    }
+}
+
+@media (min-width: 992px) {
+    .sidebar-mini.sidebar-collapse .content-wrapper, .sidebar-mini.sidebar-collapse .main-footer, .sidebar-mini.sidebar-collapse .main-header {
+        margin-left: 0rem !important;
+        margin-right: 4.6rem !important;
+        z-index:100;
+    }
+
+    .sidebar-mini.sidebar-collapse .main-sidebar, .sidebar-mini.sidebar-collapse .main-sidebar:before {
+        margin-right: 0;
+        width: 4.6rem;
+    }
+}
+
+
+@media (min-width: 768px) {
+    .content-wrapper, .main-footer, .main-header {
+        transition: margin-right .3s ease-in-out;
+        margin-right: 250px;
+        margin-left : 0;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .main-sidebar, .main-sidebar:before {
+        box-shadow: none!important;
+        margin-right: -250px;
+        margin-left: 0;
+    }
+
+    .content-wrapper, .content-wrapper:before, .main-footer, .main-footer:before, .main-header, .main-header:before {
+        margin-right: 0;
+    }
+
+    .sidebar-open .main-sidebar, .sidebar-open .main-sidebar:before {
+        margin-right: 0;
+        z-index: 4000;
+    }
+}
+
+.sidebar-collapse .main-sidebar, .sidebar-collapse .main-sidebar:before {
+    margin-right: -250px;
+}
+
+.main-sidebar {
+    left: auto;
+    right:0;
+}
+
+/*------------------------- Form ----------------------------*/
+.select2-container .select2-search--inline {
+    float: right;
+}
+
+.select2-container--default .select2-search--inline .select2-search__field {
+    text-align: right;
+}
+
+
+.modal-footer {
+    justify-content: center;
+}
+
+.alert-success {
+    color: #155724 !important;
+}
+
+.alert-danger {
+    color: #721c24 !important;
+}
+
+// Style for the required input box
+.input-required {
+    color: #dc3545;
+    font-size: 23px;
+}
+
+
+/* ---------------------------------- Admin and DataTable ---------------------------------- */
+
+$datatable_color: #1B9A57;
+
+/* Style optgroups for better separation */
+// select optgroup {
+//     font-weight: bold;
+//     color: #1b9a57 !important; /* Adjust the color as needed */
+// }
+
+.select2-container--default .select2-results__group {
+    font-weight: bold; /* Makes the label bold */
+    color: #1b9a57 !important; /* Adjust the color as needed */
+    font-size: 1em; /* Optional: adjust font size */
+    padding: 5px 10px; /* Optional: adjust spacing */
+}
+
+// .select2-container .select2-selection--single .select2-selection__rendered {
+//     padding-right: 3px;
+// }
+  
+/* Indent options within optgroups */
+// select option {
+//     padding-left: 5px;
+// }
+  
+/* Customize subcategories to appear distinct */
+select option[value^="education_"] {
+    color: #555; /* Subtle color difference */
+    font-style: italic; /* Optional: Italicize subcategories */
+}
+
+#paymentTransferTable {
+    direction: ltr;
+}
+
+#paymentTransferTable_paginate {
+    float: left;
+}
+
+#paymentTransferTable_filter {
+    text-align: left;
+}
+
+#paymentTransferTable_wrapper input {
+    text-align: left !important;
+    direction: ltr !important;
+    margin: 0;
+}
+
+
+.admin_panel {
+    background-color: #1B9A57 !important;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 15px;
+    color: #FFF;
+}
+
+table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, table.dataTable tfoot td {
+    text-align: center;
+}
+
+td.dtr-control:before, table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control:before {
+    right: 5px;
+}
+
+
+div.dataTables_wrapper div.dataTables_paginate {
+    float: right;
+}
+
+// PDF style of the data table
+.dataTablePDF {
+    display: block;
+    width: 250px;
+    height: 200px; /* Adjust the height as needed */
+    margin: 0 auto;
+    border: 1px solid #ccc;
+}
+
+/* Search input align in dataTable */
+@media screen and (max-width: 767px) {
+    div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_filter, div.dataTables_wrapper div.dataTables_info, div.dataTables_wrapper div.dataTables_paginate {
+        text-align: right !important;
+    }
+}
+
+table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before, table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control:before {
+    background-color: $datatable_color !important;
+}
+
+.page-item.active .page-link {
+    background-color: $datatable_color !important;
+    border-color: $datatable_color !important;
+}
+
+/* dataTables Search input box */
+.dataTables_filter {
+    position: relative;
+}
+
+.dataTables_filter input {
+    width: 250px !important;
+    height: 32px !important;
+    background: #FFFFFF !important;
+    border: 1px solid #aaa !important;
+    border-radius: 5px !important;
+    text-indent: 10px !important;
+}
+
+.dataTables_filter .fa-search {
+    position: absolute;
+    top: 10px;
+    left: auto;
+    right: 10px;
+}
+
+/* paginate button style */
+.paginate_button {
+    background-color: #FFFFFF;
+    color: #333; 
+    border: 1px solid #ccc; 
+    padding: 5px 10px; 
+    border-radius: 2px;
+    cursor: pointer; 
+  }
+  
+.paginate_button:hover {
+    background-color: rgba(0, 0, 0, 0.05); /* Slightly darker on hover */
+    text-decoration: none;
+}
+
+div.dataTables_wrapper div.dataTables_paginate {
+    margin-top: 0.5em;
+}
+
+// Responsive buttons
+table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, 
+    table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
+    color: #FFFFFF !important;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before, 
+    table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control:before {
+    font-size: 12px;
+    margin-left: 8px;
+    padding: 8px 8px 10px 10px;
+    color: #FFFFFF;
+    // content: 'نمایش کامل سطر';
+    border-radius: 100px;
+    background-color: #1B9A57 !important;
+}
+
+table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td.dtr-control:before, 
+    table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th.dtr-control:before {
+    padding-left: 8px;
+    padding-bottom: 5px;
+    content: "▼";
+}
+
+
